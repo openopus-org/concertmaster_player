@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Concertmaster</title>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="/js/jquery.leanModal.min.js"></script>
+    <script type="text/javascript" src="/js/html.sortable.0.1.3.js"></script>
+    <script type="text/javascript" src="/js/lib.js"></script>
+    <style type="text/css">
+        @import url("/css/main.css");
+    </style>
+</head>
+<body>
+  <div id="container" class="page">
+    <div id="toolbar">
+      <span class="logo"><a href="http://getconcertmaster.com">Concertmaster</a></span>
+    </div>
+    <div id="sidebar">
+        <div id="nowplaying" class="up">
+            <ul id="playerinfo"></ul>
+            <ul id="playertracks"></ul>
+        </div>
+    </div>
+    <div id="togglebar">
+      <a href="javascript:playingdetails()" id="toggle">toggle details</a>
+    </div>
+    <div id="playerbar">
+        <div id="player">
+            <ul id="playercontrols">
+                <li><a href="#" target="_top" id="playpause" class="play playaction">play</a></li>
+                <li class="calltoaction"><a href="#" target="_top" class="playaction">Play on Concertmaster</a></li>
+                <li id="durationglobal">0:00</li>
+            </ul>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+      init ();
+
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-89195986-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-89195986-1');
+    </script>
+  </div>
+</body>
+</html>

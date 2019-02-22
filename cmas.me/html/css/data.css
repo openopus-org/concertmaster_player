@@ -1,0 +1,81 @@
+#nowplaying
+{
+    top: 36px;
+    visibility: normal;
+    overflow: auto;
+    padding-top: 24px;
+}
+
+#nowplaying .performers ul li
+{
+	display: block;
+}
+
+#nowplaying #toggle
+{
+	background-image: none !important;
+}
+
+#toolbar .logo
+{
+	width: 204px;
+	background-image: url("../img/datalogo.png");
+	background-size: 204px 21px;
+}
+
+#loaderwindow h2 {
+    background-image: url(../img/datalogo.png);
+    background-size: 204px;
+    background-position-x: -21px;
+    width: 184px;
+}
+
+#composers ul.composerdetails li.fav, 
+#composers ul.composerdetails li.radio, 
+#composers ul.composerdetails li.forb, 
+#albums .performance .favorite a, 
+#albums .performance .permalink a, 
+#albums .performance .playlist a, 
+#genres li a.radio, 
+#favorites li.performance li.permalink, 
+#favorites li.performance li.favorite, 
+#favorites li.performance li.playlist, 
+#nowplaying #playerinfo li.permalink, 
+#nowplaying #playerinfo li.favorite, 
+#nowplaying #playerinfo li.playlist {
+    display: none;
+}
+
+body.data #composers li.composer:hover > ul.composerdetails li.edit, body.data #composers li.composer:hover > ul.composerdetails li.delete
+{
+	visibility: visible;
+}
+
+#albums li.performance li.cover .overlay
+{
+    display: none;
+}
+
+#albums li.performance li.cover a:hover img
+{
+	opacity: 1;
+}
+
+#composers li.edit a, #composers li.delete a
+{
+	width: 24px;
+    height: 24px;
+	background-size: 24px;
+	top: 26px;
+}
+
+#composers li.edit a
+{
+	top: 25px;
+	margin-right: 8px;
+}
+
+#nowplaying #composer, #nowplaying #recording 
+{
+    display: none;
+}
