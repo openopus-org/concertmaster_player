@@ -779,26 +779,31 @@ cmas_recordingsbywork = function (work, offset)
 
 cmas_randomrecording = function (wid) {
   $.ajax({
-    url: cmas_options.backend + '/recording/random/work/' + wid + '.json',
+    url: cmas_options.backend + '/recording/list/work/' + wid + '/0.json',
     method: "GET",
     success: function (response) {
       
-      if (response.recording.spotify_available) {
-        if (response.recording.compilation == "1" && !cmas_options.compilations) {
-          cmas_radioskip();
-        }
-        else if (response.recording.historical == "true" && !cmas_options.historical) {
-          cmas_radioskip();
+      if (response.status.success == "true") {
+
+        if (!cmas_options.compilations) {
+          comprec = [];
+
+          for (rec in response.recordings) {
+            if (response.recordings[rec].compilation != "true") {
+              comprec.push(response.recordings[rec]);
+            }
+          }
         }
         else {
-          $('#nowplaying').css('display', "block");
-          $('#favorites').css('bottom', "348px");
-          $("#timerglobal").html('0:00');
-          cmas_recordingaction(response);
+          comprec = response.recordings;
         }
+
+        var rnd = Math.floor((Math.random() * (comprec.length - 1)));
+        var rcd = comprec[rnd];
+        cmas_recording(wid, rcd["spotify_albumid"], rcd["set"]);
       }
       else {
-        cmas_radioskip ();
+        cmas_radioskip();
       }
     }
   });
@@ -1625,7 +1630,9 @@ cmas_radioskip = function () {
       }
       if (!$('#tuning-modal').is(':visible')) { $('#tuning-modal').leanModal(); }
       if (cmas_radiofilter.type == 'playlist') {
-        cmas_recording (cmas_radioqueue.shift());
+        var thisrec = cmas_radioqueue.shift();
+        thisrec = thisrec.split('-');
+        cmas_recording (thisrec[0], thisrec[1], thisrec[2]);
       }
       else {
         cmas_randomrecording(cmas_radioqueue.shift().id);
@@ -1681,7 +1688,7 @@ cmas_playlistradio = function (where) {
   var pids = [];
 
   for (p in performances) {
-    pids[p] = Number($(performances[p]).attr("pid"));
+    pids[p] = $(performances[p]).attr("pid");
   }
 
   if (pids.length)
@@ -1705,7 +1712,9 @@ cmas_playlistradio = function (where) {
 
     $('#radiotop select').prop("disabled", true);
 
-    cmas_recording (pids.shift());
+    var thisrec = pids.shift();
+    thisrec = thisrec.split("-");
+    cmas_recording (thisrec[0], thisrec[1], thisrec[2]);
   }
 }
 
