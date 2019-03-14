@@ -51,7 +51,7 @@ window.onpopstate = function (event) {
   if (window.location.pathname != "/") {
     vars = window.location.pathname.split("/");
     if (vars[1] == "u") {
-      cmas_recording (vars[2], vars[3], vars[4]);
+      cmas_recording (vars[2], vars[3], vars[4], 1);
     }
     else if (vars[1] == "p") {
       cmas_playlistdetail(parseInt(vars[2], 16));
@@ -96,6 +96,7 @@ cmas_spotifyauth = function ()
         if (response.status.success == "true")
         {
           localStorage.spotify_userid = response.user.id;
+          localStorage.user_country = response.user.country;
           localStorage.user_auth = response.user.auth;
           localStorage.user_product = response.user.product;
 
@@ -179,7 +180,7 @@ cmas_spotify = function ()
     }
     else {
       if (localStorage.lastwid) {
-        cmas_recording(localStorage.lastwid, localStorage.lastaid, localStorage.lastset, !parseInt (localStorage.fromurl));
+          cmas_recording(localStorage.lastwid, localStorage.lastaid, localStorage.lastset, (window.location.search != "?play"));
         if (parseInt(localStorage.fromurl)) localStorage.fromurl = 0;
       }
     }
@@ -707,17 +708,32 @@ cmas_works = function (response)
     }
 
     docsw[work].title = docsw[work].title.replace(/\"/g,"");
-    $('#works').append('<li><a href="javascript:cmas_favoritework(\''+docsw[work].id+'\')" class="wfav wfav_'+docsw[work].id+' '+favorite+'">fav</a><a href="javascript:cmas_recordingsbywork('+docsw[work].id+',0);">'+docsw[work].title+'</a></li>');
+    $('#works').append('<li><a href="javascript:cmas_favoritework(\'' + docsw[work].id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:cmas_recordingsbywork(' + docsw[work].id + ',0,{work:{title:\'' + docsw[work].title.replace(/\'/g, "\\'") + '\'},composer:{id:' + list.composer.id + ', name:\'' + list.composer.name.replace(/\'/g, "\\'") +'\'}});">'+docsw[work].title+'</a></li>');
   }
 }
 
 // recordings list
 
-cmas_recordingsbywork = function (work, offset)
+cmas_recordingsbywork = function (work, offset, data)
 {
   $('#worksearch').val('');
   window.albumlistwork = work;
   window.albumlistoffset = offset;
+
+  if (!offset) {
+    $('#genres').css("display", "none");
+    $('#works').css("display", "none");
+    $('#searchbywork').css("display", "none");
+    $('#playlistdetail').hide();
+    $('#playlistradio').hide();
+    $('#albums').removeClass('playlist');
+    $('#albums').html('');
+    $('#genresworks h2').html('<a href="javascript:cmas_genresbycomposer (' + data.composer.id + ')">' + data.composer.name + '</a>');
+    $('#genresworks h3').html(data.work.title);
+    $('#genresworks h4').html('');
+  }
+
+  $('#albums').append('<li class="loading"></li>');
 
   $.ajax({
     url: cmas_options.backend + '/recording/list/work/' + work + '/' + offset + '.json',
@@ -728,23 +744,9 @@ cmas_recordingsbywork = function (work, offset)
 
       if (list.status.success == "true") {
         
-        if (!offset)
-        {
-          $('#genres').css("display", "none");
-          $('#works').css("display", "none");
-          $('#searchbywork').css("display", "none");
-          $('#playlistdetail').hide();
-          $('#playlistradio').hide();
-          $('#albums').removeClass('playlist');
-          $('#albums').html('');
-          $('#genresworks h2').html('<a href="javascript:cmas_genresbycomposer (' + list.work.composer.id + ')">' + list.work.composer.name + '</a>');
-          $('#genresworks h3').html(list.work.title);
-          $('#genresworks h4').html('');
-        }
-
         window.albumlistnext = list.next;
-
         docsr = list.recordings;
+        $('li.loading').remove();
 
         for (performance in docsr) {
           listul = '#albums';
@@ -851,71 +853,77 @@ cmas_recording = function (wid, album, set, auto)
 cmas_recordingaction = function (list, auto)
 {
   if (list.status.success == "true") {
-    
-    if (window.location.pathname != '/u/' + list.work.id + '/' + list.recording.spotify_albumid + '/' + list.recording.set) {
-      window.history.pushState({}, 'Concertmaster', '/u/' + list.work.id + '/' + list.recording.spotify_albumid + '/' + list.recording.set);
-    }
 
-    document.title = `${list.work.composer.name}: ${list.work.title} - Concertmaster`;
+    if (list.recording.markets.indexOf(localStorage.user_country) != -1) {
 
-    $('#playerinfo').html(cmas_recordingitem(list.recording, list.work));
-    $('#playertracks').html('');
-    $('#globaltracks').html('');
+      if (window.location.pathname != '/u/' + list.work.id + '/' + list.recording.spotify_albumid + '/' + list.recording.set) {
+        window.history.pushState({}, 'Concertmaster', '/u/' + list.work.id + '/' + list.recording.spotify_albumid + '/' + list.recording.set);
+      }
 
-    if (list.recording.tracks.length >= 60) {
-      trackadjust = ' - 0.03px';
-      $('#globaltracks').addClass("tootoomanytracks");
+      document.title = `${list.work.composer.name}: ${list.work.title} - Concertmaster`;
+
+      $('#playerinfo').html(cmas_recordingitem(list.recording, list.work));
+      $('#playertracks').html('');
+      $('#globaltracks').html('');
+
+      if (list.recording.tracks.length >= 60) {
+        trackadjust = ' - 0.03px';
+        $('#globaltracks').addClass("tootoomanytracks");
+      }
+      else {
+        trackadjust = ' - 2px';
+        $('#globaltracks').removeClass("tootoomanytracks");
+        if (list.recording.tracks.length >= 12) 
+        {
+          $('#globaltracks').addClass("toomanytracks");
+        }
+        else
+        {
+          $('#globaltracks').removeClass("toomanytracks");
+        }
+      }
+
+      var currtrack = 0;
+      cmas_playbuffer.accdurations = [0];
+      cmas_playbuffer.tracks = [];
+      cmas_playbuffer.tracksuris = list.recording.spotify_tracks;
+
+      for (track in list.recording.tracks) {
+        cmas_playbuffer.tracks[track] = list.recording.tracks[track].spotify_trackid;
+        cmas_playbuffer.accdurations[parseInt(track) + 1] = parseInt(list.recording.tracks[track].length) + parseInt(cmas_playbuffer.accdurations[parseInt(track)]);
+
+        var pctsize = ((list.recording.tracks[track].length) / list.recording.length) * 100;
+        currtrack = currtrack + 1;
+        $('#playertracks').append('<li><a class="tracktitle" href="javascript:cmas_track(' + track + ')">' + list.recording.tracks[track].title + '</a><div id="timer-' + list.recording.tracks[track].spotify_trackid + '" class="timer">0:00</div><div id="slider-' + list.recording.tracks[track].spotify_trackid + '" class="slider"><div class="buffer"></div><div class="bar"></div></div><div class="duration">' + cmas_readabletime(list.recording.tracks[track].length) + '</div></li>');
+        $('#globaltracks').append('<li style="width: calc(' + Math.round(pctsize * 1000) / 1000 + '%' + trackadjust + ')"><a class="tracktitle" href="javascript:cmas_track(' + track + ')">' + currtrack + '</a><div id="globalslider-' + list.recording.tracks[track].spotify_trackid + '" class="slider"><div class="buffer"></div><div class="bar"></div></div><div id="globaltimer-' + track + '" class="timer">0:00</div><div class="duration">' + cmas_readabletime(list.recording.tracks[track].length) + '</div></li>');
+      }
+
+      $('#durationglobal').html(cmas_readabletime(list.recording.length));
+
+      if (!auto) {
+        cmas_notification(list.work.title, list.recording.cover, list.work.composer.name);
+        cmas_spotifyplay(list.recording.spotify_tracks, 0);
+
+        // registering play
+        localStorage.lastwid = list.work.id;
+        localStorage.lastaid = list.recording.spotify_albumid;
+        localStorage.lastset = list.recording.set;
+        $.ajax({
+          url: cmas_options.backend + '/dyn/user/recording/played/',
+          method: "POST",
+          data: { id: localStorage.spotify_userid, wid: list.work.id, aid: list.recording.spotify_albumid, set: list.recording.set, cover: list.recording.cover, performers: JSON.stringify(list.recording.performers), auth: cmas_authgen() },
+          success: function (response) {
+            if ($('#favtitle select option:checked').val() == 'rec') {
+              cmas_recentrecordings();
+            }
+          }
+        });
+      }
+
     }
     else {
-      trackadjust = ' - 2px';
-      $('#globaltracks').removeClass("tootoomanytracks");
-      if (list.recording.tracks.length >= 12) 
-      {
-        $('#globaltracks').addClass("toomanytracks");
-      }
-      else
-      {
-        $('#globaltracks').removeClass("toomanytracks");
-      }
+      cmas_notavailable();
     }
-
-    var currtrack = 0;
-    cmas_playbuffer.accdurations = [0];
-    cmas_playbuffer.tracks = [];
-    cmas_playbuffer.tracksuris = list.recording.spotify_tracks;
-
-    for (track in list.recording.tracks) {
-      cmas_playbuffer.tracks[track] = list.recording.tracks[track].spotify_trackid;
-      cmas_playbuffer.accdurations[parseInt(track) + 1] = parseInt(list.recording.tracks[track].length) + parseInt(cmas_playbuffer.accdurations[parseInt(track)]);
-
-      var pctsize = ((list.recording.tracks[track].length) / list.recording.length) * 100;
-      currtrack = currtrack + 1;
-      $('#playertracks').append('<li><a class="tracktitle" href="javascript:cmas_track(' + track + ')">' + list.recording.tracks[track].title + '</a><div id="timer-' + list.recording.tracks[track].spotify_trackid + '" class="timer">0:00</div><div id="slider-' + list.recording.tracks[track].spotify_trackid + '" class="slider"><div class="buffer"></div><div class="bar"></div></div><div class="duration">' + cmas_readabletime(list.recording.tracks[track].length) + '</div></li>');
-      $('#globaltracks').append('<li style="width: calc(' + Math.round(pctsize * 1000) / 1000 + '%' + trackadjust + ')"><a class="tracktitle" href="javascript:cmas_track(' + track + ')">' + currtrack + '</a><div id="globalslider-' + list.recording.tracks[track].spotify_trackid + '" class="slider"><div class="buffer"></div><div class="bar"></div></div><div id="globaltimer-' + track + '" class="timer">0:00</div><div class="duration">' + cmas_readabletime(list.recording.tracks[track].length) + '</div></li>');
-    }
-
-    $('#durationglobal').html(cmas_readabletime(list.recording.length));
-
-    if (!auto) {
-      cmas_notification(list.work.title, list.recording.cover, list.work.composer.name);
-      cmas_spotifyplay(list.recording.spotify_tracks, 0);
-
-      // registering play
-      localStorage.lastwid = list.work.id;
-      localStorage.lastaid = list.recording.spotify_albumid;
-      localStorage.lastset = list.recording.set;
-      $.ajax({
-        url: cmas_options.backend + '/dyn/user/recording/played/',
-        method: "POST",
-        data: { id: localStorage.spotify_userid, wid: list.work.id, aid: list.recording.spotify_albumid, set: list.recording.set, cover: list.recording.cover, performers: JSON.stringify(list.recording.performers), auth: cmas_authgen() },
-        success: function (response) {
-          if ($('#favtitle select option:checked').val() == 'rec') {
-            cmas_recentrecordings();
-          }
-        }
-      });
-    }
-  
   }
   else {
     cmas_notavailable();
@@ -976,7 +984,7 @@ cmas_recordingitem = function (item, work, playlist)
   alb = alb + '<div class="overlay"></div></a></li>';
 
   alb = alb+'<li class="composer"><a href="javascript:cmas_genresbycomposer('+work.composer.id+')">'+work.composer.name+'</a></li>';
-  alb = alb+'<li class="work"><a href="javascript:cmas_recordingsbywork('+work.id+',0)">'+work.title+'</a></li>';
+  alb = alb + '<li class="work"><a href="javascript:cmas_recordingsbywork(' + work.id + ',0,{work:{title:\'' + work.title.replace(/\'/g, "\\'") + '\'},composer:{id:' + work.composer.id + ', name:\'' + work.composer.name.replace(/\'/g, "\\'") +'\'}})">'+work.title+'</a></li>';
 
   albp = '';
   albc = '';
@@ -1764,8 +1772,7 @@ cmas_albumscroll = function (o)
     {
       if (window.albumlistnext != window.albumlistoffset)
       {
-        console.log ('loading');
-        cmas_recordingsbywork(window.albumlistwork, window.albumlistnext);
+        cmas_recordingsbywork(window.albumlistwork, window.albumlistnext,{});
       }
     }
   }

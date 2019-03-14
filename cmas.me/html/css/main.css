@@ -2308,3 +2308,12 @@ select:focus
 #playlistdetail, #playlistradio {
 	display: none;
 }
+
+li.loading {
+	background: url(/img/spinner-wt.svg) no-repeat center;
+	height: 78px;
+	width: 100%;
+	background-size: 70px;
+	clear: both;
+	margin-bottom: 20px;
+}
