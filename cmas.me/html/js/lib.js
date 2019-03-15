@@ -741,12 +741,12 @@ cmas_recordingsbywork = function (work, offset, data)
     success: function (response) {
 
       var list = response;
+      $('li.loading').remove();
 
       if (list.status.success == "true") {
         
         window.albumlistnext = list.next;
         docsr = list.recordings;
-        $('li.loading').remove();
 
         for (performance in docsr) {
           listul = '#albums';
@@ -771,6 +771,11 @@ cmas_recordingsbywork = function (work, offset, data)
           if (!notshow && !$("ul#albums li[pid=" + list.work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + "]").length) {
             $(listul).append('<li pid="' + list.work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + '" ' + pidsort + ' class="performance ' + draggable + '"><ul>' + cmas_recordingitem(docsr[performance], list.work) + '</ul></li>');
           }
+        }
+
+        if (list.status.rows <= 4 && list.next)
+        {
+          cmas_recordingsbywork(list.work.id, list.next, {});
         }
       }
     }
@@ -854,7 +859,10 @@ cmas_recordingaction = function (list, auto)
 {
   if (list.status.success == "true") {
 
-    if (list.recording.markets.indexOf(localStorage.user_country) != -1) {
+    if (list.recording.length == 0) {
+      cmas_notavailable();
+    }
+    else if (list.recording.markets.indexOf(localStorage.user_country) != -1) {
 
       if (window.location.pathname != '/u/' + list.work.id + '/' + list.recording.spotify_albumid + '/' + list.recording.set) {
         window.history.pushState({}, 'Concertmaster', '/u/' + list.work.id + '/' + list.recording.spotify_albumid + '/' + list.recording.set);
