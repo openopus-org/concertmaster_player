@@ -1,6 +1,6 @@
 <?
   $nojson = TRUE;
-  include_once ("../../../api.cmas.me/lib/inc.php");
+  include_once ("../../../../concertmaster_api/lib/inc.php");
 
   $api = CURL_Internals (SPOTIFYTOKENAPI, false, Array (SPOTIFYID, SPOTIFYSECRET), "code={$_REQUEST['code']}&grant_type=authorization_code&redirect_uri=https://{$_SERVER['SERVER_NAME']}/sp/", false);
   $tok = json_decode ($api, true);
