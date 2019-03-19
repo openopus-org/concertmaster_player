@@ -595,6 +595,7 @@ cmas_genresbycomposer = function (composer, genre)
         $('#genres').html('');
         $('#works').html('');
         $('#albums').html('');
+        $('#albums').hide();
 
         $('#genres').append('<li id="all"><a href="javascript:cmas_worksbycomposer(\'' + list.composer.id + '\',\'all\');">All</a><a class="radio" href="javascript:cmas_newradio({composer:' + list.composer.id + '});">radio</a></li>');
         $('#genres').append('<li id="fav"><a href="javascript:cmas_listfavoriteworks(\'' + list.composer.id + '\');">Favorites</a><a class="radio" href="javascript:cmas_newradio({composer:' + list.composer.id + ',work:\'fav\'});">radio</a></li>');
@@ -719,6 +720,7 @@ cmas_recordingsbywork = function (work, offset, data)
   $('#worksearch').val('');
   window.albumlistwork = work;
   window.albumlistoffset = offset;
+  window.albumlistnext = 0;
 
   if (!offset) {
     $('#genres').css("display", "none");
@@ -726,14 +728,16 @@ cmas_recordingsbywork = function (work, offset, data)
     $('#searchbywork').css("display", "none");
     $('#playlistdetail').hide();
     $('#playlistradio').hide();
-    $('#albums').removeClass('playlist');
+    $('#albums').removeClass();
     $('#albums').html('');
     $('#genresworks h2').html('<a href="javascript:cmas_genresbycomposer (' + data.composer.id + ')">' + data.composer.name + '</a>');
     $('#genresworks h3').html(data.work.title);
     $('#genresworks h4').html('');
+    $('#albums').addClass(work.toString());
+    $('#albums').show();
   }
 
-  $('#albums').append('<li class="loading"></li>');
+  $('#albums.'+work).append('<li class="loading"></li>');
 
   $.ajax({
     url: cmas_options.backend + '/recording/list/work/' + work + '/' + offset + '.json',
@@ -743,13 +747,13 @@ cmas_recordingsbywork = function (work, offset, data)
       var list = response;
       $('li.loading').remove();
 
-      if (list.status.success == "true") {
+      if (list.status.success == "true" && $('#albums').attr('class') == work.toString()) {
         
         window.albumlistnext = list.next;
         docsr = list.recordings;
 
         for (performance in docsr) {
-          listul = '#albums';
+          listul = '#albums.' + list.work.id;
 
           draggable = "";
           pidsort = "";
@@ -768,7 +772,7 @@ cmas_recordingsbywork = function (work, offset, data)
             }
           }
 
-          if (!notshow && !$("ul#albums li[pid=" + list.work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + "]").length) {
+          if (!notshow && !$("ul#albums." + list.work.id + " li[pid=" + list.work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + "]").length) {
             $(listul).append('<li pid="' + list.work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + '" ' + pidsort + ' class="performance ' + draggable + '"><ul>' + cmas_recordingitem(docsr[performance], list.work) + '</ul></li>');
           }
         }
@@ -1780,7 +1784,7 @@ cmas_albumscroll = function (o)
     {
       if (window.albumlistnext != window.albumlistoffset)
       {
-        cmas_recordingsbywork(window.albumlistwork, window.albumlistnext,{});
+        cmas_recordingsbywork(window.albumlistwork, window.albumlistnext, {});
       }
     }
   }

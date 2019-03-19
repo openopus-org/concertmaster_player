@@ -1,0 +1,41 @@
+*   Trying 104.154.127.47...
+* Connected to accounts.spotify.com (104.154.127.47) port 443 (#0)
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /opt/lampp/share/curl/curl-ca-bundle.crt
+  CApath: none
+* NPN, negotiated HTTP1.1
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES128-GCM-SHA256
+* ALPN, server did not agree to a protocol
+* Server certificate:
+* 	 subject: C=SE; L=Stockholm; O=Spotify AB; CN=*.spotify.com
+* 	 start date: May 16 00:00:00 2017 GMT
+* 	 expire date: Jul 29 12:00:00 2020 GMT
+* 	 subjectAltName: accounts.spotify.com matched
+* 	 issuer: C=US; O=DigiCert Inc; CN=DigiCert SHA2 Secure Server CA
+* 	 SSL certificate verify ok.
+> POST /api/token HTTP/1.1
+Host: accounts.spotify.com
+User-Agent: USERAGENT
+Accept-Encoding: deflate, gzip
+Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+Cache-Control: max-age=0
+Connection: keep-alive
+Keep-Alive: 300
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+Accept-Language: en-us,en;q=0.5
+Authorization: Basic ZDUxZjkwM2ViY2FjNDZkOWEwMzZiNGEyZGEwNWIyOTk6MWQxNTM3NTZjNWYxNDA0MDhmZDYxMTYxOWVkZWQ0NGE=
+Content-Length: 382
+Content-Type: application/x-www-form-urlencoded
+
+* upload completely sent off: 382 out of 382 bytes
+< HTTP/1.1 400 Bad Request
+< Server: nginx
+< Date: Mon, 18 Mar 2019 22:14:03 GMT
+< Content-Type: application/json
+< Content-Length: 74
+< Connection: keep-alive
+< Keep-Alive: timeout=600
+< 
+* Connection #0 to host accounts.spotify.com left intact
