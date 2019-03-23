@@ -1040,6 +1040,13 @@ cmas_recordingitem = function (item, work, playlist)
   albp = albp + albo + albor + albc;
   alb = alb + '<li class="performers"><ul>' + albp + '</ul></li>';
   alb = alb + '<li class="label">'+item.label+'</li>';
+  alb = alb + '<li class="spam"><a href="javascript:cmas_rectag(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',\'verified\',1)">verified</a></li>';
+  alb = alb + '<li class="spam"><a href="javascript:cmas_rectag(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',\'spam\',1)">spam</a></li>';
+  alb = alb + '<li class="spam"><a href="javascript:cmas_rectag(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',\'compilation\',1)">compilation</a></li>';
+  alb = alb + '<li class="spam"><a href="javascript:cmas_rectag(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',\'oldaudio\',1)">oldaudio</a></li>';
+  alb = alb + '<li class="spam"><a href="javascript:cmas_rectag(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',\'wrongdata\',1)">wrongdata</a></li>';
+  alb = alb + '<li class="spam"><a href="javascript:cmas_rectag(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',\'badquality\',1)">badquality</a></li>';
+
 
   return alb;
 }
@@ -1092,6 +1099,39 @@ cmas_authgen = function ()
   let auth = md5 (timestamp + "-" + localStorage.spotify_userid + "-" + localStorage.user_auth);
 
   return auth;
+}
+
+// tagging or untagging a recording
+
+cmas_rectag = function (wid, aid, set, tag, value) {
+  rid = wid + '-' + aid + '-' + set;
+  if (value == 1) {
+    action = 'tag';
+  }
+  else {
+    action = 'untag';
+  }
+
+  $.ajax({
+    url: cmas_options.backend + '/recording/detail/work/' + wid + '/album/' + aid + '/' + set + '.json',
+    method: "GET",
+    success: function (response) {
+
+      $.ajax({
+        url: cmas_options.backend + '/dyn/recording/' + action + '/',
+        method: "POST",
+        data: { id: localStorage.spotify_userid, wid: wid, aid: aid, set: set, cover: response.recording.cover, performers: JSON.stringify(response.recording.performers), auth: cmas_authgen(), tag: tag },
+        success: function (nresponse) {
+          if (nresponse.status.success == "true") {
+
+            cmas_recordingsbywork(wid, 0, { work: response.work, composer: response.work.composer });
+
+          }
+        }
+      });
+
+    }
+  });
 }
 
 // adding or removing favorite recording
