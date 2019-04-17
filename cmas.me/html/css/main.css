@@ -1444,6 +1444,14 @@ h2
 	font-size: 13px;
 }
 
+#albums li.performance.verified
+{
+	background-image: url("../img/verified_on.png");
+	background-position: right 10px top 10px;
+	background-repeat: no-repeat;
+	background-size: 18px;
+}
+
 #albums li.performance li.work
 {
 	font-size: 14px;

@@ -757,6 +757,8 @@ cmas_recordingsbywork = function (work, offset, data)
 
           draggable = "";
           pidsort = "";
+          extraclass = "";
+          extratitle = "";
 
           notshow = false;
 
@@ -772,8 +774,13 @@ cmas_recordingsbywork = function (work, offset, data)
             }
           }
 
+          if (docsr[performance].verified == "true") {
+            extraclass = "verified";
+            extratitle = "Verified recording";
+          }
+
           if (!notshow && !$("ul#albums." + list.work.id + " li[pid=" + list.work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + "]").length) {
-            $(listul).append('<li pid="' + list.work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + '" ' + pidsort + ' class="performance ' + draggable + '"><ul>' + cmas_recordingitem(docsr[performance], list.work) + '</ul></li>');
+            $(listul).append('<li pid="' + list.work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + '" ' + pidsort + ' class="performance ' + draggable + ' ' + extraclass + '" title="'+ extratitle + '"><ul>' + cmas_recordingitem(docsr[performance], list.work) + '</ul></li>');
           }
         }
 
@@ -875,6 +882,13 @@ cmas_recordingaction = function (list, auto)
       document.title = `${list.work.composer.name}: ${list.work.title} - Concertmaster`;
 
       $('#playerinfo').html(cmas_recordingitem(list.recording, list.work));
+
+      verify = '<li class="verified"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'verified\',1)">verified</a></li>';
+      verify += '<li class="partial"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'compilation\',1)">compilation</a></li>';
+      verify += '<li class="wrongdata"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'wrongdata\',1)">wrongdata</a></li>';
+      verify += '<li class="badquality"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'badquality\',1)">badquality</a></li>';
+
+      $('#playerverify').html(verify);
       $('#playertracks').html('');
       $('#globaltracks').html('');
 
@@ -1040,13 +1054,6 @@ cmas_recordingitem = function (item, work, playlist)
   albp = albp + albo + albor + albc;
   alb = alb + '<li class="performers"><ul>' + albp + '</ul></li>';
   alb = alb + '<li class="label">'+item.label+'</li>';
-  alb = alb + '<li class="spam"><a href="javascript:cmas_rectag(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',\'verified\',1)">verified</a></li>';
-  alb = alb + '<li class="spam"><a href="javascript:cmas_rectag(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',\'spam\',1)">spam</a></li>';
-  alb = alb + '<li class="spam"><a href="javascript:cmas_rectag(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',\'compilation\',1)">compilation</a></li>';
-  alb = alb + '<li class="spam"><a href="javascript:cmas_rectag(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',\'oldaudio\',1)">oldaudio</a></li>';
-  alb = alb + '<li class="spam"><a href="javascript:cmas_rectag(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',\'wrongdata\',1)">wrongdata</a></li>';
-  alb = alb + '<li class="spam"><a href="javascript:cmas_rectag(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',\'badquality\',1)">badquality</a></li>';
-
 
   return alb;
 }
@@ -1122,10 +1129,8 @@ cmas_rectag = function (wid, aid, set, tag, value) {
         method: "POST",
         data: { id: localStorage.spotify_userid, wid: wid, aid: aid, set: set, cover: response.recording.cover, performers: JSON.stringify(response.recording.performers), auth: cmas_authgen(), tag: tag },
         success: function (nresponse) {
-          if (nresponse.status.success == "true") {
-
+          if (nresponse.status.success == "true" && window.albumlistwork == wid) {
             cmas_recordingsbywork(wid, 0, { work: response.work, composer: response.work.composer });
-
           }
         }
       });
