@@ -315,7 +315,7 @@ a
 	display: block;
 	position: absolute;
 	top: 202px;
-	right: 44px;
+	right: 60px;
 	background-image: url("../img/permalink_big.png");
 	background-size: 14px 18px;
 }
@@ -378,13 +378,13 @@ a
 	display: block;
 	position: absolute;
 	top: 202px;
-	right: 12px;
+	right: 28px;
 }
 
 #playerinfo li.playlist a
 {
 	background-size: 18px;
-	right: 62px;
+	right: 78px;
 }
 
 #composers ul.composerdetails li.fav a, #composers li.edit a
@@ -463,12 +463,12 @@ a
 	background-image: url("../img/favorite_un.png");
 }
 
-#nowplaying.up #playertracks
+#nowplaying.up #playertracks, #nowplaying.up #playerverify
 {
 	visibility: hidden;
 }
 
-#nowplaying.down #playertracks
+#nowplaying.down #playertracks, #nowplaying.down #playerverify
 {
 	visibility: normal;
 }
@@ -529,7 +529,6 @@ h2
 #playertracks
 {
 	margin: 12px 0px 24px;
-	padding-top: 12px;
 }
 
 #playertracks, #playertracks a
@@ -2324,4 +2323,61 @@ li.loading {
 	background-size: 70px;
 	clear: both;
 	margin-bottom: 20px;
+}
+
+#playerverify {
+  border-radius: 14px;
+	width: 350px;
+	padding: 9px;
+	margin: 34px 0;
+	border: 1px solid #7C726E;
+	font-family: Sanchez, TimesNewRoman, serif;
+	color: #7C726E;
+	font-weight: normal;
+	font-size: 9px;
+	background: url(../img/toggle_down.png) no-repeat top 12px right 10px;
+  background-size: 15px;
+}
+
+#playerverify.opened {
+	background-image: url(../img/toggle_up.png);
+}
+
+#playerverify li.verified, #playerverify li.notverified {
+	padding-left: 24px;
+	padding-right: 17px;
+	background-repeat: no-repeat;
+	background-size: 18px;
+}
+
+#playerverify li.verified a, #playerverify li.notverified a {
+	color: #7C726E;
+}
+
+#playerverify li.verified a:hover, #playerverify li.notverified a:hover {
+	color: #918C8A;
+}
+
+#playerverify li.verified {
+	background-image: url("../img/verified_on.png");
+}
+
+#playerverify li.notverified {
+	background-image: url("../img/notchecked.png");
+}
+
+#playerverify li {
+	display: none;
+}
+
+#playerverify.opened li.button {
+	display: block;
+}
+
+#playerverify.verified li.verified {
+	display: block;
+}
+
+#playerverify.notverified li.notverified {
+	display: block;
 }

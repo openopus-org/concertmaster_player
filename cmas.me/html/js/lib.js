@@ -883,12 +883,15 @@ cmas_recordingaction = function (list, auto)
 
       $('#playerinfo').html(cmas_recordingitem(list.recording, list.work));
 
-      verify = '<li class="verified"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'verified\',1)">verified</a></li>';
-      verify += '<li class="partial"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'compilation\',1)">compilation</a></li>';
-      verify += '<li class="wrongdata"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'wrongdata\',1)">wrongdata</a></li>';
-      verify += '<li class="badquality"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'badquality\',1)">badquality</a></li>';
+      verify = '<li class="notverified"><a href="javascript:cmas_qualify()">This recording was fetched automatically and its metadata was not verified. Is everything right? CLICK HERE TO QUALIFY IT! Thank you!</a></li>';
+      verify += '<li class="verified"><a href="javascript:cmas_qualify()">This recording was verified by a human and its metadata is right. Disagree? Click here and help us to improve our data.</a></li>';
+      verify += '<li class="button verify"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'verified\',1)">verified</a></li>';
+      verify += '<li class="button partial"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'compilation\',1)">compilation</a></li>';
+      verify += '<li class="button wrongdata"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'wrongdata\',1)">wrongdata</a></li>';
+      verify += '<li class="button badquality"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'badquality\',1)">badquality</a></li>';
 
       $('#playerverify').html(verify);
+      $('#playerverify').toggleClass((list.recording.verified == 'true' ? 'verified' : 'notverified'));
       $('#playertracks').html('');
       $('#globaltracks').html('');
 
@@ -1027,31 +1030,28 @@ cmas_recordingitem = function (item, work, playlist)
 
   for (performers in item.performers)
   {
-      perfnum = perfnum + 1;
-
-      if (item.performers[performers].role.trim() == "Conductor" || item.performers[performers].role.trim() == "Director")
+      if (item.performers[performers].role.trim() == "Conductor")
       {
-          albc = albc + '<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>';
+        albp = albp + '<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>';
       }
-      else if (perfnum <= 2 && (item.performers[performers].role.trim() == "Harpsichord" || item.performers[performers].role.trim() == "Piano" || item.performers[performers].role.trim() == "Violin" || item.performers[performers].role.trim() == "Clarinet" || item.performers[performers].role.trim() == "Cello"))
+      else if (item.performers[performers].role.trim() == "Ensemble" || item.performers[performers].role.trim() == "Orchestra")
       {
-          albc = albc + '<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>';
+        albp = albp + '<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong></li>';
       }
-      else if (item.performers[performers].role.trim() == "Chamber Ensemble" || item.performers[performers].role.trim() == "String Quartet" || item.performers[performers].role.trim() == "Ensemble" || item.performers[performers].role.trim() == "Orchestra" || item.performers[performers].role.trim() == "Chamber Orchestra")
+      else if (item.performers[performers].role.trim() == "Choir")
       {
-          albor = albor + '<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong></li>';
+        albp = albp + '<li class="'+classmain+'"><strong>'+item.performers[performers].name+'</strong></li>';
       }
-      else if (item.performers[performers].role.trim() == "Chorus/Choir" || item.performers[performers].role.trim() == "Choir")
+      else if (item.performers[performers].role.trim() == "")
       {
-          albo = albo + '<li class="'+classmain+'"><strong>'+item.performers[performers].name+'</strong></li>';
+        albp = albp + '<li class="' + classmain + '"><strong>' + item.performers[performers].name + '</strong></li>';
       }
       else
       {
-          albp = albp + '<li class="'+classmain+'"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>';
+        albp = albp + '<li class="'+classmain+'"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>';
       }
   }
 
-  albp = albp + albo + albor + albc;
   alb = alb + '<li class="performers"><ul>' + albp + '</ul></li>';
   alb = alb + '<li class="label">'+item.label+'</li>';
 
@@ -1821,16 +1821,18 @@ cmas_refreshcomposers = function () {
 
 // album pagination by scrolling
 
-cmas_albumscroll = function (o)
-{
-  if (o.offsetHeight + o.scrollTop > o.scrollHeight - 400) 
-  {
-    if (window.albumlistnext)
-    {
-      if (window.albumlistnext != window.albumlistoffset)
-      {
+cmas_albumscroll = function (o) {
+  if (o.offsetHeight + o.scrollTop > o.scrollHeight - 400) {
+    if (window.albumlistnext) {
+      if (window.albumlistnext != window.albumlistoffset) {
         cmas_recordingsbywork(window.albumlistwork, window.albumlistnext, {});
       }
     }
   }
+}
+
+// recording tagging
+
+cmas_qualify = function () {
+  $('#playerverify').toggleClass('opened');
 }
