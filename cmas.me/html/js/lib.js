@@ -44,7 +44,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '0.19'
+    version: '1.19'
 };
 
 window.onpopstate = function (event) {
@@ -157,6 +157,16 @@ cmas_spotify = function ()
 
   // Ready
   spotplayer.addListener('ready', ({ device_id }) => {
+
+    const iframe = document.querySelector('iframe[src="https://sdk.scdn.co/embedded/index.html"]');
+
+    if (iframe) {
+      iframe.style.display = 'block';
+      iframe.style.position = 'absolute';
+      iframe.style.top = '-1000px';
+      iframe.style.left = '-1000px';
+    }
+
     device = device_id;
     cmas_state = {};
     console.log('Ready with Device ID', device_id);
@@ -885,13 +895,14 @@ cmas_recordingaction = function (list, auto)
 
       verify = '<li class="notverified"><a href="javascript:cmas_qualify()">This recording was fetched automatically and its metadata was not verified. Is everything right? CLICK HERE TO QUALIFY IT! Thank you!</a></li>';
       verify += '<li class="verified"><a href="javascript:cmas_qualify()">This recording was verified by a human and its metadata is right. Disagree? Click here and help us to improve our data.</a></li>';
-      verify += '<li class="button verify"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'verified\',1)">verified</a></li>';
-      verify += '<li class="button partial"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'compilation\',1)">compilation</a></li>';
-      verify += '<li class="button wrongdata"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'wrongdata\',1)">wrongdata</a></li>';
-      verify += '<li class="button badquality"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'badquality\',1)">badquality</a></li>';
+      verify += '<li class="tagloading">loading</li>';
+      verify += '<li class="button verify"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'verified\',1)"><strong>Everything OK!</strong>Metadata is correct and the recording is complete</a></li>';
+      verify += '<li class="button partial"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'compilation\',1)"><strong>Incomplete recording</strong>Metadata is correct but the recording is partial/missing movements</a></li>';
+      verify += '<li class="button wrongdata"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'wrongdata\',1)"><strong>Wrong work</strong>The sound doesn\'t match with the description</a></li>';
+      verify += '<li class="button badquality"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'badquality\',1)"><strong>Bad quality recording</strong>This isn\'t a real recording - it\'s played by a computer</a></li>';
 
       $('#playerverify').html(verify);
-      $('#playerverify').toggleClass((list.recording.verified == 'true' ? 'verified' : 'notverified'));
+      $('#playerverify').toggleClass('verified', (list.recording.verified == 'true'));
       $('#playertracks').html('');
       $('#globaltracks').html('');
 
@@ -1119,6 +1130,8 @@ cmas_rectag = function (wid, aid, set, tag, value) {
     action = 'untag';
   }
 
+  $('#playerverify').toggleClass('loading');
+
   $.ajax({
     url: cmas_options.backend + '/recording/detail/work/' + wid + '/album/' + aid + '/' + set + '.json',
     method: "GET",
@@ -1129,8 +1142,18 @@ cmas_rectag = function (wid, aid, set, tag, value) {
         method: "POST",
         data: { id: localStorage.spotify_userid, wid: wid, aid: aid, set: set, cover: response.recording.cover, performers: JSON.stringify(response.recording.performers), auth: cmas_authgen(), tag: tag },
         success: function (nresponse) {
-          if (nresponse.status.success == "true" && window.albumlistwork == wid) {
-            cmas_recordingsbywork(wid, 0, { work: response.work, composer: response.work.composer });
+          if (nresponse.status.success == "true") {
+
+            $('#playerverify').toggleClass('loading');
+            $('#playerverify').toggleClass('opened');
+
+            if (action == 'tag' && tag == 'verified') {
+              $('#playerverify').toggleClass('verified', true);
+            }
+            
+            if (window.albumlistwork == wid) {
+              cmas_recordingsbywork(wid, 0, { work: response.work, composer: response.work.composer });
+            }
           }
         }
       });

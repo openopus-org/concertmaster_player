@@ -2343,6 +2343,10 @@ li.loading {
 	background-image: url(../img/toggle_up.png);
 }
 
+#playerverify.loading {
+	background: none;
+}
+
 #playerverify li.verified, #playerverify li.notverified {
 	padding-left: 24px;
 	padding-right: 17px;
@@ -2366,8 +2370,86 @@ li.loading {
 	background-image: url("../img/notchecked.png");
 }
 
+#playerverify li.button {
+	font-family: PetitaMedium, Arial, sans-serif;
+	color: #7C726E;
+	padding-left: 28px;
+	margin: 6px;
+	margin-left: 20px;
+	height: 30px;
+	background: url(../img/toggle_down.png) no-repeat 0px 4px;
+	background-size: 20px;
+	font-weight: normal;
+	font-size: 10px;
+}
+
+#playerverify li.button a {
+	color: #000000;
+}
+
+#playerverify li.button strong {
+	display: block;
+	clear: right;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+#playerverify li.button a:hover {
+	color: #7C726E;
+}
+
+#playerverify li.button.verify {
+	margin-top: 14px;
+}
+
+#playerverify li.button.verify {
+	background-image: url("../img/verified_off.png");
+}
+
+#playerverify li.button.verify:hover {
+	background-image: url("../img/verified_on.png");
+}
+
+#playerverify li.button.partial {
+	background-image: url("../img/partial_off.png");
+}
+
+#playerverify li.button.partial:hover {
+	background-image: url("../img/partial_on.png");
+}
+
+#playerverify li.button.wrongdata {
+	background-image: url("../img/wrongdata_off.png");
+}
+
+#playerverify li.button.wrongdata:hover {
+	background-image: url("../img/wrongdata_on.png");
+}
+
+#playerverify li.button.badquality {
+	background-image: url("../img/badaudio_off.png");
+}
+
+#playerverify li.button.badquality:hover {
+	background-image: url("../img/badaudio_on.png");
+}
+
+#playerverify li.tagloading {
+	background: url(/img/spinner-gr.svg) no-repeat center;
+	background-size: 40px;
+	height: 40px;
+	height: 20px;
+	margin: 0px;
+	text-indent: -9000px;
+	overflow: hidden;
+}
+
 #playerverify li {
 	display: none;
+}
+
+#playerverify li.notverified {
+	display: block;
 }
 
 #playerverify.opened li.button {
@@ -2378,6 +2460,14 @@ li.loading {
 	display: block;
 }
 
-#playerverify.notverified li.notverified {
-	display: block;
+#playerverify.verified li.notverified {
+	display: none;
+}
+
+#playerverify.loading li {
+	display: none !important;
+}
+
+#playerverify.loading li.tagloading {
+	display: block !important;
 }

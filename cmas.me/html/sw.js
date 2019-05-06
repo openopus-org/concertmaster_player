@@ -1,4 +1,4 @@
-const cacheName = '0.18.12';
+const cacheName = '1.19';
 const precacheResources = [
     '/css/main.css',
     '/css/PetitaBold.ttf',
