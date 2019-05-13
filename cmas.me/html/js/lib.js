@@ -80,7 +80,6 @@ cmas_spotifyauth = function ()
       localStorage.lastwid = vars[2];
       localStorage.lastaid = vars[3];
       localStorage.lastset = vars[4];
-      localStorage.fromurl = 1;
     }
     else if (vars[1] == "p") {
       cmas_playlistdetail(parseInt(vars[2], 16));
@@ -719,7 +718,7 @@ cmas_works = function (response)
     }
 
     docsw[work].title = docsw[work].title.replace(/\"/g,"");
-    $('#works').append('<li><a href="javascript:cmas_favoritework(\'' + docsw[work].id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:cmas_recordingsbywork(' + docsw[work].id + ',0,{work:{title:\'' + docsw[work].title.replace(/\'/g, "\\'") + '\'},composer:{id:' + list.composer.id + ', name:\'' + list.composer.name.replace(/\'/g, "\\'") +'\'}});">'+docsw[work].title+'</a></li>');
+    $('#works').append('<li><a href="javascript:cmas_favoritework(\'' + docsw[work].id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:cmas_recordingsbywork(' + docsw[work].id + ',0,{work:{title:\'' + docsw[work].title.replace(/\'|\"/g, "\\'") + '\'},composer:{id:' + list.composer.id + ', name:\'' + list.composer.name.replace(/\'/g, "\\'") +'\'}});">'+docsw[work].title+'</a></li>');
   }
 }
 
@@ -894,15 +893,17 @@ cmas_recordingaction = function (list, auto)
       $('#playerinfo').html(cmas_recordingitem(list.recording, list.work));
 
       verify = '<li class="notverified"><a href="javascript:cmas_qualify()">This recording was fetched automatically and its metadata was not verified. Is everything right? CLICK HERE TO QUALIFY IT! Thank you!</a></li>';
-      verify += '<li class="verified"><a href="javascript:cmas_qualify()">This recording was verified by a human and its metadata is right. Disagree? Click here and help us to improve our data.</a></li>';
+      verify += '<li class="verified"><a href="javascript:cmas_qualify()">This recording was verified by a human and its metadata was considered right. Disagree? Click here and help us to improve our data.</a></li>';
+      verify += '<li class="report">Thanks for reporting. This recording will be excluded from our database.</li>';
+
       verify += '<li class="tagloading">loading</li>';
       verify += '<li class="button verify"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'verified\',1)"><strong>Everything OK!</strong>Metadata is correct and the recording is complete</a></li>';
-      verify += '<li class="button partial"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'compilation\',1)"><strong>Incomplete recording</strong>Metadata is correct but the recording is partial/missing movements</a></li>';
-      verify += '<li class="button wrongdata"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'wrongdata\',1)"><strong>Wrong work</strong>The sound doesn\'t match with the description</a></li>';
+      verify += '<li class="button partial"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'compilation\',1)"><strong>Correct but incomplete</strong>Metadata is right but the recording is partial/missing movements</a></li>';
+      verify += '<li class="button wrongdata"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'wrongdata\',1)"><strong>Wrong work</strong>The description doesn\'t match the recording</a></li>';
       verify += '<li class="button badquality"><a href="javascript:cmas_rectag(' + list.work.id + ',\'' + list.recording.spotify_albumid + '\',' + list.recording.set + ',\'badquality\',1)"><strong>Bad quality recording</strong>This isn\'t a real recording - it\'s played by a computer</a></li>';
 
       $('#playerverify').html(verify);
-      $('#playerverify').toggleClass('verified', (list.recording.verified == 'true'));
+      $('#playerverify').removeClass('reported').toggleClass('verified', (list.recording.verified == 'true'));
       $('#playertracks').html('');
       $('#globaltracks').html('');
 
@@ -1024,7 +1025,7 @@ cmas_recordingitem = function (item, work, playlist)
   alb = alb + '<div class="overlay"></div></a></li>';
 
   alb = alb+'<li class="composer"><a href="javascript:cmas_genresbycomposer('+work.composer.id+')">'+work.composer.name+'</a></li>';
-  alb = alb + '<li class="work"><a href="javascript:cmas_recordingsbywork(' + work.id + ',0,{work:{title:\'' + work.title.replace(/\'/g, "\\'") + '\'},composer:{id:' + work.composer.id + ', name:\'' + work.composer.name.replace(/\'/g, "\\'") +'\'}})">'+work.title+'</a></li>';
+  alb = alb + '<li class="work"><a href="javascript:cmas_recordingsbywork(' + work.id + ',0,{work:{title:\'' + work.title.replace(/\'|\"/g, "\\'") + '\'},composer:{id:' + work.composer.id + ', name:\'' + work.composer.name.replace(/\'/g, "\\'") +'\'}})">'+work.title+'</a></li>';
 
   albp = '';
   albc = '';
@@ -1065,6 +1066,7 @@ cmas_recordingitem = function (item, work, playlist)
 
   alb = alb + '<li class="performers"><ul>' + albp + '</ul></li>';
   alb = alb + '<li class="label">'+item.label+'</li>';
+  alb = alb + '<li class="spotify"><a href="http://open.spotify.com/album/' + item.spotify_albumid + '" target="_blank">Listen on Spotify</a></li>';
 
   return alb;
 }
@@ -1147,12 +1149,20 @@ cmas_rectag = function (wid, aid, set, tag, value) {
             $('#playerverify').toggleClass('loading');
             $('#playerverify').toggleClass('opened');
 
-            if (action == 'tag' && tag == 'verified') {
-              $('#playerverify').toggleClass('verified', true);
-            }
-            
-            if (window.albumlistwork == wid) {
-              cmas_recordingsbywork(wid, 0, { work: response.work, composer: response.work.composer });
+            if (action == 'tag') {
+
+              if (tag == 'verified' || tag == 'compilation') {
+                $('#playerverify').toggleClass('verified', true);
+                if (window.albumlistwork == wid) {
+                  $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').show();
+                  $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').toggleClass('verified', true);
+                  $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').parent().prepend($('#albums li[pid=' + wid + '-' + aid + '-' + set + ']'));
+                }
+              }
+              else if (tag == 'wrongdata' || tag == 'badquality') {
+                $('#playerverify').toggleClass('reported', true);
+                if (window.albumlistwork == wid) $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').hide();
+              }
             }
           }
         }
@@ -1811,10 +1821,17 @@ cmas_playlistradio = function (where) {
 cmas_permalink = function (wid, aid, set) {
   $('#sharedialog').show();
   $('#shareconfirm').hide();
-  permauri = cmas_options.shareurl + '/u/' + wid + '/' + aid + '/' + set;
-  $('#permalink-direct').val(permauri);
-  $('#permalink-widget').text(`<iframe src="${permauri}/widget" width="593" height="388" frameborder="0"></iframe>`);
-  $('#permalink-modal').leanModal();
+
+  $.ajax({
+    url: cmas_options.backend + '/recording/shorturl/work/' + wid + '/album/' + aid + '/' + set + '.json',
+    method: "GET",
+    success: function (response) {
+      permauri = cmas_options.shareurl + '/r/' + (Number(response.recording.id)).toString(16);
+      $('#permalink-direct').val(permauri);
+      $('#permalink-widget').text(`<iframe src="${permauri}/widget" width="593" height="388" frameborder="0"></iframe>`);
+      $('#permalink-modal').leanModal();
+    }
+  });
 }
 
 cmas_linkcopy = function (obj) {

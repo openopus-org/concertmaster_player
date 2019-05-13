@@ -2343,7 +2343,7 @@ li.loading {
 	background-image: url(../img/toggle_up.png);
 }
 
-#playerverify.loading {
+#playerverify.loading, #playerverify.reported {
 	background: none;
 }
 
@@ -2437,7 +2437,6 @@ li.loading {
 #playerverify li.tagloading {
 	background: url(/img/spinner-gr.svg) no-repeat center;
 	background-size: 40px;
-	height: 40px;
 	height: 20px;
 	margin: 0px;
 	text-indent: -9000px;
@@ -2470,4 +2469,33 @@ li.loading {
 
 #playerverify.loading li.tagloading {
 	display: block !important;
+}
+
+#playerverify.reported li {
+	display: none !important;
+}
+
+#playerverify.reported li.report {
+	display: block !important;
+	text-align: center;
+}
+
+.spotify a {
+	background: url(/img/spotifyi.png) no-repeat;
+	background-size: 10px;
+	height: 10px;
+	height: 14px;
+	margin: 0px;
+	font-size: 9px;
+	padding-left: 14px;
+	margin-top: 15px;
+	display: block;
+}
+
+li.spotify  {
+	display: none;
+}
+
+#playerinfo li.spotify  {
+	display: block;
 }

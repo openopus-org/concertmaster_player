@@ -1,6 +1,6 @@
 options = {};
-options.backend = 'https://api.concertmaster.app';
-options.frontend = 'https://concertmaster.app'
+options.backend = 'https://api.cmas.me';
+options.frontend = 'https://cmas.me'
 
 init = function () {
     vars = window.location.pathname.split("/");
@@ -12,18 +12,21 @@ init = function () {
     }
 
     rid = parseInt(vars[2], 16);
-    concertmaster_uri = options.frontend + '/r/' + vars[2];
-
-    for (link in $('.playaction'))
-    {
-        $('.playaction')[link].href = concertmaster_uri;
-    }
     
     $.ajax({
-        url: options.backend + '/recording/detail/' + rid + '.json',
+        url: options.backend + '/recording/unshorten/' + rid + '.json',
         method: "GET",
         success: function (response) {
-            recording(response);
+            
+            $.ajax({
+                url: options.backend + '/recording/detail/work/' + response.recording.work_id + '/album/' + response.recording.spotify_albumid + '/' + response.recording.set + '.json',
+                method: "GET",
+                success: function (response) {
+                    recording(response);
+                    $('#loading').hide();
+                }
+            });
+            
         }
     });
 }
@@ -36,7 +39,13 @@ recording = function (response) {
     albor = '';
     classmain = '';
 
-    alb = alb + '<li class="cover"><a href="' + concertmaster_uri + '"><img src="' + response.recording.cover + '" /></a></li>';
+    concertmaster_uri = options.frontend + '/u/' + response.work.id + '/' + response.recording.spotify_albumid + '/' + response.recording.set + '?play';
+
+    for (link in $('.playaction')) {
+        $('.playaction')[link].href = concertmaster_uri;
+    }
+
+    alb = alb + '<li class="cover"><a href="' + concertmaster_uri + '" target="_top"><img src="' + response.recording.cover + '" /></a></li>';
     alb = alb + '<li class="composer">' + response.work.composer.name + '</li>';
     alb = alb + '<li class="work">' + response.work.title + '</li>';
 
@@ -71,6 +80,7 @@ recording = function (response) {
     albp = albp + albo + albor + albc;
     alb = alb + '<li class="performers"><ul>' + albp + '</ul></li>';
     alb = alb + '<li class="label">' + response.recording.label.replace(/\'/gi, '') + '</li>';
+    alb = alb + '<li class="spotify"><a href="http://open.spotify.com/album/' + response.recording.spotify_albumid + '" target="_blank">Listen on Spotify</a></li>';
 
     $('#playerinfo').html(alb);
     $('#durationglobal').html(readabletime (response.recording.length));

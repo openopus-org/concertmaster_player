@@ -1666,3 +1666,24 @@ body.windows ul.connected .radio
 	border-right: 0px;
 	border-left: 0px;
 }
+
+.spotify a {
+	background: url(/img/spotifyi.png) no-repeat;
+	background-size: 10px;
+	height: 10px;
+	height: 14px;
+	margin: 0px;
+	font-size: 9px;
+	padding-left: 14px;
+	margin-top: 15px;
+	display: block;
+}
+
+#loading {
+	background: url(/img/spinner-gr.svg) no-repeat center;
+	background-size: 60px;
+	height: 220px;
+	margin: 0px;
+	text-indent: -9000px;
+	overflow: hidden;
+}
