@@ -220,7 +220,7 @@ a
 
 #nowplaying.up
 {
-	height: 264px;
+	height: 278px;
 }
 
 #nowplaying.down
@@ -2498,4 +2498,52 @@ li.spotify  {
 
 #playerinfo li.spotify  {
 	display: block;
+}
+
+li.disclaimer {
+	clear: both;
+	margin: 0 auto 20px;
+	width: 462px;
+	height: 90px;
+}
+
+li.disclaimer p {
+	margin-top: 10px;
+	border-radius: 20px;
+	padding: 11px;
+	border: 1px solid #7C726E;
+	font-family: Sanchez, TimesNewRoman, serif;
+	color: #7C726E;
+	font-size: 10px;
+	position: relative;
+	top: 26px;
+}
+
+li.disclaimer p a, li.emptylist p a {
+	color: #7C726E;
+	text-decoration: underline dotted #7C726E;
+}
+
+li.disclaimer p a:hover, li.emptylist p a:hover {
+	color: #FFF;
+}
+
+li.emptylist {
+	clear: both;
+	margin: 0 auto 20px;
+	width: 462px;
+	height: 90px;
+}
+
+li.emptylist p {
+	  margin-top: 10px;
+    color: #7C726E;
+    font-size: 13px;
+    position: relative;
+    top: 26px;
+    padding-left: 50px;
+    background-repeat: no-repeat;
+    background-image: url(../img/notchecked.png);
+    background-size: 36px;
+    background-position-y: 6px;
 }

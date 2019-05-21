@@ -183,7 +183,7 @@ cmas_spotify = function ()
     if (cmas_recoverplayer.tracks)
     {
       $('#nowplaying').css('display', "block");
-      $('#favorites').css('bottom', "348px");
+      $('#favorites').css('bottom', "362px");
       cmas_spotifyplay(cmas_recoverplayer.tracks, cmas_recoverplayer.offset);
       cmas_recoverplayer = {};
     }
@@ -310,7 +310,7 @@ cmas_track = function (offset)
 
 cmas_playstate = function (state)
 {
-  var itsover = false;
+  var isover = false;
 
   // treating player shutdown
 
@@ -346,12 +346,13 @@ cmas_playstate = function (state)
       $('#playpause').removeClass("pause");
       $('#playpause').addClass("play");
 
-      // is the recording over?
+      // is the single-track recording over?
 
-      if (state.paused && state.track_window.current_track.id == cmas_playbuffer.tracks[0] && state.position == 0)
+      if (cmas_playbuffer.tracks.length == 1 && state.paused && state.track_window.current_track.id == cmas_playbuffer.tracks[0] && (state.position == 0 || Math.floor(state.position / 1000) == Math.floor(state.duration / 1000)))
       {
         console.log ('Over, next');
-        itsover = true;
+        state.position = 0;
+        isover = true;
         cmas_radioskip ();
       }
     }
@@ -368,6 +369,8 @@ cmas_playstate = function (state)
 
   if (state.track_window.current_track.id != cmas_state.id && Object.keys(cmas_state).length > 0)
   {
+    state.position = 0;
+
     for (trid in cmas_playbuffer.tracks)
     {
       if (cmas_playbuffer.tracks[trid] != state.track_window.current_track.id)
@@ -375,13 +378,17 @@ cmas_playstate = function (state)
         cmas_slider ({ changed: true, paused: state.paused, id: cmas_playbuffer.tracks[trid], position: 0, duration: 0 });
       }
     }
-  }
 
+    if (cmas_playbuffer.tracks[0] == state.track_window.current_track.id && state.track_window.next_tracks.length == 0) {
+      console.log('Over, next');
+      cmas_radioskip();
+    }
+  }
+  
   // update current track position
 
-  cmas_state = { paused: state.paused, id: state.track_window.current_track.id, position: Math.floor (state.position / 1000), duration: Math.floor (state.duration / 1000) };
-  if (cmas_state.position > 0 || itsover)
-  {
+  cmas_state = { paused: state.paused, id: state.track_window.current_track.id, position: Math.floor(state.position / 1000), duration: Math.floor(state.duration / 1000) };
+  if (cmas_state.position > 0 || isover) {
     cmas_slider(cmas_state);
   }
 }
@@ -755,6 +762,7 @@ cmas_recordingsbywork = function (work, offset, data)
 
       var list = response;
       $('li.loading').remove();
+      listul = '#albums.' + list.work.id;
 
       if (list.status.success == "true" && $('#albums').attr('class') == work.toString()) {
         
@@ -762,8 +770,7 @@ cmas_recordingsbywork = function (work, offset, data)
         docsr = list.recordings;
 
         for (performance in docsr) {
-          listul = '#albums.' + list.work.id;
-
+  
           draggable = "";
           pidsort = "";
           extraclass = "";
@@ -798,6 +805,9 @@ cmas_recordingsbywork = function (work, offset, data)
           cmas_recordingsbywork(list.work.id, list.next, {});
         }
       }
+
+      if (list.status.success == "false") $(listul).append('<li class="emptylist"><p>Concertmaster couldn\'t find any recording of this work in the Spotify database. It might be an error, though. Please <a href="mailto:concertmasterteam@gmail.com">reach us</a> if you know a recording. This will help us correct our algorithm.</p></li>')
+      if (!list.next && list.status.success == "true") $(listul).append('<li class="disclaimer"><p>These recordings were fetched automatically from the Spotify database. The list might be inaccurate or incomplete. Please <a href="mailto:concertmasterteam@gmail.com">reach us</a> for requests, questions or suggestions.</p></li>');
     }
   });
 }
@@ -867,7 +877,7 @@ cmas_recording = function (wid, album, set, auto)
         $('#favorites').css('bottom', "280px");
       }
       else {
-        $('#favorites').css('bottom', "348px");
+        $('#favorites').css('bottom', "362px");
       }
       $("#timerglobal").html('0:00');
       cmas_recordingaction (response, auto);
@@ -1039,34 +1049,47 @@ cmas_recordingitem = function (item, work, playlist)
   }
 
   perfnum = 0;
+  var albpon = '';
+  var albptw = '';
+  var albpth = '';
 
   for (performers in item.performers)
   {
-      if (item.performers[performers].role.trim() == "Conductor")
-      {
-        albp = albp + '<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>';
-      }
-      else if (item.performers[performers].role.trim() == "Ensemble" || item.performers[performers].role.trim() == "Orchestra")
-      {
-        albp = albp + '<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong></li>';
-      }
-      else if (item.performers[performers].role.trim() == "Choir")
-      {
-        albp = albp + '<li class="'+classmain+'"><strong>'+item.performers[performers].name+'</strong></li>';
-      }
-      else if (item.performers[performers].role.trim() == "")
-      {
-        albp = albp + '<li class="' + classmain + '"><strong>' + item.performers[performers].name + '</strong></li>';
-      }
-      else
-      {
-        albp = albp + '<li class="'+classmain+'"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>';
-      }
+    if (item.performers[performers].role.trim() == "Conductor")
+    {
+      albpth = albpth + '<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>';
+    }
+    else if (item.performers[performers].role.trim() == "Ensemble" || item.performers[performers].role.trim() == "Orchestra")
+    {
+      albptw = albptw + '<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong></li>';
+    }
+    else if (item.performers[performers].role.trim() == "Choir")
+    {
+      albptw = albptw + '<li class="'+classmain+'"><strong>'+item.performers[performers].name+'</strong></li>';
+    }
+    else if (item.performers[performers].role.trim() == "")
+    {
+      albpon = albpon + '<li class="' + classmain + '"><strong>' + item.performers[performers].name + '</strong></li>';
+    }
+    else
+    {
+      albpon = albpon + '<li class="'+classmain+'"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>';
+    }
+
+    albp = albpon + albptw + albpth;
+  }
+
+  var spotify_link = 'http://open.spotify.com/album/' + item.spotify_albumid;
+
+  if (typeof item.spotify_tracks !== 'undefined') {
+    if (item.spotify_tracks.length == 1) {
+      spotify_link = 'http://open.spotify.com/track/' + item.spotify_tracks[0].replace ("spotify:track:", "");
+    }
   }
 
   alb = alb + '<li class="performers"><ul>' + albp + '</ul></li>';
   alb = alb + '<li class="label">'+item.label+'</li>';
-  alb = alb + '<li class="spotify"><a href="http://open.spotify.com/album/' + item.spotify_albumid + '" target="_blank">Listen on Spotify</a></li>';
+  alb = alb + '<li class="spotify"><a href="' + spotify_link + '" target="_blank">Listen on Spotify</a></li>';
 
   return alb;
 }
