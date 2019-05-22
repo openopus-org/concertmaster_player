@@ -183,7 +183,7 @@ cmas_spotify = function ()
     if (cmas_recoverplayer.tracks)
     {
       $('#nowplaying').css('display', "block");
-      $('#favorites').css('bottom', "362px");
+      $('#favorites').css('bottom', "384px");
       cmas_spotifyplay(cmas_recoverplayer.tracks, cmas_recoverplayer.offset);
       cmas_recoverplayer = {};
     }
@@ -725,7 +725,7 @@ cmas_works = function (response)
     }
 
     docsw[work].title = docsw[work].title.replace(/\"/g,"");
-    $('#works').append('<li><a href="javascript:cmas_favoritework(\'' + docsw[work].id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:cmas_recordingsbywork(' + docsw[work].id + ',0,{work:{title:\'' + docsw[work].title.replace(/\'|\"/g, "\\'") + '\'},composer:{id:' + list.composer.id + ', name:\'' + list.composer.name.replace(/\'/g, "\\'") +'\'}});">'+docsw[work].title+'</a></li>');
+    $('#works').append('<li><a href="javascript:cmas_favoritework(\'' + docsw[work].id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:cmas_recordingsbywork(' + docsw[work].id + ',0,{work:{title:\'' + docsw[work].title.replace(/\'|\"/g, "\\'") + '\',subtitle:\'' + docsw[work].subtitle.replace(/\'|\"/g, "\\'") + '\'},composer:{id:' + list.composer.id + ', name:\'' + list.composer.name.replace(/\'/g, "\\'") + '\'}});">' + docsw[work].title + '<span>' + docsw[work].subtitle +' </span></a></li>');
   }
 }
 
@@ -748,7 +748,7 @@ cmas_recordingsbywork = function (work, offset, data)
     $('#albums').html('');
     $('#genresworks h2').html('<a href="javascript:cmas_genresbycomposer (' + data.composer.id + ')">' + data.composer.name + '</a>');
     $('#genresworks h3').html(data.work.title);
-    $('#genresworks h4').html('');
+    $('#genresworks h4').html(data.work.subtitle);
     $('#albums').addClass(work.toString());
     $('#albums').show();
   }
@@ -874,10 +874,10 @@ cmas_recording = function (wid, album, set, auto)
     success: function (response) {
       $('#nowplaying').css('display', "block");
       if (cmas_disabled) {
-        $('#favorites').css('bottom', "280px");
+        $('#favorites').css('bottom', "312px");
       }
       else {
-        $('#favorites').css('bottom', "362px");
+        $('#favorites').css('bottom', "384px");
       }
       $("#timerglobal").html('0:00');
       cmas_recordingaction (response, auto);
@@ -998,6 +998,7 @@ cmas_playingdetails = function ()
 cmas_recordingitem = function (item, work, playlist)
 {
   if (typeof item.label === 'undefined') item.label = '';
+  if (typeof work.subtitle === 'undefined') work.subtitle = '';
 
   alb = '';
   alb = alb + '<li class="permalink"><a href="javascript:cmas_permalink(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')">permalink</a></li>';
@@ -1035,7 +1036,7 @@ cmas_recordingitem = function (item, work, playlist)
   alb = alb + '<div class="overlay"></div></a></li>';
 
   alb = alb+'<li class="composer"><a href="javascript:cmas_genresbycomposer('+work.composer.id+')">'+work.composer.name+'</a></li>';
-  alb = alb + '<li class="work"><a href="javascript:cmas_recordingsbywork(' + work.id + ',0,{work:{title:\'' + work.title.replace(/\'|\"/g, "\\'") + '\'},composer:{id:' + work.composer.id + ', name:\'' + work.composer.name.replace(/\'/g, "\\'") +'\'}})">'+work.title+'</a></li>';
+  alb = alb + '<li class="work"><a href="javascript:cmas_recordingsbywork(' + work.id + ',0,{work:{title:\'' + work.title.replace(/\'|\"/g, "\\'") + '\',subtitle:\'' + work.subtitle.replace(/\'|\"/g, "\\'") + '\'},composer:{id:' + work.composer.id + ', name:\'' + work.composer.name.replace(/\'/g, "\\'") + '\'}})">' + work.title +'<span>' + work.subtitle + '</span></a></li>';
 
   albp = '';
   albc = '';

@@ -1,3 +1,4 @@
+* Hostname in DNS cache was stale, zapped
 *   Trying 104.154.127.47...
 * Connected to accounts.spotify.com (104.154.127.47) port 443 (#0)
 * ALPN, offering http/1.1
@@ -32,7 +33,7 @@ Content-Type: application/x-www-form-urlencoded
 * upload completely sent off: 382 out of 382 bytes
 < HTTP/1.1 200 OK
 < Server: nginx
-< Date: Wed, 01 May 2019 19:06:29 GMT
+< Date: Tue, 21 May 2019 22:02:11 GMT
 < Content-Type: application/json
 < Transfer-Encoding: chunked
 < Connection: keep-alive

@@ -220,7 +220,8 @@ a
 
 #nowplaying.up
 {
-	height: 278px;
+	/*height: 278px;*/
+	height: 300px;
 }
 
 #nowplaying.down
@@ -263,7 +264,7 @@ a
 #playerinfo .composer a, #favorites .composer a, #albums.playlist .composer a
 {
 	font-family: Sanchez, TimesNewRoman, serif;
-	font-size: 20px;
+	font-size: 18px;
 	text-transform: uppercase;
 }
 
@@ -281,7 +282,7 @@ a
 #playerinfo .work a
 {
 	font-family: PetitaBold, Arial, sans-serif;
-	font-size: 20px;
+	font-size: 18px;
 }
 
 #playerinfo .label
@@ -2546,4 +2547,20 @@ li.emptylist p {
     background-image: url(../img/notchecked.png);
     background-size: 36px;
     background-position-y: 6px;
+}
+
+#works li a span {
+	font-size: 10px;
+  margin-left: 10px;
+}
+
+#playerinfo li a span {
+	display: block;
+  font-size: 12px;
+	margin-top: 4px;
+}
+
+#genresworks h4 {
+	font-size: 12px;
+  margin-top: 2px;
 }
