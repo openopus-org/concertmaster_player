@@ -48,6 +48,7 @@ recording = function (response) {
     alb = alb + '<li class="cover"><a href="' + concertmaster_uri + '" target="_top"><img src="' + response.recording.cover + '" /></a></li>';
     alb = alb + '<li class="composer">' + response.work.composer.name + '</li>';
     alb = alb + '<li class="work">' + response.work.title + '</li>';
+    alb = alb + '<li class="subtitle">' + response.work.subtitle + '</li>';
 
     document.title = `${response.work.composer.name}: ${response.work.title} - Concertmaster`;
 
