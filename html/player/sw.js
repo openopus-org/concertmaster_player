@@ -1,4 +1,4 @@
-const cacheName = '1.19';
+const cacheName = '1.19.05';
 const precacheResources = [
     '/css/main.css',
     '/css/PetitaBold.ttf',
@@ -77,7 +77,22 @@ const precacheResources = [
     '/img/cancel.png',
     '/img/cancel-on.png',
     '/img/update.png',
-    '/favicon.ico'
+    '/favicon.ico',
+    '/img/spotifyi.png',
+    '/img/spinner-gr.svg',
+    '/img/partial_off.png',
+    '/img/partial_on.png',
+    '/img/badaudio_on.png',
+    '/img/wrongdata_on.png',
+    '/img/incomplete_on.png',
+    '/img/verified_on.png',
+    '/img/badaudio_off.png',
+    '/img/wrongdata_off.png',
+    '/img/incomplete_off.png',
+    '/img/verified_off.png',
+    '/img/notchecked.png',
+    '/img/spinner-wt.svg',
+    '/img/spinner-ld.svg'
 ];
 
 self.addEventListener('install', event => {
@@ -129,6 +144,7 @@ self.addEventListener('fetch', event => {
                         event.request.url.indexOf("/work/list/composer/") != -1 ||
                         event.request.url.indexOf("/composer/list/") != -1 ||
                         event.request.url.indexOf("/recording/list/work/") != -1 ||
+                        event.request.url.indexOf("/user/") != -1 ||
                         event.request.url.indexOf("/recording/detail/") != -1
                     )
                     {

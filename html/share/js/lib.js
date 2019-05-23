@@ -1,6 +1,6 @@
 options = {};
-options.backend = 'https://api.cmas.me';
-options.frontend = 'https://cmas.me'
+options.backend = 'https://api.concertmaster.app';
+options.frontend = 'https://concertmaster.app'
 
 init = function () {
     vars = window.location.pathname.split("/");

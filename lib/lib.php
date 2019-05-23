@@ -1,14 +1,12 @@
 <?
   define ("SOFTWARENAME", "Concertmaster");
-  define ("SOFTWAREVERSION", "0.19");
+  define ("SOFTWAREVERSION", "1.19.05");
   define ("USERAGENT", SOFTWARENAME. "/" . SOFTWAREVERSION. " ( ". SOFTWAREMAIL. " )");
 
   function CURL_Internals ($url, $bust = true, $plusheader, $pluspost, $token)
   {
     $ts = time ();
     $ch = curl_init ();
-
-    $fp = fopen (DEBUG, "w");
 
     $header = array();
     $header[] = 'Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5';
@@ -51,7 +49,6 @@
     curl_setopt ($ch, CURLOPT_TIMEOUT, 200);
     //curl_setopt ($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
     curl_setopt ($ch, CURLOPT_VERBOSE, TRUE);
-    curl_setopt ($ch, CURLOPT_STDERR, $fp);
 
     if ($pluspost)
     {
@@ -62,7 +59,6 @@
     $api = curl_exec ($ch);
 
     curl_close ($ch);
-    fclose ($fp);
 
     return $api;
   }
