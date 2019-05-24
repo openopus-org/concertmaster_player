@@ -1,4 +1,4 @@
-const cacheName = '1.19.05';
+const cacheName = '1.19.05.24';
 const precacheResources = [
     '/css/main.css',
     '/css/PetitaBold.ttf',
@@ -144,7 +144,6 @@ self.addEventListener('fetch', event => {
                         event.request.url.indexOf("/work/list/composer/") != -1 ||
                         event.request.url.indexOf("/composer/list/") != -1 ||
                         event.request.url.indexOf("/recording/list/work/") != -1 ||
-                        event.request.url.indexOf("/user/") != -1 ||
                         event.request.url.indexOf("/recording/detail/") != -1
                     )
                     {
