@@ -44,7 +44,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.05'
+    version: '1.19.05.25'
 };
 
 window.onpopstate = function (event) {
@@ -1852,7 +1852,7 @@ cmas_permalink = function (wid, aid, set) {
     success: function (response) {
       permauri = cmas_options.shareurl + '/r/' + (Number(response.recording.id)).toString(16);
       $('#permalink-direct').val(permauri);
-      $('#permalink-widget').text(`<iframe src="${permauri}/widget" width="593" height="388" frameborder="0"></iframe>`);
+      $('#permalink-widget').text(`<iframe src="${permauri}/widget" width="593" height="430" frameborder="0"></iframe>`);
       $('#permalink-modal').leanModal();
     }
   });
