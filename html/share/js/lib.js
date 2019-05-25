@@ -59,6 +59,26 @@ recording = function (response) {
     perfnum = 0;
 
     for (performers in response.recording.performers) {
+        if (response.recording[performers].role.trim() == "Conductor") {
+            albpth = albpth + '<li class="mainperformer"><strong>' + response.recording.performers[performers].name + '</strong>, ' + response.recording.performers[performers].role + '</li>';
+        }
+        else if (response.recording.performers[performers].role.trim() == "Ensemble" || response.recording.performers[performers].role.trim() == "Orchestra") {
+            albptw = albptw + '<li class="mainperformer"><strong>' + response.recording.performers[performers].name + '</strong></li>';
+        }
+        else if (response.recording.performers[performers].role.trim() == "Choir") {
+            albptw = albptw + '<li class="' + classmain + '"><strong>' + response.recording.performers[performers].name + '</strong></li>';
+        }
+        else if (response.recording.performers[performers].role.trim() == "") {
+            albpon = albpon + '<li class="' + classmain + '"><strong>' + response.recording.performers[performers].name + '</strong></li>';
+        }
+        else {
+            albpon = albpon + '<li class="' + classmain + '"><strong>' + response.recording.performers[performers].name + '</strong>, ' + response.recording.performers[performers].role + '</li>';
+        }
+
+        albp = albpon + albptw + albpth;
+    }
+
+    /*for (performers in response.recording.performers) {
         perfnum = perfnum + 1;
 
         if (response.recording.performers[performers].role.trim() == "Conductor" || response.recording.performers[performers].role.trim() == "Director") {
@@ -76,7 +96,7 @@ recording = function (response) {
         else {
             albp = albp + '<li class="' + classmain + '"><strong>' + response.recording.performers[performers].name + '</strong>, ' + response.recording.performers[performers].role + '</li>';
         }
-    }
+    }*/
 
     albp = albp + albo + albor + albc;
     alb = alb + '<li class="performers"><ul>' + albp + '</ul></li>';
