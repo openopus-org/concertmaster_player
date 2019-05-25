@@ -58,6 +58,10 @@ recording = function (response) {
 
     perfnum = 0;
 
+    var albpon = '';
+    var albptw = '';
+    var albpth = '';
+
     for (performers in response.recording.performers) {
         if (response.recording.performers[performers].role.trim() == "Conductor") {
             albpth = albpth + '<li class="mainperformer"><strong>' + response.recording.performers[performers].name + '</strong>, ' + response.recording.performers[performers].role + '</li>';
