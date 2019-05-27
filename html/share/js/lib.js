@@ -1,6 +1,13 @@
 options = {};
-options.backend = 'https://api.concertmaster.app';
-options.frontend = 'https://concertmaster.app'
+
+if (window.location.hostname.split('.')[1] == 'local') {
+    tld = 'local';
+}
+else {
+    tld = 'app';
+}
+options.backend = 'https://api.concertmaster.' + tld;
+options.frontend = 'https://concertmaster.' + tld;
 
 init = function () {
     vars = window.location.pathname.split("/");
@@ -81,26 +88,6 @@ recording = function (response) {
 
         albp = albpon + albptw + albpth;
     }
-
-    /*for (performers in response.recording.performers) {
-        perfnum = perfnum + 1;
-
-        if (response.recording.performers[performers].role.trim() == "Conductor" || response.recording.performers[performers].role.trim() == "Director") {
-            albc = albc + '<li class="mainperformer"><strong>' + response.recording.performers[performers].name + '</strong>, ' + response.recording.performers[performers].role + '</li>';
-        }
-        else if (perfnum <= 2 && (response.recording.performers[performers].role.trim() == "Harpsichord" || response.recording.performers[performers].role.trim() == "Piano" || response.recording.performers[performers].role.trim() == "Violin" || response.recording.performers[performers].role.trim() == "Clarinet" || response.recording.performers[performers].role.trim() == "Cello")) {
-            albc = albc + '<li class="mainperformer"><strong>' + response.recording.performers[performers].name + '</strong>, ' + response.recording.performers[performers].role + '</li>';
-        }
-        else if (response.recording.performers[performers].role.trim() == "Chamber Ensemble" || response.recording.performers[performers].role.trim() == "String Quartet" || response.recording.performers[performers].role.trim() == "Ensemble" || response.recording.performers[performers].role.trim() == "Orchestra" || response.recording.performers[performers].role.trim() == "Chamber Orchestra") {
-            albor = albor + '<li class="mainperformer"><strong>' + response.recording.performers[performers].name + '</strong></li>';
-        }
-        else if (response.recording.performers[performers].role.trim() == "Chorus/Choir" || response.recording.performers[performers].role.trim() == "Choir") {
-            albo = albo + '<li class="' + classmain + '"><strong>' + response.recording.performers[performers].name + '</strong></li>';
-        }
-        else {
-            albp = albp + '<li class="' + classmain + '"><strong>' + response.recording.performers[performers].name + '</strong>, ' + response.recording.performers[performers].role + '</li>';
-        }
-    }*/
 
     albp = albp + albo + albor + albc;
     alb = alb + '<li class="performers"><ul>' + albp + '</ul></li>';
