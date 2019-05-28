@@ -1056,6 +1056,11 @@ cmas_recordingitem = function (item, work, playlist)
 
   for (performers in item.performers)
   {
+    if (item.performers[performers].role === null)
+    {
+      item.performers[performers].role = "";
+    }
+
     if (item.performers[performers].role.trim() == "Conductor")
     {
       albpth = albpth + '<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>';
