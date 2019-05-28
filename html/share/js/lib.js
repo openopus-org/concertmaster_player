@@ -70,6 +70,11 @@ recording = function (response) {
     var albpth = '';
 
     for (performers in response.recording.performers) {
+
+        if (item.performers[performers].role === null) {
+            item.performers[performers].role = "";
+        }
+        
         if (response.recording.performers[performers].role.trim() == "Conductor") {
             albpth = albpth + '<li class="mainperformer"><strong>' + response.recording.performers[performers].name + '</strong>, ' + response.recording.performers[performers].role + '</li>';
         }
