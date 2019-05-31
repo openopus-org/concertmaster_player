@@ -44,7 +44,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.05.27'
+    version: '1.19.05.31'
 };
 
 window.onpopstate = function (event) {
@@ -725,13 +725,13 @@ cmas_works = function (response)
     }
 
     docsw[work].title = docsw[work].title.replace(/\"/g,"");
-    $('#works').append('<li><a href="javascript:cmas_favoritework(\'' + docsw[work].id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:cmas_recordingsbywork(' + docsw[work].id + ',0,{work:{title:\'' + docsw[work].title.replace(/\'|\"/g, "\\'") + '\',subtitle:\'' + docsw[work].subtitle.replace(/\'|\"/g, "\\'") + '\'},composer:{id:' + list.composer.id + ', name:\'' + list.composer.name.replace(/\'/g, "\\'") + '\'}});">' + docsw[work].title + '<span>' + docsw[work].subtitle +' </span></a></li>');
+    $('#works').append('<li><a href="javascript:cmas_favoritework(\'' + docsw[work].id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:cmas_recordingsbywork(' + docsw[work].id + ',0);">' + docsw[work].title + '<span>' + docsw[work].subtitle +' </span></a></li>');
   }
 }
 
 // recordings list
 
-cmas_recordingsbywork = function (work, offset, data)
+cmas_recordingsbywork = function (work, offset)
 {
   $('#worksearch').val('');
   window.albumlistwork = work;
@@ -746,9 +746,9 @@ cmas_recordingsbywork = function (work, offset, data)
     $('#playlistradio').hide();
     $('#albums').removeClass();
     $('#albums').html('');
-    $('#genresworks h2').html('<a href="javascript:cmas_genresbycomposer (' + data.composer.id + ')">' + data.composer.name + '</a>');
-    $('#genresworks h3').html(data.work.title);
-    $('#genresworks h4').html(data.work.subtitle);
+    $('#genresworks h2').html('');
+    $('#genresworks h3').html('');
+    $('#genresworks h4').html('');
     $('#albums').addClass(work.toString());
     $('#albums').show();
   }
@@ -766,6 +766,9 @@ cmas_recordingsbywork = function (work, offset, data)
 
       if (list.status.success == "true" && $('#albums').attr('class') == work.toString()) {
         
+        $('#genresworks h2').html('<a href="javascript:cmas_genresbycomposer (' + list.work.composer.id + ')">' + list.work.composer.name + '</a>');
+        $('#genresworks h3').html(list.work.title);
+        $('#genresworks h4').html(list.work.subtitle);
         window.albumlistnext = list.next;
         docsr = list.recordings;
 
@@ -802,7 +805,7 @@ cmas_recordingsbywork = function (work, offset, data)
 
         if (list.status.rows <= 4 && list.next)
         {
-          cmas_recordingsbywork(list.work.id, list.next, {});
+          cmas_recordingsbywork(list.work.id, list.next);
         }
       }
 
@@ -1036,7 +1039,7 @@ cmas_recordingitem = function (item, work, playlist)
   alb = alb + '<div class="overlay"></div></a></li>';
 
   alb = alb+'<li class="composer"><a href="javascript:cmas_genresbycomposer('+work.composer.id+')">'+work.composer.name+'</a></li>';
-  alb = alb + '<li class="work"><a href="javascript:cmas_recordingsbywork(' + work.id + ',0,{work:{title:\'' + work.title.replace(/\'|\"/g, "\\'") + '\',subtitle:\'' + work.subtitle.replace(/\'|\"/g, "\\'") + '\'},composer:{id:' + work.composer.id + ', name:\'' + work.composer.name.replace(/\'/g, "\\'") + '\'}})">' + work.title +'<span>' + work.subtitle + '</span></a></li>';
+  alb = alb + '<li class="work"><a href="javascript:cmas_recordingsbywork(' + work.id + ',0)">' + work.title +'<span>' + work.subtitle + '</span></a></li>';
 
   albp = '';
   albc = '';
@@ -1894,7 +1897,7 @@ cmas_albumscroll = function (o) {
   if (o.offsetHeight + o.scrollTop > o.scrollHeight - 400) {
     if (window.albumlistnext) {
       if (window.albumlistnext != window.albumlistoffset) {
-        cmas_recordingsbywork(window.albumlistwork, window.albumlistnext, {});
+        cmas_recordingsbywork(window.albumlistwork, window.albumlistnext);
       }
     }
   }
