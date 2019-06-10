@@ -37,6 +37,7 @@ cmas_options = {
     compilations: JSON.parse(localStorage.configcompilations),
     timeout: 10000,
     backend: 'https://api.' + window.location.hostname,
+    opusbackend: 'https://api.openopus.' + (window.location.hostname.split('.')[1] == 'local' ? 'local' : 'org'),
     publicsite: 'https://getconcertmaster.com',
     shareurl: 'https://cmas.me',
     smartradio: JSON.parse(localStorage.smartradio),
@@ -44,7 +45,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.05.31'
+    version: '1.19.06'
 };
 
 window.onpopstate = function (event) {
@@ -457,7 +458,7 @@ cmas_readabletime = function(time)
 cmas_composersbyname = function (letter)
 {
   $.ajax({
-    url: cmas_options.backend + '/composer/list/name/' + letter + '.json',
+    url: cmas_options.opusbackend + '/composer/list/name/' + letter + '.json',
     method: "GET",
     success: function (response) {
       cmas_composers (response);
@@ -470,7 +471,7 @@ cmas_composersbysearch = function (search)
   if (search.length > 3)
   {
     $.ajax({
-      url: cmas_options.backend + '/composer/list/search/' + search + '.json',
+      url: cmas_options.opusbackend + '/composer/list/search/' + search + '.json',
       method: "GET",
       success: function (response) {
         cmas_composers(response);
@@ -486,7 +487,7 @@ cmas_composersbysearch = function (search)
 cmas_composersbyepoch = function (epoch)
 {
   $.ajax({
-    url: cmas_options.backend + '/composer/list/epoch/' + epoch + '.json',
+    url: cmas_options.opusbackend + '/composer/list/epoch/' + epoch + '.json',
     method: "GET",
     success: function (response) {
       cmas_composers(response);
@@ -574,7 +575,7 @@ cmas_composers = function (response)
           cforb = '';
         }
         
-        $('#composers').append('<li class="composer"><ul class="composerdetails"><li class="photo"><a href="javascript:cmas_genresbycomposer(\'' + docs[composer].id + '\');"><img src="/img/portraits/' + cmas_slug(docs[composer].name) + '.jpg" /></a></li><li class="name"><a href="javascript:cmas_genresbycomposer(\'' + docs[composer].id + '\');">' + docs[composer].name + '</a></li><li class="fullname">' + docs[composer].complete_name + '</li><li class="dates">(' + docs[composer].birth.substring(0, 4) + (docs[composer].death.substring(0, 4) != '0000' ? '-' + docs[composer].death.substring(0, 4) : '') + ')</li><li id="forb_' + docs[composer].id + '" class="forb ' + cforb + '"><a href="javascript:cmas_compforbid(\'' + docs[composer].id + '\');">forbidden</a></li><li id="cfav_' + docs[composer].id + '" class="fav ' + cfav + '"><a href="javascript:cmas_compfavorite(\'' + docs[composer].id + '\');">fav</a></li><li class="radio"><a href="javascript:cmas_newradio({composer:' + docs[composer].id + '});">radio</a></li><li class="edit"><a href="javascript:cmas_editcomposer(\'' + docs[composer].id + '\');">edit</a></li></ul></li>');
+        $('#composers').append('<li class="composer"><ul class="composerdetails"><li class="photo"><a href="javascript:cmas_genresbycomposer(\'' + docs[composer].id + '\');"><img src="' + docs[composer].portrait + '" /></a></li><li class="name"><a href="javascript:cmas_genresbycomposer(\'' + docs[composer].id + '\');">' + docs[composer].name + '</a></li><li class="fullname">' + docs[composer].complete_name + '</li><li class="dates">(' + docs[composer].birth.substring(0, 4) + (docs[composer].death.substring(0, 4) != '0000' ? '-' + docs[composer].death.substring(0, 4) : '') + ')</li><li id="forb_' + docs[composer].id + '" class="forb ' + cforb + '"><a href="javascript:cmas_compforbid(\'' + docs[composer].id + '\');">forbidden</a></li><li id="cfav_' + docs[composer].id + '" class="fav ' + cfav + '"><a href="javascript:cmas_compfavorite(\'' + docs[composer].id + '\');">fav</a></li><li class="radio"><a href="javascript:cmas_newradio({composer:' + docs[composer].id + '});">radio</a></li><li class="edit"><a href="javascript:cmas_editcomposer(\'' + docs[composer].id + '\');">edit</a></li></ul></li>');
       }
 
       $('#composers').scrollLeft(0);
@@ -592,7 +593,7 @@ cmas_genresbycomposer = function (composer, genre)
   window.albumlistnext = 0;
 
   $.ajax({
-    url: cmas_options.backend + '/genre/list/composer/' + composer + '.json',
+    url: cmas_options.opusbackend + '/genre/list/composer/' + composer + '.json',
     method: "GET",
     success: function (response) {
       
@@ -648,7 +649,7 @@ cmas_worksbycomposer = function (composer, genre)
   $('#worksearch').val('');
 
   $.ajax({
-    url: cmas_options.backend + '/work/list/composer/' + composer + '/' + genre + '.json',
+    url: cmas_options.opusbackend + '/work/list/composer/' + composer + '/' + genre + '.json',
     method: "GET",
     success: function (response) {
       cmas_works(response);
@@ -684,7 +685,7 @@ cmas_worksbysearch = function (composer, genre, search)
   else if (search.length > 3)
   {
     $.ajax({
-      url: cmas_options.backend + '/work/list/composer/' + composer + '/genre/' + genre + '/search/' + search + '.json',
+      url: cmas_options.opusbackend + '/work/list/composer/' + composer + '/genre/' + genre + '/search/' + search + '.json',
       method: "GET",
       success: function (response) {
         cmas_works(response);
@@ -725,7 +726,7 @@ cmas_works = function (response)
     }
 
     docsw[work].title = docsw[work].title.replace(/\"/g,"");
-    $('#works').append('<li><a href="javascript:cmas_favoritework(\'' + docsw[work].id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:cmas_recordingsbywork(' + docsw[work].id + ',0);">' + docsw[work].title + '<span>' + docsw[work].subtitle +' </span></a></li>');
+    $('#works').append('<li><a href="javascript:cmas_favoritework(\'' + docsw[work].id + '\',\'' + list.composer.id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:cmas_recordingsbywork(' + docsw[work].id + ',0);">' + docsw[work].title + '<span>' + docsw[work].subtitle +' </span></a></li>');
   }
 }
 
@@ -764,11 +765,13 @@ cmas_recordingsbywork = function (work, offset)
       $('li.loading').remove();
       listul = '#albums.' + list.work.id;
 
-      if (list.status.success == "true" && $('#albums').attr('class') == work.toString()) {
-        
+      if ($('#albums').attr('class') == work.toString()) {
         $('#genresworks h2').html('<a href="javascript:cmas_genresbycomposer (' + list.work.composer.id + ')">' + list.work.composer.name + '</a>');
         $('#genresworks h3').html(list.work.title);
         $('#genresworks h4').html(list.work.subtitle);
+      }
+
+      if (list.status.success == "true") {
         window.albumlistnext = list.next;
         docsr = list.recordings;
 
@@ -1252,7 +1255,7 @@ cmas_recfavorite = function (wid, aid, set)
 
 // adding or removing favorite work
 
-cmas_favoritework = function (wid) {
+cmas_favoritework = function (wid, cid) {
   if ($.inArray(wid.toString(), cmas_favoriteworks) != -1) {
     action = 'unfavorite';
   }
@@ -1263,7 +1266,7 @@ cmas_favoritework = function (wid) {
   $.ajax({
     url: cmas_options.backend + '/dyn/user/work/' + action + '/',
     method: "POST",
-    data: { id: localStorage.spotify_userid, wid: wid, auth: cmas_authgen() },
+    data: { id: localStorage.spotify_userid, wid: wid, cid: cid, auth: cmas_authgen() },
     success: function (response) {
       if (response.status.success == "true") {
         cmas_favoriteworks = (response.list ? response.list : []);
@@ -1712,7 +1715,7 @@ cmas_newradio = function (filter) {
     $(`#${cmas_disabledreason}`).leanModal(); return;
   }
   $.ajax({
-    url: cmas_options.backend + '/dyn/work/random/',
+    url: cmas_options.backend + '/dyn/user/work/random/',
     method: "POST",
     data: { id: localStorage.spotify_userid, genre: filter.genre, epoch: filter.epoch, composer: filter.composer, work: filter.work },
     success: function (response) {
