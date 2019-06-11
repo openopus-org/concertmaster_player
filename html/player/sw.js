@@ -139,7 +139,6 @@ self.addEventListener('fetch', event => {
                     var responseToCache = response.clone();
 
                     if (event.request.url.indexOf("/cover/") != -1 || 
-                        event.request.url.indexOf("/img/portraits/") != -1 ||
                         event.request.url.indexOf("/genre/list/composer/") != -1 ||
                         event.request.url.indexOf("/work/list/composer/") != -1 ||
                         event.request.url.indexOf("/composer/list/") != -1 ||
