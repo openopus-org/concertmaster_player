@@ -506,6 +506,16 @@ cmas_composersbyfav = function ()
   });
 }
 
+cmas_composersbytag = function (tag) {
+  $.ajax({
+    url: cmas_options.opusbackend + '/composer/list/' + tag + '.json',
+    method: "GET",
+    success: function (response) {
+      cmas_composers(response);
+    }
+  });
+}
+
 cmas_composers = function (response)
 {
   var list = response;
@@ -517,7 +527,7 @@ cmas_composers = function (response)
       switch (list.request.type)
       {
         case "epoch":
-          compcontent = '<li class="index period"></li>';
+          compcontent = '<li class="index period">' + list.request.item + '</li>';
           $('#library #composersearch').val('');
           break;
 
@@ -528,7 +538,21 @@ cmas_composers = function (response)
           break;
 
         case "fav":
-          compcontent = '<li class="index favorite"></li>';
+          compcontent = '<li class="index favorite">Favorites</li>';
+          $('#library #composersearch').val('');
+          $('#library select.periods').val('all');
+          $('#library select.periods').trigger('change.select2');
+          break;
+
+        case "pop":
+          compcontent = '<li class="index popular">Popular</li>';
+          $('#library #composersearch').val('');
+          $('#library select.periods').val('all');
+          $('#library select.periods').trigger('change.select2');
+          break;
+
+        case "rec":
+          compcontent = '<li class="index recommended">Essential</li>';
           $('#library #composersearch').val('');
           $('#library select.periods').val('all');
           $('#library select.periods').trigger('change.select2');
@@ -538,7 +562,7 @@ cmas_composers = function (response)
         default:
           if (list.request.item == "all")
           {
-            compcontent = '<li class="index all"></li>';
+            compcontent = '<li class="index all">All</li>';
           }
           else
           {
@@ -621,19 +645,22 @@ cmas_genresbycomposer = function (composer, genre)
 
         docsg = list.genres;
         for (dgenre in docsg) {
-          $('#genres').append('<li id="' + cmas_slug(docsg[dgenre]) + '"><a href="javascript:cmas_worksbycomposer(\'' + list.composer.id + '\',\'' + docsg[dgenre] + '\');">' + docsg[dgenre] + '</a><a class="radio" href="javascript:cmas_newradio({composer:' + list.composer.id + ',genre:\'' + docsg[dgenre] + '\'});">radio</a></li>');
+          $('#genres').append('<li id="' + cmas_slug(docsg[dgenre]) + '"><a href="javascript:cmas_worksbycomposer(\'' + list.composer.id + '\',\'' + docsg[dgenre] + '\');">' + (docsg[dgenre] == 'Recommended' ? 'Essential' : docsg[dgenre]) + '</a><a class="radio" href="javascript:cmas_newradio({composer:' + list.composer.id + ',genre:\'' + docsg[dgenre] + '\'});">radio</a></li>');
         }
 
         if (!genre) {
-          genre = 'all';
+          if ($('#genres #recommended').length) {
+            genre = 'Recommended';
+          }
+          else {
+            genre = 'all';
+          }
         }
 
-        if (genre == 'fav')
-        {
+        if (genre == 'fav') {
           cmas_listfavoriteworks(list.composer.id);
         }
-        else
-        {
+        else {
           cmas_worksbycomposer(list.composer.id, genre);
         }
       }
@@ -717,16 +744,25 @@ cmas_works = function (response)
   $('#works').html('');
 
   docsw = list.works;
-  for (work in docsw)
-  {
+  lastrec = '';
+  lastgenre = '';
+
+  for (work in docsw) {
     favorite = '';
-    if ($.inArray(docsw[work].id.toString(), cmas_favoriteworks) != -1) 
-    {
+    if ($.inArray(docsw[work].id.toString(), cmas_favoriteworks) != -1) {
       favorite = 'favorite';
     }
 
-    docsw[work].title = docsw[work].title.replace(/\"/g,"");
-    $('#works').append('<li><a href="javascript:cmas_favoritework(\'' + docsw[work].id + '\',\'' + list.composer.id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:cmas_recordingsbywork(' + docsw[work].id + ',0);">' + docsw[work].title + '<span>' + docsw[work].subtitle +' </span></a></li>');
+    if (list.request.item == 'Recommended' || list.request.item == 'Popular' || list.request.item == 'fav') {
+      if (lastgenre != docsw[work].genre) $('#works').append('<li class="separator">' + docsw[work].genre + '</li>');
+    }
+    else if (lastrec != docsw[work].recommended && !(lastrec == '' && docsw[work].recommended == '0')) $('#works').append('<li class="separator">' + (docsw[work].recommended == 1 ? 'Essential': 'Other works') + '</li>');
+
+    docsw[work].title = docsw[work].title.replace(/\"/g, "");
+    $('#works').append('<li><a href="javascript:cmas_favoritework(\'' + docsw[work].id + '\',\'' + list.composer.id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:cmas_recordingsbywork(' + docsw[work].id + ',0);">' + docsw[work].title + '<span>' + docsw[work].subtitle + ' </span></a></li>');
+
+    lastrec = docsw[work].recommended;
+    lastgenre = docsw[work].genre;
   }
 }
 
@@ -1294,7 +1330,7 @@ cmas_init = function ()
       cmas_favoriteworks = (response.works ? response.works : []);
       cmas_playlists = (response.playlists ? response.playlists : {});
 
-      cmas_composersbyname('all');
+      cmas_composersbytag('pop');
       cmas_genresbycomposer(localStorage.lastcomposerid, localStorage.lastgenre);
       cmas_playlist("fav");
     }
@@ -1711,26 +1747,23 @@ cmas_playlistdetail = function (pid) {
 // new radio
 
 cmas_newradio = function (filter) {
+  if (filter.genre == 'Popular') filter.popularwork = 1;
+  if (filter.genre == 'Recommended') filter.recommendedwork = 1;
+  if (filter.genre == 'Recommended' || filter.genre == 'Popular') filter.genre = '';
   if (cmas_disabled) {
     $(`#${cmas_disabledreason}`).leanModal(); return;
   }
   $.ajax({
     url: cmas_options.backend + '/dyn/user/work/random/',
     method: "POST",
-    data: { id: localStorage.spotify_userid, genre: filter.genre, epoch: filter.epoch, composer: filter.composer, work: filter.work },
+    data: { id: localStorage.spotify_userid, popularcomposer: filter.popularcomposer, recommendedcomposer: filter.recommendedcomposer, popularwork: filter.popularwork, recommendedwork: filter.recommendedwork, genre: filter.genre, epoch: filter.epoch, composer: filter.composer, work: filter.work },
     success: function (response) {
       if (response.status.success == "true") {
 
         cmas_radioqueue = [];
-
-        // removing forbidden composers
-
         for (wk in response.works)
         {
-          if ($.inArray(response.works[wk].composer.toString(), cmas_forbiddencomposers) == -1)
-          {
-            cmas_radioqueue.push(response.works[wk]);
-          } 
+          cmas_radioqueue.push(response.works[wk]);
         }
 
         cmas_onair = true;
@@ -1795,6 +1828,18 @@ cmas_radiobutton = function () {
     filter = { genre: $('#radiotop select.genres option:checked').val(), epoch: $('#radiotop select.periods option:checked').val() };
     if ($('#radiotop select.composers option:checked').val() == "wfav") {
       filter.work = "fav";
+    }
+    else if ($('#radiotop select.composers option:checked').val() == "wrec") {
+      filter.recommendedwork = "1";
+    }
+    else if ($('#radiotop select.composers option:checked').val() == "rec") {
+      filter.recommendedcomposer = "1";
+    }
+    else if ($('#radiotop select.composers option:checked').val() == "wpop") {
+      filter.popularwork = "1";
+    }
+    else if ($('#radiotop select.composers option:checked').val() == "pop") {
+      filter.popularcomposer = "1";
     }
     else {
       filter.composer = $('#radiotop select.composers option:checked').val();

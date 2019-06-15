@@ -38,7 +38,9 @@
             <select class="composers">
                 <option value="All">All composers</option>
                 <option value="fav">Favorite composers</option>
+                <option value="rec">Essential composers</option>
                 <option value="wfav">Favorite works</option>
+                <option value="wrec">Essential works</option>
             </select>
             <select class="periods">
                 <option value="All">All periods</option>
@@ -94,7 +96,9 @@
         <div id="library">
             <ul id="atoz">
                 <li><a href="javascript:cmas_composersbyname('all')">All</a></li>
-                <li><a class="favorite" href="javascript:cmas_composersbyfav()">fav</a></li>
+                <li><a class="favorite" title="Favorites" href="javascript:cmas_composersbyfav()">fav</a></li>
+                <li><a class="popular" title="Popular" href="javascript:cmas_composersbytag('pop')">pop</a></li>
+                <li><a class="recommended" title="Essential" href="javascript:cmas_composersbytag('rec')">rec</a></li>
             </ul>
             <select class="periods">
                 <option value="all">All periods</option>

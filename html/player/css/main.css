@@ -2,13 +2,13 @@
 
 html, body
 {
-	height: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
 body
 {
-	position: absolute;
+  position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
@@ -326,7 +326,7 @@ a
 	background-image: url("../img/permalink_big_on.png");
 }
 
-#atoz li a.favorite
+#atoz li a.favorite, #atoz li a.recommended, #atoz li a.popular
 {
 	display: block;
 	background-repeat: no-repeat;
@@ -334,7 +334,21 @@ a
 	background-size: 11px;
 	text-indent: -9000px;
 	overflow: hidden;
+}
+
+#atoz li a.favorite
+{
 	background-image: url("../img/cfav.png");
+}
+
+#atoz li a.recommended
+{
+	background-image: url("../img/crec.png");
+}
+
+#atoz li a.popular
+{
+	background-image: url("../img/cpop.png");
 }
 
 #composers ul.composerdetails li.fav, #composers ul.composerdetails li.radio, #composers ul.composerdetails li.forb,
@@ -1126,7 +1140,7 @@ h2
 
 #composers .index
 {
-	width: 36px;
+	width: 46px;
 	height: 60px;
 	background-color: #FCE546;
 	font-family: Sanchez, TimesNewRoman, serif;
@@ -1144,32 +1158,64 @@ h2
 {
 	background-image: url("../img/search.png");
 	background-repeat: no-repeat;
-	background-position: 6px 12px;
-	background-size: 24px 24px;
+	background-position: 13px 12px;
+	background-size: 20px 20px;
 }
 
 #composers .index.period
 {
 	background-image: url("../img/period.png");
 	background-repeat: no-repeat;
-	background-position: 8px 12px;
-	background-size: 19px 27px;
+	background-position: 22px 12px;
+	background-size: 16px 20px;
+
+	font-size: 8px;
+    font-family: inherit;
+    text-transform: capitalize;
+	padding-top: 57px;
+	height: 15px;
+	width: 60px;
+}
+
+#composers .index.favorite, #composers .index.popular, #composers .index.recommended
+{
+	background-repeat: no-repeat;
+	background-position: 13px 12px;
+	background-size: 19px;
+
+	font-size: 8px;
+    font-family: inherit;
+    text-transform: none;
+	padding-top: 57px;
+    height: 15px;
 }
 
 #composers .index.favorite
 {
 	background-image: url("../img/compfav.png");
-	background-repeat: no-repeat;
-	background-position: 6px 12px;
-	background-size: 24px;
+}
+
+#composers .index.popular
+{
+	background-image: url("../img/bpop.png");
+}
+
+#composers .index.recommended
+{
+	background-image: url("../img/brec.png");
 }
 
 #composers .index.all
 {
 	background-image: url("../img/all.png");
 	background-repeat: no-repeat;
-	background-position: 10px 12px;
+	background-position: 15px 12px;
 	background-size: 16px 15px;
+	font-size: 8px;
+    font-family: inherit;
+    text-transform: none;
+    padding-top: 57px;
+    height: 15px;
 }
 
 #composers .photo
@@ -1204,7 +1250,7 @@ h2
 
 #radiotop select.composers
 {
-	width: 142px;
+	width: 152px;
 	background-position: 123px;
 }
 
@@ -1282,11 +1328,39 @@ h2
 {
 	border-bottom: 1px solid #717171;
 	padding: 12px 12px 6px;
+	font-size: 13px;
 }
 
 #genres li:hover, #genres li.active
 {
 	background-color: #3A3A3A;
+}
+
+#genres li#fav,  #genres li#recommended, #genres li#popular
+{
+	background-repeat: no-repeat;
+    background-size: 14px;
+    background-position: 10px 13px;
+    text-indent: 20px;
+}
+
+#genres li#fav
+{
+	background-image: url(../img/cfav.png);
+}
+
+#genres li#recommended
+{
+	background-image: url(../img/crec.png);
+	background-size: 15px;
+    background-position: 10px;
+}
+
+#genres li#popular
+{
+	background-image: url(../img/cpop.png);
+	background-position: 11px;
+    background-size: 13px;
 }
 
 #works
@@ -1388,6 +1462,20 @@ h2
 #works:hover > li a.wfav.favorite:hover
 {
 	background-image: url("../img/favorite_un.png");
+}
+
+#works li.separator 
+{
+	text-transform: uppercase;
+    font-family: "Sanchez";
+    font-size: 10px;
+	color: #7C726E;
+	padding-top: 20px;
+}
+
+#works :first-child.separator
+{
+	padding-top: 0px;
 }
 
 #changelog
@@ -1796,7 +1884,7 @@ body.windows #windowcontrol
 
 #radiotop
 {
-	width: 542px;
+	width: 552px;
 	position: absolute;
 	right: 114px;
 	bottom: 5px;
