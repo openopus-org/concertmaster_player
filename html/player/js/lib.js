@@ -758,7 +758,7 @@ cmas_works = function (response)
     }
     else if (lastrec != docsw[work].recommended && !(lastrec == '' && docsw[work].recommended == '0')) $('#works').append('<li class="separator">' + (docsw[work].recommended == 1 ? 'Essential': 'Other works') + '</li>');
 
-    docsw[work].title = docsw[work].title.replace(/\"/g, "");
+    //docsw[work].title = docsw[work].title.replace(/\"/g, "");
     $('#works').append('<li><a href="javascript:cmas_favoritework(\'' + docsw[work].id + '\',\'' + list.composer.id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:cmas_recordingsbywork(' + docsw[work].id + ',0);">' + docsw[work].title + '<span>' + docsw[work].subtitle + ' </span></a></li>');
 
     lastrec = docsw[work].recommended;
