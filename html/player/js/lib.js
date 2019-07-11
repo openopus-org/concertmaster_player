@@ -1127,7 +1127,7 @@ cmas_recordingitem = function (item, work, playlist)
 
   if (item.performers.length > 4 && albpthree.length == 0 && albptwo.length == 0) {
     for (oneperfs in albpone) {
-      if (oneperfs <= 4) albpone[oneperfs] = albpone[oneperfs].replace ('class=""', 'class="mainperformer"');
+      if (oneperfs <= 3) albpone[oneperfs] = albpone[oneperfs].replace ('class=""', 'class="mainperformer"');
     }
   }
 
