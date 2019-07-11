@@ -39,13 +39,13 @@ cmas_options = {
     backend: 'https://api.' + window.location.hostname,
     opusbackend: 'https://api.openopus.' + (window.location.hostname.split('.')[1] == 'local' ? 'local' : 'org'),
     publicsite: 'https://getconcertmaster.com',
-    shareurl: 'https://cmas.me',
+    shareurl: 'https://cmas.' + (window.location.hostname.split('.')[1] == 'local' ? 'local' : 'me'),
     smartradio: JSON.parse(localStorage.smartradio),
     notshow: false,
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.06.14'
+    version: '1.19.07'
 };
 
 window.onpopstate = function (event) {
@@ -1080,7 +1080,10 @@ cmas_recordingitem = function (item, work, playlist)
   alb = alb+'<li class="composer"><a href="javascript:cmas_genresbycomposer('+work.composer.id+')">'+work.composer.name+'</a></li>';
   alb = alb + '<li class="work"><a href="javascript:cmas_recordingsbywork(' + work.id + ',0)">' + work.title +'<span>' + work.subtitle + '</span></a></li>';
 
-  albp = '';
+  albpone = [];
+  albptwo = [];
+  albptwohalf = [];
+  albpthree = [];
   albc = '';
   albo = '';
   albor = '';
@@ -1092,9 +1095,6 @@ cmas_recordingitem = function (item, work, playlist)
   }
 
   perfnum = 0;
-  var albpon = '';
-  var albptw = '';
-  var albpth = '';
 
   for (performers in item.performers)
   {
@@ -1105,26 +1105,30 @@ cmas_recordingitem = function (item, work, playlist)
 
     if (item.performers[performers].role.trim() == "Conductor")
     {
-      albpth = albpth + '<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>';
+      albpthree.push ('<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>');
     }
     else if (item.performers[performers].role.trim() == "Ensemble" || item.performers[performers].role.trim() == "Orchestra")
     {
-      albptw = albptw + '<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong></li>';
+      albptwo.push ('<li class="mainperformer"><strong>'+item.performers[performers].name+'</strong></li>');
     }
     else if (item.performers[performers].role.trim() == "Choir")
     {
-      albptw = albptw + '<li class="'+classmain+'"><strong>'+item.performers[performers].name+'</strong></li>';
+      albptwohalf.push ('<li class="'+classmain+'"><strong>'+item.performers[performers].name+'</strong></li>');
     }
     else if (item.performers[performers].role.trim() == "")
     {
-      albpon = albpon + '<li class="' + classmain + '"><strong>' + item.performers[performers].name + '</strong></li>';
+      albpone.push ('<li class="' + classmain + '"><strong>' + item.performers[performers].name + '</strong></li>');
     }
     else
     {
-      albpon = albpon + '<li class="'+classmain+'"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>';
+      albpone.push ('<li class="'+classmain+'"><strong>'+item.performers[performers].name+'</strong>, ' + item.performers[performers].role + '</li>');
     }
+  }
 
-    albp = albpon + albptw + albpth;
+  if (item.performers.length > 4 && albpthree.length == 0 && albptwo.length == 0) {
+    for (oneperfs in albpone) {
+      if (oneperfs <= 4) albpone[oneperfs] = albpone[oneperfs].replace ('class=""', 'class="mainperformer"');
+    }
   }
 
   var spotify_link = 'http://open.spotify.com/album/' + item.spotify_albumid;
@@ -1135,7 +1139,7 @@ cmas_recordingitem = function (item, work, playlist)
     }
   }
 
-  alb = alb + '<li class="performers"><ul>' + albp + '</ul></li>';
+  alb = alb + '<li class="performers"><ul>' + albpone.join('') + albptwo.join('') + albptwohalf.join('') + albpthree.join('') + '</ul></li>';
   alb = alb + '<li class="label">'+item.label+'</li>';
   alb = alb + '<li class="spotify"><a href="' + spotify_link + '" target="_blank">Listen on Spotify</a></li>';
 
