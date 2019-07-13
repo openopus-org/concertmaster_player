@@ -264,7 +264,7 @@ a
 #playerinfo .composer a, #favorites .composer a, #albums.playlist .composer a
 {
 	font-family: Sanchez, TimesNewRoman, serif;
-	font-size: 18px;
+	font-size: 17px;
 	text-transform: uppercase;
 }
 
@@ -282,7 +282,9 @@ a
 #playerinfo .work a
 {
 	font-family: PetitaBold, Arial, sans-serif;
-	font-size: 18px;
+	font-size: 16px;
+	margin-top: 3px;
+    display: block;
 }
 
 #playerinfo .label
@@ -294,8 +296,8 @@ a
 
 #playerinfo .cover img
 {
-	width: 84px;
-	height: 84px;
+	width: 90px;
+	height: 90px;
 	float: left;
 	margin-right: 12px;
 	margin-bottom: 24px;
@@ -1558,6 +1560,15 @@ h2
 	height: 100px;
 }
 
+#albums li.version {
+	margin-bottom: 6px;
+    font-size: 10px;
+}
+
+#favalbums li.version {
+	display: none;
+}
+
 #albums.playlist li.performance li.cover img
 {
 	width: 82px;
@@ -2443,11 +2454,11 @@ li.loading {
 	background-size: 18px;
 }
 
-#playerverify li.verified a, #playerverify li.notverified a {
+#playerverify li.verified a, #playerverify li.notverified a, #playerverify li.perform a, #playerverify li.versionform a {
 	color: #7C726E;
 }
 
-#playerverify li.verified a:hover, #playerverify li.notverified a:hover {
+#playerverify li.verified a:hover, #playerverify li.notverified a:hover, #playerverify li.perform a:hover, #playerverify li.versionform a:hover {
 	color: #918C8A;
 }
 
@@ -2499,12 +2510,28 @@ li.loading {
 	background-image: url("../img/verified_on.png");
 }
 
+#playerverify li.button.edit {
+	background-image: url("../img/editmeta_off.png");
+}
+
+#playerverify li.button.edit:hover {
+	background-image: url("../img/editmeta_on.png");
+}
+
 #playerverify li.button.partial {
 	background-image: url("../img/partial_off.png");
 }
 
 #playerverify li.button.partial:hover {
 	background-image: url("../img/partial_on.png");
+}
+
+#playerverify li.button.version {
+	background-image: url("../img/version_off.png");
+}
+
+#playerverify li.button.version:hover {
+	background-image: url("../img/version_on.png");
 }
 
 #playerverify li.button.wrongdata {
@@ -2567,6 +2594,55 @@ li.loading {
 #playerverify.reported li.report {
 	display: block !important;
 	text-align: center;
+}
+
+#playerverify.opened.editingperf li.perform {
+	display: block;
+	margin-right: 24px;
+}
+
+#playerverify.opened.editingobs li.versionform {
+	display: block;
+	margin-right: 24px;
+}
+
+#playerverify textarea {
+	margin: 13px 2px 6px;
+    border: 0px;
+    color: #000;
+    background-color: #FFF;
+    font-family: Sanchez;
+    font-size: 12px;
+    padding: 6px;
+    width: 100%;
+    height: 80px;	
+}
+
+#playerverify.editingobs textarea {
+	height: 50px;
+}
+
+#playerverify a.submit {
+	font-family: PetitaMedium;
+    font-size: 10px;
+    background-color: #7C726E;
+    border-radius: 10px;
+    width: 50px;
+    display: block;
+    text-align: center;
+    padding: 3px;
+	margin-left: 284px;
+	color: #FFF !important;
+}
+
+#playerverify a.submit:hover {
+    background-color: #918C8A;
+	color: #EEE;
+}
+
+#playerverify.editingperf li.button, #playerverify.editingperf li.verified, #playerverify.editingperf li.notverified,
+#playerverify.editingobs li.button, #playerverify.editingobs li.verified, #playerverify.editingobs li.notverified {
+	display: none;
 }
 
 .spotify a {
