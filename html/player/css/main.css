@@ -2732,6 +2732,15 @@ li.emptylist p {
 /* firefox tweak */
 
 #composers, #favorites, #works, #albums {
-	scrollbar-color: #000;
-  	scrollbar-width: none;
+	scrollbar-width: none;
+}
+
+#composers:hover, #favorites:hover, #albums:hover {
+  	scrollbar-color: #28282B;
+	scrollbar-width: thin;
+}
+
+#works:hover {
+  	scrollbar-color: #000;
+	scrollbar-width: thin;
 }
