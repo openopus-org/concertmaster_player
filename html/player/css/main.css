@@ -2728,3 +2728,10 @@ li.emptylist p {
 	font-size: 12px;
   margin-top: 2px;
 }
+
+/* firefox tweak */
+
+#composers, #favorites, #works, #albums {
+	scrollbar-color: #000;
+  	scrollbar-width: none;
+}
