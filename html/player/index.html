@@ -3,21 +3,23 @@
 <head>
     <title>Concertmaster</title>
     <link rel="manifest" href="/manifest.json">
+    <meta name="viewport" content="initial-scale=1.1, maximum-scale=1.1">
     <script type="text/javascript" src="/js/ua-parser-min.js"></script>
     <script type="text/javascript" src="/js/jquery.js"></script>
     <script type="text/javascript" src="/js/jquery.mousewheel.js"></script>
     <script type="text/javascript" src="/js/jquery.leanModal.min.js"></script>
     <script type="text/javascript" src="/js/html.sortable.0.1.3.js"></script>
     <script type="text/javascript" src="/js/toggles.min.js"></script>
-    <link href="/js/select2/css/select2.css" rel="stylesheet" />
     <script src="/js/select2/js/select2.js"></script>
     <script src="/js/js-md5.js"></script>
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script type="text/javascript" src="/js/lib.js"></script>
 
     <style type="text/css">
-        @import url("/css/main.css");
-        @import url("/css/toggles-full.css");
+        @import "/css/main.css" screen and (min-width: 1024px);
+        @import "/js/select2/css/select2.css" screen and (min-width: 1024px);
+        @import "/css/toggles-full.css";
+        @import "/css/mobile.css" screen and (max-width: 1024px);
     </style>
 </head>
 <body>
@@ -282,19 +284,9 @@
                 $("body").addClass("windows");
             }
 
-            uagentparser = new UAParser();
-            uagent = uagentparser.getResult();
-
-            if (uagent.device.type == 'mobile')
-            {
-                window.location.assign('/mobile');
-            }
-            else
-            {
-                window.onSpotifyWebPlaybackSDKReady = () => {
+            window.onSpotifyWebPlaybackSDKReady = () => {
                     cmas_spotifyauth();
-                };
-            }
+            };
 
             $('#composersearch').keyup(function () { cmas_composersbysearch($('#composersearch').val()); });
             $('#worksearch').keyup(function () { cmas_worksbysearch(localStorage.lastcomposerid, localStorage.lastgenre, $('#worksearch').val()); });
@@ -304,8 +296,10 @@
     </script>
     <script type="text/javascript">
         $('#composers').mousewheel(function (event, delta) {
-            this.scrollLeft -= (delta * 30);
-            event.preventDefault();
+            if ($(window).width() >= 1024) {
+                this.scrollLeft -= (delta * 30);
+                event.preventDefault();
+            }
         });
 
         cmas_listplaylists();
