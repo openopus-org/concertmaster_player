@@ -1202,8 +1202,10 @@ cmas_notification = function (text, icon, title)
       silent: true
     };
 
-  var n = new Notification (title, options);
-  setTimeout(n.close.bind(n), 5000);
+  if ($(window).width() >= 1024) {
+    var n = new Notification (title, options);
+    setTimeout(n.close.bind(n), 5000);
+  }
 }
 
 // generating auth hash
