@@ -72,7 +72,7 @@ h2
 	color: #717171;
 	font-family: 'Sanchez', sans-serif;
 	font-weight: normal;
-	font-size: 11px;
+	font-size: 10px;
 	text-transform: uppercase;
 	margin: 12px 0;
 	clear: both;
@@ -99,14 +99,13 @@ h2
 	overflow: hidden;
 	display: block;
 	background-image: url("../img/logo.png");
-	background-size: 120px 21px;
+	background-size: 120px;
 	margin: 8px auto;
 	bottom: 7px;
 }
 
 li.cover a img {
 	width: 80px;
-	border-radius: 16px;
 }
 
 #sidebar {
@@ -281,6 +280,10 @@ body.player #playerinfo .work a {
     margin: -15px 8px 8px;
 }
 
+body.composer #genresworks h2 {
+    margin-top: 34px;
+}
+
 #playerinfo .favorite a {
     width: 18px;
     background-size: 18px;
@@ -390,8 +393,8 @@ body.player #nowplaying #playertracks {
     display: block;
 }
 
-.apple a {
-	background: url(/img/appleicon.svg) no-repeat;
+.spotify a {
+	background: url(/img/spotifyi.png) no-repeat;
 	background-size: 10px;
 	height: 10px;
 	height: 14px;
@@ -402,7 +405,7 @@ body.player #nowplaying #playertracks {
 	display: block;
 }
 
-#playerinfo li.apple  {
+#playerinfo li.spotify  {
 	display: block;
 }
 
@@ -427,7 +430,6 @@ body.player #nowplaying #playertracks {
     float: left;
     margin-top: 13px;
     margin-bottom: 24px;
-    border-radius: 2px;
 }
 
 #playertracks .bar
@@ -437,7 +439,6 @@ body.player #nowplaying #playertracks {
 	background-color: #FCE546;
 	position: relative;
 	bottom: 4px;
-	border-radius: 2px;
 }
 
 #playertracks .buffer
@@ -517,7 +518,7 @@ body.player #nowplaying #playertracks {
 	display: block;
 	background-image: url("../img/sitelogo.png");
 	background-size: 176px;
-	background-position-x: -33px;
+	background-position-x: -25px;
 	margin: 30px auto;
 	width: 152px;
 	height: 30px;
@@ -599,23 +600,20 @@ body.player #nowplaying {
 #playerinfo li.cover img {
     width: 46px;
     height: 46px;
-    border-radius: 12px;
     float: left;
     margin-right: 12px;
 	margin-bottom: 24px;
-	margin-top: 3px;
 }
 
 body.player #playerinfo .cover img
 {
 	width: 100px;
     height: auto;
-    border-radius: 14px;
 }
 
 #playerinfo li.performers, 
 #playerinfo li.label, 
-#playerinfo li.apple,
+#playerinfo li.spotify,
 #playerinfo .favorite, 
 #playerinfo .permalink, 
 #playerinfo .playlist {
@@ -624,7 +622,7 @@ body.player #playerinfo .cover img
 
 body.player #playerinfo li.performers, 
 body.player #playerinfo li.label, 
-body.player #playerinfo li.apple,
+body.player #playerinfo li.spotify,
 body.player #playerinfo .favorite, 
 body.player #playerinfo .permalink, 
 body.player #playerinfo .playlist {
@@ -715,7 +713,7 @@ body.player #nowplaying #toggle {
 #playercontrols #timerglobal, #playercontrols #durationglobal
 {
 	font-family: 'Sanchez', sans-serif;
-	font-size: 11px;
+	font-size: 10px;
 }
 
 #playercontrols #timerglobal
@@ -772,7 +770,6 @@ body.player #nowplaying #toggle {
 	height: 4px;
 	background-color: #FCE546;
 	position: relative;
-    border-radius: 2px;
     display: block;
 }
 
@@ -973,11 +970,10 @@ body.showingnowplaying.showingplayerbar #main {
    	background-color: #ffffff;
    	width: calc(100% - 60px);
    	font-family: 'Sanchez', sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	color: #000000;
    	line-height: 1;
    	border: 0;
-   	border-radius: 10px;
    	height: 34px;
    	-webkit-appearance: none;
 	padding: 0 6px 0 32px;
@@ -1013,8 +1009,12 @@ body.showingnowplaying.showingplayerbar #main {
 	background-color: #202023;
 	padding: 12px 12px 0 12px;
 	margin-right: 12px;
-	border-radius: 12px;
 	flex: 0 0 auto;
+}
+
+#composers li.name a {
+    margin: 8px 0 4px;
+    display: block;
 }
 
 ul.composerdetails
@@ -1060,7 +1060,6 @@ ul.composerdetails img
 {
 	width: 48px;
 	height: 48px;
-	border-radius: 24px;
 }
 
 #composerprofile,
@@ -1074,7 +1073,6 @@ ul.composerdetails img
 {
 	width: 58px;
 	height: 58px;
-	border-radius: 29px;
 }
 
 #composerprofile li.back,
@@ -1110,27 +1108,27 @@ ul.composerdetails img
 
 #composerprofile li.name,
 #workprofile li.name {
-	font-size: 16px;
+	font-size: 14px;
 }
 
 #composerprofile li.completename {
-	font-size: 13px;
+	font-size: 12px;
 	width: 90%;
     margin-top: 2px;
 }
 
 #workprofile li.title {
-	font-size: 15px;
+	font-size: 13px;
     width: 82%;
     font-weight: 600;
 }
 
 #composerprofile li.dates {
-	font-size: 11px;
+	font-size: 10px;
 }
 
 #workprofile li.subtitle {
-	font-size: 13px;
+	font-size: 11px;
 	width: 82%;
 }
 
@@ -1395,8 +1393,8 @@ a.wfav {
 #works li.separator {
     font-weight: 600;
     padding: 12px 0 2px;
-	border-bottom: 1px solid #f6365e;
-	color: #f6365e;
+	border-bottom: 1px solid #FCE546;
+	color: #FCE546;
 }
 
 #works li {
@@ -1446,12 +1444,12 @@ height: 138px;
 #albums li.composer,
 #albums li.work,
 #albums li.label,
-#albums li.apple,
+#albums li.spotify,
 #albums li.permalink,
 #albums li.playlist,
 #albums li.favorite,
 #favalbums li.label,
-#favalbums li.apple,
+#favalbums li.spotify,
 #favalbums li.permalink,
 #favalbums li.playlist,
 #favalbums li.favorite,
@@ -1481,7 +1479,7 @@ height: 138px;
 #favalbums li.composer,
 #favalbums li.work,
 #favalbums li.performers {
-	top: 15px;
+	/*top: 15px;*/
 }
 
 #albums li.version {
@@ -1581,14 +1579,12 @@ li.emptylist p {
 
 #playlist-menu span.portraits img {
     height: 76px;
-    border-radius: 12px;
     object-fit: cover;
     margin: 2px;
 }
 
 #playlist-menu span.portraits.composers-1 img {
 	width: calc(100% - 4px);
-	border-radius: 18px;
 }
 
 #playlist-menu span.portraits.composers-2 img {
@@ -1597,7 +1593,6 @@ li.emptylist p {
 
 #playlist-menu span.portraits.composers-3 img {
 	width: calc(33% - 4px);
-	border-radius: 8px;
 }
 
 #playlist-menu span.portraits.composers-4 img {
@@ -1611,7 +1606,7 @@ li.emptylist p {
 }
 
 #playlist-menu li {
-	height: 158px;
+	height: 180px;
 }
 
 #playlist-menu li a {
@@ -1622,7 +1617,7 @@ li.emptylist p {
 #playlist-menu li.playlist span.title,
 #playlist-menu li.favorites a,
 #playlist-menu li.recently a {
-    font-size: 13px;
+    font-size: 12px;
 	color: #FCE546;
 	font-family: 'Sanchez', sans-serif;
 	font-weight: 400;
@@ -1661,9 +1656,8 @@ li.emptylist p {
 #playlist-menu li.playlist span.summary {
     font-size: 9px;
 	font-family: 'Sanchez', sans-serif;
-	font-weight: 400;
 	display: block;
-	line-height: 1.5;
+	line-height: 1.1;
 }
 
 #playlist-menu li.active {
@@ -2195,15 +2189,15 @@ body.radioonair #radiotop select {
     z-index: 99999;
     top: 10px;
     left: 10px;
-	display: none;
+    display: none;
     font-family: 'Sanchez', sans-serif;
-	font-size: 9px;
-	background-image: url(../img/update.png);
-	background-repeat: no-repeat;
+    font-size: 8px;
+    background-image: url(../img/update.png);
+    background-repeat: no-repeat;
     width: 67px;
     height: 14px;
-	background-size: 14px;
-	padding: 0px 20px;
+    background-size: 12px;
+    padding: 2px 17px;
 }
 
 #config {
@@ -2281,27 +2275,24 @@ body.showingplayerbar #config #signin {
 
 .hintbox
 {
-	width: 86px;
-	height: 15px;
-	background-color: #FCE546;
-	display: none;
-	position: fixed;
-	top: 0px;
-	right: 12px;
-	z-index: 999;
-	padding: 7px;
-	border-bottom-right-radius: 12px;
-	border-bottom-left-radius: 12px;
+    width: 76px;
+    height: 12px;
+    background-color: #FCE546;
+    position: fixed;
+    top: 0px;
+    right: 7px;
+    z-index: 999;
+    padding: 7px;
 }
 
 .hintbox a
 {
-	font-size: 11px;
+    font-size: 10px;
     background-repeat: no-repeat;
     width: -webkit-fill-available;
     height: 20px;
-    background-size: 14px;
-    background-position: right 1px;
+    background-size: 12px;
+    background-position: right 0;
     overflow: hidden;
     display: block;
     color: #121212;

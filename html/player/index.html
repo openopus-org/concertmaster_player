@@ -27,16 +27,24 @@
         <div id="loaderwindow">
             <h1>Logo</h1>
             <h2>Concertmaster</h2>
-            <h3 id="version"></h3>
-            <h4>Loading<span class="blink">...</span></h4>
+            <h3 id="version" class="conc-version"></h3>
+            <h4 id="loader-loading">Loading<span class="blink">...</span></h4>
+            <ul id="loader-options">
+                <li><a href="javascript:cmas_appleauth()">Log in to Spotify</a></li>
+                <li><a href="javascript:cmas_guestauth()">Guest access<span>Just browsing, no playback</span></a></li>
+            </ul>
             <p>&copy; <span id="year"></span> Open Opus. All rights reserved.</p>
         </div>
     </div>
     <div id="toolbar">
         <span class="logo">Concertmaster</span>
         <span class="update"><a href="javascript:cmas_update()">New version available! Click to update</a></span>
+        <span class="update mobonly"><a href="javascript:cmas_update()">Update available</a></span>
         <div id="radiotop">
             <h2>radio</h2>
+            <h3 class="mobonly">Build your no-nonsense classical radio! Start a continuous stream of music based on what <strong>you</strong> want to hear.</h3>
+            <h4 class="mobonly">Composers and Works</h4>
+            <h5 class="mobonly">Any composer or only your favorites? Maybe only essential, recommended works?</h5>
             <select class="composers">
                 <option value="All">All composers</option>
                 <option value="fav">Favorite composers</option>
@@ -44,6 +52,9 @@
                 <option value="wfav">Favorite works</option>
                 <option value="wrec">Essential works</option>
             </select>
+            <h6 class="mobonly">and</h6>
+            <h4 class="mobonly">Periods</h4>
+            <h5 class="mobonly">Music of any period or only from a specific time?</h5>
             <select class="periods">
                 <option value="All">All periods</option>
                 <option value="Medieval">Medieval</option>
@@ -57,6 +68,9 @@
                 <option value="Post-War">Post-War</option>
                 <option value="21st Century">21st Century</option>
             </select>
+            <h6 class="mobonly">and</h6>
+            <h4 class="mobonly">Genres</h4>
+            <h5 class="mobonly">Any kind of music or some specific genre?</h5>
             <select class="genres">
                 <option value="All">All genres</option>
                 <option value="Chamber">Chamber</option>
@@ -66,6 +80,8 @@
                 <option value="Vocal">Vocal</option>
             </select>
             <a href="javascript:cmas_radiobutton()" id="goradio">ON AIR</a>
+            <a href="javascript:cmas_radiobutton()" class="startradio mobonly actionbutton"><span></span>Start radio</a>
+            <a href="javascript:cmas_radiobutton()" class="stopradio mobonly"><span></span>Stop radio</a>
         </div>
         <a href="https://getconcertmaster.com/help" id="help" target="_blank">help</a>
         <a href="javascript:$('#config').leanModal()" id="setup">setup</a>
@@ -73,6 +89,12 @@
 
     <div id="sidebar">
         <ul id="favorites">
+            <li class="mobonly">
+                <h2>Playlists</h2>
+            </li>
+            <li id="playlist-menu" class="mobonly">
+                <ul></ul>
+            </li>
             <li id="favtitle">
                 <select class="playlist_slug"></select>
                 <a id="favradio" href="javascript:cmas_playlistradio('#favalbums');">radio</a>
@@ -85,37 +107,40 @@
             </li>
         </ul>
         <div id="nowplaying" class="up">
-            <a href="javascript:cmas_playingdetails()" id="toggle">toggle details</a>
-            <h2>Now playing</h2>
-            <ul id="playerinfo"></ul>
+            <div id="nowplaying-touch">
+                <a href="javascript:cmas_playingdetails()" id="toggle">toggle details</a>
+                <h2>Now playing</h2>
+                <ul id="playerinfo"></ul>
+            </div>
             <ul id="playerverify"></ul>
             <ul id="playertracks"></ul>
         </div>
     </div>
 
-    <div id="main">
-        <h2>Library</h2>
-        <div id="library">
-            <ul id="atoz">
-                <li><a href="javascript:cmas_composersbyname('all')">All</a></li>
-                <li><a class="favorite" title="Favorites" href="javascript:cmas_composersbyfav()">fav</a></li>
-                <li><a class="popular" title="Popular" href="javascript:cmas_composersbytag('pop')">pop</a></li>
-                <li><a class="recommended" title="Essential" href="javascript:cmas_composersbytag('rec')">rec</a></li>
-            </ul>
-            <select class="periods">
-                <option value="all">All periods</option>
-                <option value="Medieval">Medieval</option>
-                <option value="Renaissance">Renaissance</option>
-                <option value="Baroque">Baroque</option>
-                <option value="Classical">Classical</option>
-                <option value="Early Romantic">Early Romantic</option>
-                <option value="Romantic">Romantic</option>
-                <option value="Late Romantic">Late Romantic</option>
-                <option value="20th Century">20th Century</option>
-                <option value="Post-War">Post-War</option>
-                <option value="21st Century">21st Century</option>
-            </select>
-            <input type="text" id="composersearch" placeholder="Composer search" />
+    <div id="main"  onscroll="cmas_albumscroll(this)">
+        <div id="composersbrowser">
+            <h2 class="deskonly">Library</h2>
+            <div id="library">
+                <ul id="atoz">
+                    <li><a href="javascript:cmas_composersbyname('all')">All</a></li>
+                    <li><a class="favorite" title="Favorites" href="javascript:cmas_composersbyfav()">fav</a></li>
+                    <li><a class="popular" title="Popular" href="javascript:cmas_composersbytag('pop')">pop</a></li>
+                    <li><a class="recommended" title="Essential" href="javascript:cmas_composersbytag('rec')">rec</a></li>
+                </ul>
+                <select class="periods">
+                    <option value="all">All periods</option>
+                    <option value="Medieval">Medieval</option>
+                    <option value="Renaissance">Renaissance</option>
+                    <option value="Baroque">Baroque</option>
+                    <option value="Classical">Classical</option>
+                    <option value="Early Romantic">Early Romantic</option>
+                    <option value="Romantic">Romantic</option>
+                    <option value="Late Romantic">Late Romantic</option>
+                    <option value="20th Century">20th Century</option>
+                    <option value="Post-War">Post-War</option>
+                    <option value="21st Century">21st Century</option>
+                </select>
+                <input type="text" id="composersearch" placeholder="Search composer by name" />
         </div>
         <script type="text/javascript">
             var alphabet = "abcdefghijklmnoprstvwxyz".split("");
@@ -124,11 +149,48 @@
               $('#atoz').append('<li><a href="javascript:cmas_composersbyname(\''+alphabet[letter]+'\')">'+alphabet[letter]+'</a></li>');
             }
         </script>
+        <h2 id="maincomposerlist" class="mobonly"></h2>
         <ul id="composers"></ul>
+        <h2 class="mobonly">Browse by period</h2>
+            <ul id="browsebyperiod" class="mobonly">
+                <li class="medieval"><a href="javascript:cmas_composersbyepoch('Medieval');">Medieval</a></li>
+                <li class="renaissance"><a href="javascript:cmas_composersbyepoch('Renaissance');">Renaissance</a></li>
+                <li class="baroque"><a href="javascript:cmas_composersbyepoch('Baroque');">Baroque</a></li>
+                <li class="classical"><a href="javascript:cmas_composersbyepoch('Classical');">Classical</a></li>
+                <li class="earlyromantic"><a href="javascript:cmas_composersbyepoch('Early Romantic');">Early Romantic</a></li>
+                <li class="romantic"><a href="javascript:cmas_composersbyepoch('Romantic');">Romantic</a></li>
+                <li class="lateromantic"><a href="javascript:cmas_composersbyepoch('Late Romantic');">Late Romantic</a></li>
+                <li class="the20thcentury"><a href="javascript:cmas_composersbyepoch('20th Century');">20th Century</a></li>
+                <li class="postwar"><a href="javascript:cmas_composersbyepoch('Post-War');">Post-War</a></li>
+                <li class="the21stcentury"><a href="javascript:cmas_composersbyepoch('21st Century');">21st Century</a></li>
+            </ul>
+            <div id="favoritecomposers" class="mobonly empty">
+                <h2>Your favorite composers</h2>
+                <ul id="favoritecomposerslist"></ul>
+            </div>
+        </div>
         <div id="genresworks">
-            <h2></h2>
-            <h3></h3>
-            <h4></h4>
+            <ul class="mobonly" id="composerprofile">
+                <li class="back"><a href="javascript:cmas_mobilepage('library');">back</a></li>
+                <li class="portrait"></li>
+                <li class="name"></li>
+                <li class="completename"></li>
+                <li class="dates"></li>
+                <li class="buttons"></li>
+            </ul>
+            <ul class="mobonly" id="workprofile">
+                    <li class="back"></li>
+                    <li class="name"></li>
+                    <li class="title"></li>
+                    <li class="subtitle"></li>
+                    <li class="buttons"></li>
+            </ul>
+            <h2 class="mobonly"></h2>
+            <div class="deskonly">
+                <h2></h2>
+                <h3></h3>
+                <h4></h4>
+            </div>
             <div id="playlistdetail">
                 <a class="subscribe" href="javascript:cmas_subplaylist(window.playlistid)">Subscribe</a>
                 <a class="unsubscribe" href="javascript:cmas_unsubplaylist(window.playlistid)">Unsubscribe</a>
@@ -138,7 +200,7 @@
             </div>
             <ul id="genres"></ul>
             <div id="searchbywork">
-                <input type="text" id="worksearch" placeholder="Search by name" />
+                    <input type="text" id="worksearch" placeholder="Search by work title" />
             </div>
             <ul id="works"></ul>
             <ul id="albums" onscroll="cmas_albumscroll(this)"></ul>
@@ -160,17 +222,31 @@
             </ul>
         </div>
     </div>
-    <div id="install-pwa" class="hintbox">
-        <p>Install app?</p>
-        <a href="javascript:$('#install-pwa').hide()" class="cancel">Close</a>
-        <a href="javascript:cmas_installpwa()" class="check">Go!</a>
+    <div id="mobile-menu" class="mobonly">
+        <ul>
+            <li><a href="javascript:cmas_mobilepage('library')" class="library">Library</a></li>
+            <li><a href="javascript:cmas_mobilepage('favorites')" class="favorites">Favorites</a></li>
+            <li><a href="javascript:cmas_mobilepage('radio')" class="radio"><span></span>Radio</a></li>
+            <li><a href="javascript:cmas_mobilepage('settings')" class="settings">Settings</a></li>
+        </ul>
     </div>
-    <div id="oldinstall-pwa" class="modal">
-        <h2>Install app?</h2>
-        <p>Would you like to transform Concertmaster in an app, with its own icon, independent from the web browser?</p>
-        <a href="javascript:cmas_installpwa()">Yes, please</a>
-        <a href="javascript:$('#oldinstall-pwa').closeModal()">No, thanks</a>
+    <div id="radioslider" class="mobonly">
+            <a href="javascript:cmas_newradio({composer: localStorage.lastcomposerid, genre: $('#genres li.active').attr('id')});">Start radio<em></em></a>
     </div>
+    <div id="editplaylistslider" class="mobonly">
+            <a href="javascript:cmas_editplaylist();">Edit playlist</a>
+    </div>
+    <div id="playlistradioslider" class="mobonly">
+            <a href="javascript:cmas_playlistradio('#favalbums');">Start playlist radio</a>
+    </div>
+    <div class="hintbox deskonly">
+            <p>Install as app?</p>
+            <a href="javascript:$('.hintbox').hide()" class="cancel">Close</a>
+            <a href="javascript:cmas_installpwa()" class="check">Go!</a>
+        </div>
+        <div class="hintbox mobonly">
+            <a href="javascript:cmas_installpwa()" class="check">Install as app?</a>
+        </div>
     <div id="notavailable" class="modal">
         <h2>Error</h2>
         <p>Sorry, this recording is not available in your country. What a bummer!</p>
@@ -196,14 +272,18 @@
     </div>
     <div id="playlistmodal" class="modal">
         <h2>Playlist</h2>
+        <div id="playlistmodal-new">
+            <h3>New playlist</h3>
+            <h4>Create a new playlist and add this recording to it</h4>
+            <input type="text" id="newplaylist" />
+        </div>
+        <div id="playlistmodal-existing">
         <h3>Existing playlist</h3>
         <h4>Add this recording to a an existing playlist</h4>
         <select id="existingplaylist"></select>
-        <h3>New playlist</h3>
-        <h4>Create a new playlist and add this recording to it</h4>
-        <input type="text" id="newplaylist" />
-        <a href="javascript:cmas_addtoplaylist()">Add</a>
-        <a href="javascript:$('#playlistmodal').closeModal()">Cancel</a>
+    </div>
+    <a href="javascript:cmas_addtoplaylist()" class="actionbutton">Add</a>        
+    <a href="javascript:$('#playlistmodal').closeModal()">Cancel</a>
     </div>
     <div id="editplaylistmodal" class="modal">
         <h2>Edit</h2>
@@ -240,27 +320,42 @@
             <li><div id="toggle_compilation" class="toggle"></div>Hide incomplete recordings (often from compilation albums)</li>
             <li><div id="toggle_historic" class="toggle"></div>Hide old, historical recordings</li>
         </ul>
+        <div id="signout">
+                <h3>Sign out</h3>
+                <a href="javascript:cmas_logout()">Logout from Spotify</a>        
+            </div>
+            <div id="signin">
+                <h3>Log in</h3>
+                <a href="javascript:cmas_appleauth()">Log in to Spotify</a>        
+            </div>
+    
         <!--<h3 class="smartradio">Smart radio</h3>
         <ul class="toggle-light">
             <li><div id="toggle_smart" class="toggle"></div>Use your listening behavior to improve the radio experience</li>
-        </ul>
-        <h3 class="spotifyconnection">Spotify status</h3>
-        <ul>
-            <li id="spotifystatus"><span id="spoticon" class="off">Spotify</span> <span id="spotlegend">Spotify is not running or unresponsive</span></li>
         </ul>-->
         <a href="javascript:$('#config').closeModal()">Close</a>
+        <div id="about" class="mobonly">
+            <h2>About</h2>
+            <ul>
+                <li>Version<span class="conc-version"></span></li>
+                <li><a href="https://patreon.com/openopus">Support our projects<span>Help us keeping Concertmaster free! Donate and back our development and hosting costs.</span></a></li>
+                <li><a href="https://github.com/adrianosbr/concertmaster_player">Contribute with code<span>Concertmaster is an open source project. You may fork it and help us with code!</span></a></li>
+            </ul>
+        </div>
     </div>
     <div id="permalink-modal" class="modal">
         <h2>Share</h2>
         <div id="sharedialog">
             <h3>Direct link</h3>
             <h4>Copy the address below:</h4>
-            <input type="text" id="permalink-direct" />
+            <input type="text" id="permalink-direct" readonly />
             <a href="javascript:cmas_linkcopy('direct')" class="actionbutton">Copy</a>
-            <h3>Embed widget</h3>
-            <h4>Use the HTML code below on your blog or website:</h4>
-            <textarea id="permalink-widget"></textarea>
-            <a href="javascript:cmas_linkcopy('widget')" class="actionbutton" id="widgetcopy">Copy</a>
+            <div class="deskonly">
+                <h3>Embed widget</h3>
+                <h4>Use the HTML code below on your blog or website:</h4>
+                <textarea id="permalink-widget" readonly></textarea>
+                <a href="javascript:cmas_linkcopy('widget')" class="actionbutton" id="widgetcopy">Copy</a>
+            </div>
             <a href="javascript:$('#permalink-modal').closeModal()" id="closepermalink">Cancel</a>
         </div>
         <div id="shareconfirm">
@@ -275,7 +370,7 @@
     <script>
         d = new Date();
 
-        $('#version').html(cmas_options.version);
+        $('.conc-version').html(cmas_options.version);
         $('#year').html(d.getFullYear());
     </script>
     <script type="text/javascript">
@@ -285,13 +380,16 @@
             }
 
             window.onSpotifyWebPlaybackSDKReady = () => {
-                    cmas_spotifyauth();
+                cmas_spotifyauth();
             };
 
             $('#composersearch').keyup(function () { cmas_composersbysearch($('#composersearch').val()); });
             $('#worksearch').keyup(function () { cmas_worksbysearch(localStorage.lastcomposerid, localStorage.lastgenre, $('#worksearch').val()); });
             $('#library .periods').change(function () { cmas_composersbyepoch($('#library .periods').val()); });
             $('#favtitle select').change(function () { cmas_playlist($('#favtitle select').val()); });
+            $('#existingplaylist').change(function () { if ($('#existingplaylist').val() == "0") { $('#playlistmodal-new').fadeTo(100,1); } else { $('#playlistmodal-new').fadeTo(100,0.2); } });
+            $('#newplaylist').keyup(function () { if ($('#newplaylist').val()) { $('#playlistmodal-existing').fadeTo(100,0.2); } else { $('#playlistmodal-existing').fadeTo(100,1); } });
+            
 
     </script>
     <script type="text/javascript">
@@ -302,12 +400,34 @@
             }
         });
 
+        cmas_swipedetect (document.getElementById('nowplaying-touch'), function (swipedir) {
+            if ($('#nowplaying').hasClass(swipedir)) cmas_playingdetails ();
+        });
+
+        cmas_swipedetect (document.getElementById('radioslider'), function (swipedir) {
+            if (($('#radioslider').hasClass("active") && swipedir == "right") || (!$('#radioslider').hasClass("active") && swipedir == "left")) {
+                $('#radioslider').toggleClass ("active");
+            }
+        });
+
+        cmas_swipedetect (document.getElementById('playlistradioslider'), function (swipedir) {
+            if (($('#playlistradioslider').hasClass("active") && swipedir == "right") || (!$('#playlistradioslider').hasClass("active") && swipedir == "left")) {
+                $('#playlistradioslider').toggleClass ("active");
+            }
+        });
+
+        cmas_swipedetect (document.getElementById('editplaylistslider'), function (swipedir) {
+            if (($('#editplaylistslider').hasClass("active") && swipedir == "right") || (!$('#editplaylistslider').hasClass("active") && swipedir == "left")) {
+                $('#editplaylistslider').toggleClass ("active");
+            }
+        });
+
         cmas_listplaylists();
     </script>
     <script type="text/javascript">
 
       $('#toggle_compilation, #toggle_historic, #toggle_smart, #toggle_delpl, #toggle_unsubpl').toggles({
-        drag: false, // allow dragging the toggle between positions
+        drag: true, // allow dragging the toggle between positions
         click: true, // allow clicking on the toggle
         text: {
           on: 'YES', // text for the ON position
@@ -426,7 +546,7 @@
 
                 cmas_installpwa = function () {
 
-                    $('#install-pwa').hide();
+                    $('.hintbox').hide();
                     deferredPrompt.prompt();
 
                     deferredPrompt.userChoice
@@ -440,7 +560,7 @@
                         });
                 }
 
-                $('#install-pwa').show();
+                $('.hintbox').show(0, function () { setTimeout(function(){ $('.hintbox').hide(); }, 0.5 * 60 * 1000); });
             });
 
             let refreshing;

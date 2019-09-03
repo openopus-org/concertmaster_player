@@ -49,10 +49,12 @@ cmas_options = {
 };
 
 window.onpopstate = function (event) {
-  if (window.location.pathname != "/") {
+  if (window.location.hash) {
+    cmas_mobilepage(window.location.hash.replace('#',''));
+  } else if (window.location.pathname != "/") {
     vars = window.location.pathname.split("/");
     if (vars[1] == "u") {
-      cmas_recording (vars[2], vars[3], vars[4], 1);
+      cmas_recording(vars[2], vars[3], vars[4], 1);
     }
     else if (vars[1] == "p") {
       cmas_playlistdetail(parseInt(vars[2], 16));
@@ -480,7 +482,7 @@ cmas_composersbysearch = function (search)
   }
   else if (search.length == 0)
   {
-    cmas_composersbyname ('all');
+    cmas_composersbytag ('pop');
   }
 }
 
@@ -528,17 +530,24 @@ cmas_composers = function (response)
       {
         case "epoch":
           compcontent = '<li class="index period">' + list.request.item + '</li>';
+          if (list.request.item == 'all') {
+            $('#main #maincomposerlist').html('All composers');
+          } else {
+            $('#main #maincomposerlist').html('Composers of the ' + list.request.item + ' period');
+          }          
           $('#library #composersearch').val('');
           break;
 
         case "search":
           compcontent = '<li class="index search"></li>';
+          $('#main #maincomposerlist').html('Search results');
           $('#library select.periods').val('all');
           $('#library select.periods').trigger('change.select2');
           break;
 
         case "fav":
           compcontent = '<li class="index favorite">Favorites</li>';
+          if (list.status.success == "true") $('#favoritecomposers').removeClass('empty');
           $('#library #composersearch').val('');
           $('#library select.periods').val('all');
           $('#library select.periods').trigger('change.select2');
@@ -546,6 +555,7 @@ cmas_composers = function (response)
 
         case "pop":
           compcontent = '<li class="index popular">Popular</li>';
+          $('#main #maincomposerlist').html('Most requested composers');
           $('#library #composersearch').val('');
           $('#library select.periods').val('all');
           $('#library select.periods').trigger('change.select2');
@@ -553,6 +563,7 @@ cmas_composers = function (response)
 
         case "rec":
           compcontent = '<li class="index recommended">Essential</li>';
+          $('#main #maincomposerlist').html('Essential composers');
           $('#library #composersearch').val('');
           $('#library select.periods').val('all');
           $('#library select.periods').trigger('change.select2');
@@ -563,6 +574,7 @@ cmas_composers = function (response)
           if (list.request.item == "all")
           {
             compcontent = '<li class="index all">All</li>';
+            $('#main #maincomposerlist').html('All composers');
           }
           else
           {
@@ -574,7 +586,16 @@ cmas_composers = function (response)
           break;
       }
 
-      $('#composers').html(compcontent);
+      if (list.request.type == "fav" && $(window).width() < 1024)
+      {
+        ulcomposers = $('#favoritecomposerslist');
+        ulcomposers.html('');
+      }
+      else 
+      {
+        ulcomposers = $('#composers');
+        ulcomposers.html(compcontent);
+      }
 
       docs = list.composers;
       for (composer in docs)
@@ -599,7 +620,7 @@ cmas_composers = function (response)
           cforb = '';
         }
         
-        $('#composers').append('<li class="composer"><ul class="composerdetails"><li class="photo"><a href="javascript:cmas_genresbycomposer(\'' + docs[composer].id + '\');"><img src="' + docs[composer].portrait + '" /></a></li><li class="name"><a href="javascript:cmas_genresbycomposer(\'' + docs[composer].id + '\');">' + docs[composer].name + '</a></li><li class="fullname">' + docs[composer].complete_name + '</li><li class="dates">(' + docs[composer].birth.substring(0, 4) + (docs[composer].death.substring(0, 4) != '0000' ? '-' + docs[composer].death.substring(0, 4) : '') + ')</li><li id="forb_' + docs[composer].id + '" class="forb ' + cforb + '"><a href="javascript:cmas_compforbid(\'' + docs[composer].id + '\');">forbidden</a></li><li id="cfav_' + docs[composer].id + '" class="fav ' + cfav + '"><a href="javascript:cmas_compfavorite(\'' + docs[composer].id + '\');">fav</a></li><li class="radio"><a href="javascript:cmas_newradio({composer:' + docs[composer].id + '});">radio</a></li><li class="edit"><a href="javascript:cmas_editcomposer(\'' + docs[composer].id + '\');">edit</a></li></ul></li>');
+        ulcomposers.append('<li class="composer"><ul class="composerdetails"><li class="photo"><a href="javascript:cmas_genresbycomposer(\'' + docs[composer].id + '\');"><img src="' + docs[composer].portrait + '" /></a></li><li class="name"><a href="javascript:cmas_genresbycomposer(\'' + docs[composer].id + '\');">' + docs[composer].name + '</a></li><li class="fullname">' + docs[composer].complete_name + '</li><li class="dates">(' + docs[composer].birth.substring(0, 4) + (docs[composer].death.substring(0, 4) != '0000' ? '-' + docs[composer].death.substring(0, 4) : '') + ')</li><li id="forb_' + docs[composer].id + '" class="forb ' + cforb + '"><a href="javascript:cmas_compforbid(\'' + docs[composer].id + '\', \'#forb_' + docs[composer].id + '\');">forbidden</a></li><li id="cfav_' + docs[composer].id + '" class="fav ' + cfav + '"><a href="javascript:cmas_compfavorite(\'' + docs[composer].id + '\', \'#cfav_' + docs[composer].id + '\');">fav</a></li><li class="radio"><a href="javascript:cmas_newradio({composer:' + docs[composer].id + '});">radio</a></li></ul></li>');
       }
 
       $('#composers').scrollLeft(0);
@@ -612,7 +633,7 @@ cmas_composers = function (response)
 
 // genres list
 
-cmas_genresbycomposer = function (composer, genre)
+cmas_genresbycomposer = function (composer, genre, auto=false)
 {
   window.albumlistnext = 0;
 
@@ -626,9 +647,32 @@ cmas_genresbycomposer = function (composer, genre)
       if (list.status.success == "true") {
         localStorage.lastcomposerid = list.composer.id;
 
+        if (!list.composer.death) list.composer.death = '0000';
+        
+        $('#composerprofile li.portrait').html('<img src="' + list.composer.portrait + '" />');
+        $('#composerprofile li.name').html(list.composer.name);
+        $('#composerprofile li.completename').html(list.composer.complete_name);
+        $('#composerprofile li.dates').html('(' + list.composer.birth.substring(0, 4) + (list.composer.death.substring(0, 4) != '0000' ? '-' + list.composer.death.substring(0, 4) : '') + ')');
+        
+        if ($.inArray(list.composer.id.toString(), cmas_favoritecomposers) != -1) {
+          cfav = 'favorite';
+        }
+        else {
+          cfav = '';
+        }
+
+        if ($.inArray(list.composer.id.toString(), cmas_forbiddencomposers) != -1) {
+          cforb = 'forbidden';
+        }
+        else {
+          cforb = '';
+        }
+        
+        $('#composerprofile li.buttons').html('<a id="mforb_' + list.composer.id + '" href="javascript:cmas_compforbid(\'' + list.composer.id + '\', \'' + '#mforb_' + list.composer.id + '\');" class="forb ' + cforb + '">forbidden</a><a id="mfav_' + list.composer.id + '" href="javascript:cmas_compfavorite(\'' + list.composer.id + '\', \'#mfav_' + list.composer.id + '\');" class="fav ' + cfav + '">fav</a>');
+
         $('#genresworks h4').html('');
         $('#playlistdetail').hide();
-        $('#genresworks h2').html('<a href="javascript:cmas_genresbycomposer (' + list.composer.id + ')">' + list.composer.name + '</a>');
+        $('#genresworks div.deskonly h2').html('<a href="javascript:cmas_genresbycomposer (' + list.composer.id + ')">' + list.composer.name + '</a>');
         $('#genresworks h3').html('');
         $('#genres').css("display", "inline-block");
         $('#works').css("display", "inline-block");
@@ -638,14 +682,14 @@ cmas_genresbycomposer = function (composer, genre)
         $('#albums').html('');
         $('#albums').hide();
 
-        $('#genres').append('<li id="all"><a href="javascript:cmas_worksbycomposer(\'' + list.composer.id + '\',\'all\');">All</a><a class="radio" href="javascript:cmas_newradio({composer:' + list.composer.id + '});">radio</a></li>');
-        $('#genres').append('<li id="fav"><a href="javascript:cmas_listfavoriteworks(\'' + list.composer.id + '\');">Favorites</a><a class="radio" href="javascript:cmas_newradio({composer:' + list.composer.id + ',work:\'fav\'});">radio</a></li>');
+        $('#genres').append('<li id="all"><a href="javascript:cmas_worksbycomposer(\'' + list.composer.id + '\',\'all\');"><span>icon</span>All</a><a class="radio" href="javascript:cmas_newradio({composer:' + list.composer.id + '});">radio</a></li>');
+        $('#genres').append('<li id="fav"><a href="javascript:cmas_listfavoriteworks(\'' + list.composer.id + '\');"><span>icon</span>Favorites</a><a class="radio" href="javascript:cmas_newradio({composer:' + list.composer.id + ',work:\'fav\'});">radio</a></li>');
 
         var lastgenre = '';
 
         docsg = list.genres;
         for (dgenre in docsg) {
-          $('#genres').append('<li id="' + cmas_slug(docsg[dgenre]) + '"><a href="javascript:cmas_worksbycomposer(\'' + list.composer.id + '\',\'' + docsg[dgenre] + '\');">' + (docsg[dgenre] == 'Recommended' ? 'Essential' : docsg[dgenre]) + '</a><a class="radio" href="javascript:cmas_newradio({composer:' + list.composer.id + ',genre:\'' + docsg[dgenre] + '\'});">radio</a></li>');
+          $('#genres').append('<li id="' + cmas_slug(docsg[dgenre]) + '"><a href="javascript:cmas_worksbycomposer(\'' + list.composer.id + '\',\'' + docsg[dgenre] + '\');"><span>icon</span>' + (docsg[dgenre] == 'Recommended' ? 'Essential' : docsg[dgenre]) + '</a><a class="radio" href="javascript:cmas_newradio({composer:' + list.composer.id + ',genre:\'' + docsg[dgenre] + '\'});">radio</a></li>');
         }
 
         if (!genre) {
@@ -663,6 +707,14 @@ cmas_genresbycomposer = function (composer, genre)
         else {
           cmas_worksbycomposer(list.composer.id, genre);
         }
+
+        $('#genresworks h2.mobonly').html('works');
+        
+        if (auto) { 
+          cmas_mobilepage ('library');
+        } else {
+          cmas_mobilepage ('composer');
+        }      
       }
       
     }
@@ -674,7 +726,6 @@ cmas_genresbycomposer = function (composer, genre)
 cmas_worksbycomposer = function (composer, genre)
 {
   $('#worksearch').val('');
-
   $.ajax({
     url: cmas_options.opusbackend + '/work/list/composer/' + composer + '/' + genre + '.json',
     method: "GET",
@@ -754,9 +805,13 @@ cmas_works = function (response)
     }
 
     if (list.request.item == 'Recommended' || list.request.item == 'Popular' || list.request.item == 'fav') {
-      if (lastgenre != docsw[work].genre) $('#works').append('<li class="separator">' + docsw[work].genre + '</li>');
+      if (lastgenre != docsw[work].genre) {
+        $('#works').append('<li class="separator">' + docsw[work].genre + '</li>');
+      }
     }
-    else if (lastrec != docsw[work].recommended && !(lastrec == '' && docsw[work].recommended == '0')) $('#works').append('<li class="separator">' + (docsw[work].recommended == 1 ? 'Essential': 'Other works') + '</li>');
+    else if (lastrec != docsw[work].recommended && !(lastrec == '' && docsw[work].recommended == '0')) {
+      $('#works').append('<li class="separator">' + (docsw[work].recommended == 1 ? 'Essential': 'Other works') + '</li>');
+    }
 
     //docsw[work].title = docsw[work].title.replace(/\"/g, "");
     $('#works').append('<li><a href="javascript:cmas_favoritework(\'' + docsw[work].id + '\',\'' + list.composer.id + '\')" class="wfav wfav_' + docsw[work].id + ' ' + favorite + '">fav</a><a href="javascript:cmas_recordingsbywork(' + docsw[work].id + ',0);">' + docsw[work].title + '<span>' + docsw[work].subtitle + ' </span></a></li>');
@@ -764,6 +819,9 @@ cmas_works = function (response)
     lastrec = docsw[work].recommended;
     lastgenre = docsw[work].genre;
   }
+
+  $("#works li.separator").prev().addClass('beforeseparator');
+  $('#radioslider em').html($('#composerprofile li.name').html() + ' ' + ($('#genres li.active a').html().toLowerCase().includes('all') ? '' : $('#genres li.active a').html().toLowerCase()) + ($('#genres li.active a').html().toLowerCase().includes('favorites') ? '' : ' works'));
 }
 
 // recordings list
@@ -783,15 +841,20 @@ cmas_recordingsbywork = function (work, offset)
     $('#playlistradio').hide();
     $('#albums').removeClass();
     $('#albums').html('');
-    $('#genresworks h2').html('');
+    $('#genresworks div.deskonly h2').html('');
     $('#genresworks h3').html('');
     $('#genresworks h4').html('');
     $('#albums').addClass(work.toString());
     $('#albums').show();
+    $('#workprofile').hide();
+    $('#genresworks h2.mobonly').html('recordings').hide();;
+    cmas_mobilepage ('work');
+    $('#albums.'+work).append('<li class="loading firstload"></li>');
   }
-
-  $('#albums.'+work).append('<li class="loading"></li>');
-
+  else {
+    $('#albums.'+work).append('<li class="loading"></li>');
+  }
+  
   $.ajax({
     url: cmas_options.backend + '/recording/list/work/' + work + '/' + offset + '.json',
     method: "GET",
@@ -802,9 +865,23 @@ cmas_recordingsbywork = function (work, offset)
       listul = '#albums.' + list.work.id;
 
       if ($('#albums').attr('class') == work.toString()) {
-        $('#genresworks h2').html('<a href="javascript:cmas_genresbycomposer (' + list.work.composer.id + ')">' + list.work.composer.name + '</a>');
+        $('#genresworks div.deskonly h2').html('<a href="javascript:cmas_genresbycomposer (' + list.work.composer.id + ')">' + list.work.composer.name + '</a>');
         $('#genresworks h3').html(list.work.title);
         $('#genresworks h4').html(list.work.subtitle);
+
+        $('#workprofile li.back').html('<a href="javascript:cmas_genresbycomposer (' + list.work.composer.id + ')">back</a>');
+        $('#workprofile li.name').html(list.work.composer.name);
+        $('#workprofile li.title').html(list.work.title);
+        $('#workprofile li.subtitle').html(list.work.subtitle);
+
+        if ($.inArray(list.work.id.toString(), cmas_favoriteworks) != -1) {
+          mwfav = 'favorite';
+        }
+        else {
+          mwfav = '';
+        }
+        
+        $('#workprofile li.buttons').html('<a id="mwfav_' + list.work.id + '" href="javascript:cmas_favoritework(\'' + list.work.id + '\', \'' + list.work.composer.id + '\');" class="fav ' + mwfav + '">fav</a>');
       }
 
       if (list.status.success == "true") {
@@ -848,8 +925,11 @@ cmas_recordingsbywork = function (work, offset)
         }
       }
 
-      if (list.status.success == "false") $(listul).append('<li class="emptylist"><p>Concertmaster couldn\'t find any recording of this work in the Spotify database. It might be an error, though. Please <a href="mailto:concertmasterteam@gmail.com">reach us</a> if you know a recording. This will help us correct our algorithm.</p></li>')
-      if (!list.next && list.status.success == "true") $(listul).append('<li class="disclaimer"><p>These recordings were fetched automatically from the Spotify database. The list might be inaccurate or incomplete. Please <a href="mailto:concertmasterteam@gmail.com">reach us</a> for requests, questions or suggestions.</p></li>');
+      if (list.status.success == "false") $(listul).append('<li class="emptylist"><p>Concertino couldn\'t find any recording of this work in the Spotify catalog. It might be an error, though. Please <a href="mailto:concertmasterteam@gmail.com">reach us</a> if you know a recording. This will help us correct our algorithm.</p></li>')
+      if (!list.next && list.status.success == "true") $(listul).append('<li class="disclaimer"><p>Those recordings were fetched automatically from the Spotify catalog. The list might be inaccurate or incomplete. Please <a href="mailto:concertmasterteam@gmail.com">reach us</a> for requests, questions or suggestions.</p></li>');
+
+      $('#genresworks h2.mobonly').show();
+      $('#workprofile').show();
     }
   });
 }
@@ -857,6 +937,7 @@ cmas_recordingsbywork = function (work, offset)
 // random recording
 
 cmas_randomrecording = function (wid) {
+
   $.ajax({
     url: cmas_options.backend + '/recording/list/work/' + wid + '/0.json',
     method: "GET",
@@ -898,6 +979,7 @@ cmas_thisrecording = function (album, wid, set) {
   cmas_radioqueue = [];
   cmas_radiofilter = {};
   cmas_onair = false;
+  $('body').removeClass('radioonair');
   
   cmas_recording (wid, album, set);
 }
@@ -916,10 +998,10 @@ cmas_recording = function (wid, album, set, auto)
     success: function (response) {
       $('#nowplaying').css('display', "block");
       if (cmas_disabled) {
-        $('#favorites').css('bottom', "312px");
+        $('body').removeClass("showingplayerbar");
       }
       else {
-        $('#favorites').css('bottom', "384px");
+        $('body').addClass("showingplayerbar");
       }
       $("#timerglobal").html('0:00');
       cmas_recordingaction (response, auto);
@@ -935,6 +1017,8 @@ cmas_recordingaction = function (list, auto)
       cmas_notavailable();
     }
     else if (list.recording.markets.indexOf(localStorage.user_country) != -1) {
+
+      $('body').addClass('showingnowplaying');
 
       if (window.location.pathname != '/u/' + list.work.id + '/' + list.recording.spotify_albumid + '/' + list.recording.set) {
         window.history.pushState({}, 'Concertmaster', '/u/' + list.work.id + '/' + list.recording.spotify_albumid + '/' + list.recording.set);
@@ -971,11 +1055,11 @@ cmas_recordingaction = function (list, auto)
       $('#globaltracks').html('');
 
       if (list.recording.tracks.length >= 60) {
-        trackadjust = ' - 0.03px';
+        trackadjust = ' - 0px';
         $('#globaltracks').addClass("tootoomanytracks");
       }
       else {
-        trackadjust = ' - 2px';
+        trackadjust = ' - 0px';
         $('#globaltracks').removeClass("tootoomanytracks");
         if (list.recording.tracks.length >= 12) 
         {
@@ -1005,7 +1089,7 @@ cmas_recordingaction = function (list, auto)
       $('#durationglobal').html(cmas_readabletime(list.recording.length));
 
       if (!auto) {
-        cmas_notification(list.work.title, list.recording.cover, list.work.composer.name);
+        cmas_mobilepage ('player');
         cmas_spotifyplay(list.recording.spotify_tracks, 0);
 
         // registering play
@@ -1036,14 +1120,16 @@ cmas_recordingaction = function (list, auto)
 
 cmas_playingdetails = function ()
 {
-    if (document.getElementById('nowplaying').className == 'up')
-    {
-        document.getElementById('nowplaying').className = 'down';
-    }
-    else
-    {
-        document.getElementById('nowplaying').className = 'up';
-    }
+  if ($('body').hasClass('player'))
+  {
+    $('#nowplaying').attr('class', 'up');
+    $('body').removeClass('player');
+  }
+  else
+  {
+    $('#nowplaying').attr('class', 'down');
+    $('body').addClass('player');
+  }
 }
 
 // recording item
@@ -1055,35 +1141,6 @@ cmas_recordingitem = function (item, work, playlist)
   if (typeof item.observation === 'undefined') item.observation = '';
 
   alb = '';
-  alb = alb + '<li class="permalink"><a href="javascript:cmas_permalink(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')">permalink</a></li>';
-  
-  rid = work.id + '-' + item.spotify_albumid + '-' + item.set;
-
-  if ($.inArray(rid, cmas_favorites) != -1)
-  {
-    alb = alb + '<li class="favorite"><a href="javascript:cmas_recfavorite(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')" class="is fav_' + rid + '">unfavorite</a></li>';
-  }
-  else
-  {
-    alb = alb + '<li class="favorite"><a href="javascript:cmas_recfavorite(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')" class="go fav_' + rid + '">favorite</a></li>';
-  }
-
-  if (playlist) {
-    if (playlist.owner.id == localStorage.spotify_userid) {
-      plaction = 'unplaylist';
-      plfunction = 'cmas_unplaylistperformance(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',' + playlist.id + ')';
-    }
-    else {
-      plaction = 'doplaylist';
-      plfunction = 'cmas_playlistmodal(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')';
-    }
-  }
-  else {
-    plaction = 'doplaylist';
-    plfunction = 'cmas_playlistmodal(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')';
-  }
-
-  alb = alb + '<li class="playlist '+ plaction +'"><a href="javascript:'+ plfunction +'">playlist</a></li>';
 
   alb = alb + '<li class="cover"><a href="javascript:cmas_thisrecording(\'' + item.spotify_albumid +'\','+work.id+','+item.set+')">';
   alb = alb + '<img src="' + item.cover + '" onerror="this.src=\'/img/nocover.png\'" />';
@@ -1104,6 +1161,36 @@ cmas_recordingitem = function (item, work, playlist)
   alb = alb + '<li class="performers"><ul>' + cmas_listperformers(item.performers) + '</ul></li>';
   alb = alb + '<li class="label">'+item.label+'</li>';
   alb = alb + '<li class="spotify"><a href="' + spotify_link + '" target="_blank">Listen on Spotify</a></li>';
+
+  rid = work.id + '-' + item.spotify_albumid + '-' + item.set;
+
+  if ($.inArray(rid, cmas_favorites) != -1)
+  {
+    alb = alb + '<li class="favorite"><a href="javascript:cmas_recfavorite(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')" class="is fav_' + rid + '">unfavorite</a></li>';
+  }
+  else
+  {
+    alb = alb + '<li class="favorite"><a href="javascript:cmas_recfavorite(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')" class="go fav_' + rid + '">favorite</a></li>';
+  }
+
+  alb = alb + '<li class="permalink"><a href="javascript:cmas_permalink(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')">permalink</a></li>';
+
+  if (playlist) {
+    if (playlist.owner.id == localStorage.spotify_userid) {
+      plaction = 'unplaylist';
+      plfunction = 'cmas_unplaylistperformance(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',' + playlist.id + ')';
+    }
+    else {
+      plaction = 'doplaylist';
+      plfunction = 'cmas_playlistmodal(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')';
+    }
+  }
+  else {
+    plaction = 'doplaylist';
+    plfunction = 'cmas_playlistmodal(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')';
+  }
+
+  alb = alb + '<li class="playlist '+ plaction +'"><a href="javascript:'+ plfunction +'">playlist</a></li>';
 
   return alb;
 }
@@ -1182,11 +1269,7 @@ cmas_notavailable = function () {
 
 cmas_showplayerbar = function ()
 {
-  $('#playerbar').css('display',"block");
-  $('#main').css('bottom',"68px");
-  $('#nowplaying').css('bottom',"68px");
-  $('#sidebar').css('bottom',"68px");
-  $('#favorites').css('bottom', "68px");
+  $('body').addClass('showingplayerbar');
 }
 
 // notification
@@ -1423,8 +1506,9 @@ cmas_favoritework = function (wid, cid) {
       if (response.status.success == "true") {
         cmas_favoriteworks = (response.list ? response.list : []);
         $('.wfav_' + wid).toggleClass('favorite');
+        $('#mwfav_' + wid).toggleClass('favorite');
 
-        if ($('li#fav').hasClass('active')) {
+        if ($('li#fav').hasClass('active') && $(window).width() >= 1024) {
           cmas_listfavoriteworks(localStorage.lastcomposerid);
         }
       }
@@ -1447,8 +1531,18 @@ cmas_init = function ()
       cmas_playlists = (response.playlists ? response.playlists : {});
 
       cmas_composersbytag('pop');
-      cmas_genresbycomposer(localStorage.lastcomposerid, localStorage.lastgenre);
+      cmas_genresbycomposer(localStorage.lastcomposerid, localStorage.lastgenre, true);
       cmas_playlist("fav");
+
+      if ($(window).width() < 1024) {
+        cmas_composersbyfav();
+      }
+
+      cmas_mobilepage('library');
+      if (localStorage.lastwid) {
+        cmas_recording(localStorage.lastwid, localStorage.lastaid, localStorage.lastset, true);
+      }
+      $('#loader').fadeOut();
     }
   });
 }
@@ -1504,14 +1598,19 @@ cmas_playlistrecordings = function (pid) {
     url: cmas_options.backend + '/recording/list/playlist/'+pid+'.json',
     method: "GET",
     success: function (response) {
-      docsr = response.recordings;
 
-      for (performance in docsr) {
-        listul = '#favalbums';
-        draggable = "draggable";
-        pidsort = "";
+      if (response.status.success == "false") {
+        cmas_playlist("fav");
+      } else {
+        docsr = response.recordings;
 
-        $(listul).append('<li pid="' + docsr[performance].work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + '" class="performance"><ul>' + cmas_recordingitem(docsr[performance], docsr[performance].work, response.playlist) + '</ul></li>');
+        for (performance in docsr) {
+          listul = '#favalbums';
+          draggable = "draggable";
+          pidsort = "";
+
+          $(listul).append('<li pid="' + docsr[performance].work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + '" class="performance"><ul>' + cmas_recordingitem(docsr[performance], docsr[performance].work, response.playlist) + '</ul></li>');
+        }
       }
     }
   });
@@ -1519,8 +1618,8 @@ cmas_playlistrecordings = function (pid) {
 
 // adding or removing favorite composers
 
-cmas_compfavorite = function (cid) {
-  if ($('#cfav_' + cid).hasClass('favorite'))
+cmas_compfavorite = function (cid, classcheck) {
+  if ($(classcheck).hasClass('favorite'))
   {
     action = 'unfavorite';
   }
@@ -1539,8 +1638,9 @@ cmas_compfavorite = function (cid) {
         cmas_favoritecomposers = (response.list ? response.list : []);
 
         $('#cfav_' + cid).toggleClass('favorite');
+        $('#mfav_' + cid).toggleClass('favorite');
 
-        if ($('#composers li.index').hasClass('favorite')) {
+        if ($(window).width() < 1024 || $('#composers li.index').hasClass('favorite')) {
           cmas_composersbyfav();
         }
       }
@@ -1550,8 +1650,8 @@ cmas_compfavorite = function (cid) {
 
 // adding or removing forbidden composers
 
-cmas_compforbid = function (cid) {
-  if ($('#forb_' + cid).hasClass('forbidden')) {
+cmas_compforbid = function (cid, classcheck) {
+  if ($(classcheck).hasClass('forbidden')) {
     action = 'permit';
   }
   else {
@@ -1568,6 +1668,7 @@ cmas_compforbid = function (cid) {
         cmas_forbiddencomposers = (response.list ? response.list : []);
 
         $('#forb_' + cid).toggleClass('forbidden');
+        $('#mforb_' + cid).toggleClass('forbidden');
       }
     }
   });
@@ -1591,6 +1692,7 @@ cmas_listplaylists = function (playlist_slug) {
   }
 
   $('#favtitle select').html('');
+  $('#playlist-menu').html('');
 
   var favoption = new Option("Favorites", "fav");
   $('#favtitle select').append($(favoption));
@@ -1598,17 +1700,32 @@ cmas_listplaylists = function (playlist_slug) {
   var favoption = new Option("Recently Played", "rec");
   $('#favtitle select').append($(favoption));
 
+  $('#playlist-menu').append('<li class="favorites" id="playlist_fav"><a href="javascript:cmas_playlist(\'fav\');">Your favorites</a></li><li class="recently" id="playlist_rec"><a href="javascript:cmas_playlist(\'rec\');">Recently played</a></li>');
+
   for (pllst in cmas_playlists)
   {
     var favoption = new Option(cmas_playlists[pllst].name, cmas_playlists[pllst].id);
+
+    var summary = cmas_playlists[pllst].summary.works.rows + ' work' + (cmas_playlists[pllst].summary.works.rows > 1 ? 's' : '') + ' by ' + cmas_playlists[pllst].summary.composers.names.slice (0,4).join (', ');
+    var portraits = '';
+
+    for (cpid in cmas_playlists[pllst].summary.composers.portraits.slice (0, 4)) {
+      var portraits = portraits + '<img src="' + cmas_playlists[pllst].summary.composers.portraits[cpid] + '" />'; 
+    }
+
     $('#favtitle select').append($(favoption));
+    $('#playlist-menu').append('<li id="playlist_' + cmas_playlists[pllst].id + '" class="playlist"><a href="javascript:cmas_playlist(\'' + cmas_playlists[pllst].id + '\')"><span class="portraits composers-' + cmas_playlists[pllst].summary.composers.portraits.slice (0, 4).length + '">' + portraits + '</span><span class="title">' + cmas_playlists[pllst].name + '</span><span class="summary">' + summary + '</span></a></li>');
   }
 
+  $('#playlist-menu li#playlist_' + playlist_slug).addClass('active');
   $('#favtitle select').val(playlist_slug);
   $('#favtitle select').css('visibility', 'visible');
 }
 
 cmas_playlist = function (playlist) {
+  $('ul#favalbums').removeClass().addClass((playlist == "fav" || playlist == "rec") ? playlist : "playlist");
+  $('body').removeClass("playlist").addClass((playlist == "fav" || playlist == "rec") ? "" : "playlist");
+
   cmas_listplaylists (playlist);
   if (playlist == "fav") {
     cmas_favoriterecordings();
@@ -1619,6 +1736,7 @@ cmas_playlist = function (playlist) {
   else {
     cmas_playlistrecordings(playlist);
   }
+  cmas_mobilepage ("favorites");
 }
 
 // playlist modal
@@ -1642,11 +1760,11 @@ cmas_playlistmodal = function (wid, aid, set) {
   window.playlistwid = wid;
   window.playlistaid = aid;
   window.playlistset = set;
-  $('#tuning-modal').hide();
-  $("#playlistmodal").leanModal();
+  $('#tuning-modal').hide(0, function () { $("#playlistmodal").leanModal(); });
 }
 
 cmas_addtoplaylist = function () {
+
   if ($('#playlistmodal #newplaylist').val() != "") {
     cmas_playlistperformance(window.playlistwid, window.playlistaid, window.playlistset, 'new', $('#playlistmodal #newplaylist').val(), 1);
   }
@@ -1673,6 +1791,8 @@ cmas_playlistperformance = function (wid, aid, set, pid, name) {
             cmas_playlists = (response.list ? response.list : {});
             cmas_playlist(response.playlist.id);
             $('#playlistmodal').closeModal();
+            $('#playlistmodal-existing').fadeTo(0,1);
+            $('#playlistmodal-new').fadeTo(0,1);
           }
         }
       });
@@ -1863,9 +1983,12 @@ cmas_playlistdetail = function (pid) {
 // new radio
 
 cmas_newradio = function (filter) {
-  if (filter.genre == 'Popular') filter.popularwork = 1;
-  if (filter.genre == 'Recommended') filter.recommendedwork = 1;
-  if (filter.genre == 'Recommended' || filter.genre == 'Popular') filter.genre = '';
+  if (filter.genre) {
+    if (filter.genre.toLowerCase() == 'popular') filter.popularwork = 1;
+    if (filter.genre.toLowerCase() == 'recommended') filter.recommendedwork = 1;
+    if (filter.genre.toLowerCase() == 'fav') filter.work = 'fav';  
+    if (filter.genre.toLowerCase() == 'recommended' || filter.genre.toLowerCase() == 'popular' || filter.genre.toLowerCase() == 'fav' || filter.genre.toLowerCase() == 'all') filter.genre = '';  
+  }
   if (cmas_disabled) {
     $(`#${cmas_disabledreason}`).leanModal(); return;
   }
@@ -1891,6 +2014,8 @@ cmas_newradio = function (filter) {
         $('#radiotop #goradio').removeClass('on');
         $('#radiotop #goradio').addClass('on');
 
+        $('body').addClass('radioonair');
+
         $('#playercontrols #skip').removeClass('radio');
         $('#playercontrols #skip').addClass('radio');
 
@@ -1905,6 +2030,7 @@ cmas_newradio = function (filter) {
 // radio skip
 
 cmas_radioskip = function () {
+  console.log('Over, next'); 
   if (cmas_onair) {
     if (cmas_radioqueue.length) {
       if (Object.keys(cmas_state).length > 0 && !cmas_state.paused) {
@@ -1966,6 +2092,7 @@ cmas_radiobutton = function () {
     cmas_radioqueue = [];
     cmas_radiofilter = {};
     cmas_onair = false;
+    $('body').removeClass('radioonair');
     $('#radiotop select').prop("disabled", false);
   }
 }
@@ -2000,6 +2127,7 @@ cmas_playlistradio = function (where) {
 
     $('#radiotop #goradio').removeClass('on');
     $('#radiotop #goradio').addClass('on');
+    $('body').addClass('radioonair');
 
     $('#playercontrols #skip').removeClass('radio');
     $('#playercontrols #skip').addClass('radio');
@@ -2071,4 +2199,71 @@ cmas_albumscroll = function (o) {
 
 cmas_qualify = function () {
   $('#playerverify').toggleClass('opened');
+}
+
+// mobile pagination
+
+cmas_mobilepage = function (page) {
+  if ($(window).width() < 1024) {
+    if (window.location.hash != '#' + page) {
+      window.history.pushState({}, 'Concertino', window.location.pathname.split('#')[0] + '#' + page);
+    }
+  
+    if (page == 'player') { 
+      $('#nowplaying').removeClass().addClass('down');
+      $('body').addClass('player');
+    } else {
+      $('body').removeClass('player library favorites radio settings composer work').addClass(page);
+    }
+  }
+}
+
+// mobile swipe detection
+
+cmas_swipedetect = function (el, callback) {
+  // http://javascriptkit.com/javatutors/touchevents2.shtml
+  var touchsurface = el,
+  swipedir,
+  startX,
+  startY,
+  distX,
+  distY,
+  threshold = 10, //required min distance traveled to be considered swipe
+  restraint = 1000, // maximum distance allowed at the same time in perpendicular direction
+  allowedTime = 10000000, // maximum time allowed to travel that distance
+  elapsedTime,
+  startTime,
+  handleswipe = callback || function(swipedir){}
+
+  touchsurface.addEventListener('touchstart', function(e){
+      var touchobj = e.changedTouches[0]
+      swipedir = 'none'
+      dist = 0
+      startX = touchobj.pageX
+      startY = touchobj.pageY
+      startTime = new Date().getTime() // record time when finger first makes contact with surface
+      //e.preventDefault()
+  }, false)
+
+  touchsurface.addEventListener('touchmove', function(e){
+      //e.preventDefault() // prevent scrolling when inside DIV
+  }, false)
+
+  touchsurface.addEventListener('touchend', function(e){
+      var touchobj = e.changedTouches[0]
+      distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
+      distY = touchobj.pageY - startY // get vertical dist traveled by finger while in contact with surface
+      
+      elapsedTime = new Date().getTime() - startTime // get time elapsed
+      if (elapsedTime <= allowedTime){ // first condition for awipe met
+          if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){ // 2nd condition for horizontal swipe met
+              swipedir = (distX < 0)? 'left' : 'right' // if dist traveled is negative, it indicates left swipe
+          }
+          else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){ // 2nd condition for vertical swipe met
+              swipedir = (distY < 0)? 'up' : 'down' // if dist traveled is negative, it indicates up swipe
+          }
+      }
+      handleswipe(swipedir)
+      //e.preventDefault()
+  }, false)
 }

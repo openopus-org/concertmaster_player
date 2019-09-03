@@ -83,6 +83,11 @@ a
     z-index: 1000;
 }
 
+body.showingplayerbar #playerbar
+{
+	display: block;  
+}
+
 #toolbar
 {
 	position: fixed;
@@ -104,7 +109,7 @@ a
 	display: block;
 	position: absolute;
 	background-image: url("../img/logo.png");
-	background-size: 146px 21px;
+	background-size: 146px;
 	left: 30px;
 	bottom: 7px;
 }
@@ -218,15 +223,21 @@ a
 	border: 6px solid #FCE546;
 }
 
+#nowplaying.down
+{
+	top: 36px;
+}
+
 #nowplaying.up
 {
 	/*height: 278px;*/
 	height: 300px;
 }
 
-#nowplaying.down
+body.showingplayerbar #nowplaying,
+body.showingplayerbar #main
 {
-	top: 36px;
+	bottom: 68px;
 }
 
 #favorites
@@ -239,6 +250,21 @@ a
 	margin: 0px 0px;
 	padding: 24px;
 	border: 6px solid #121212;
+}
+
+body.showingplayerbar #favorites
+{
+	bottom: 68px;
+}
+
+body.showingnowplaying.showingplayerbar #favorites
+{
+	bottom: 384px;
+}
+
+body.showingnowplaying #favorites
+{
+	bottom: 312px;
 }
 
 #main
@@ -372,7 +398,7 @@ a
 #albums .performance:hover > ul .favorite a, #albums .performance:hover > ul .permalink a, #albums .performance:hover > ul .playlist a,
 #genres li:hover > a.radio,
 #favorites li.performance:hover > ul li.permalink, #favorites li.performance:hover > ul li.favorite, #favorites li.performance:hover > ul li.playlist,
-#nowplaying:hover > #playerinfo li.permalink, #nowplaying:hover > #playerinfo li.favorite, #nowplaying:hover > #playerinfo li.playlist
+#nowplaying-touch:hover > #playerinfo li.permalink, #nowplaying-touch:hover > #playerinfo li.favorite, #nowplaying-touch:hover > #playerinfo li.playlist
 {
 	visibility: visible;
 }
@@ -652,6 +678,7 @@ h2
 	clear: both;
 	height: 92px;
 	overflow: hidden;
+	position: relative;
 }
 
 #favorites li.performance:last-child
@@ -687,8 +714,8 @@ h2
 	overflow: hidden;
 	display: block;
 	position: absolute;
-	margin-top: 60px;
-	left: 352px;
+	top: 62px;
+    right: 28px;
 	background-image: url("../img/permalink_big.png");
 	background-size: 11px 13px;
 }
@@ -708,8 +735,8 @@ h2
 	overflow: hidden;
 	display: block;
 	position: absolute;
-	margin-top: 60px;
-	left: 372px;
+    right: 4px;
+    top: 62px;
 }
 
 #favorites .favorite a.go
@@ -892,6 +919,9 @@ h2
 {
 	float: left;
 	border-left: 2px solid #121212;
+	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 #playercontrols #globaltracks.tootoomanytracks
@@ -1532,6 +1562,7 @@ h2
 	display: block;
 	margin-bottom: 12px;
 	font-size: 13px;
+	position: relative;
 }
 
 #albums li.performance.verified
@@ -1622,9 +1653,9 @@ h2
 	overflow: hidden;
 	display: block;
 	float: right;
-	position: relative;
-	bottom: -88px;
-	right: -15px;
+	position: absolute;
+	bottom: 10px;
+	right: 9px;
 }
 
 #albums .performance .permalink a
@@ -1636,9 +1667,9 @@ h2
 	overflow: hidden;
 	display: block;
 	float: right;
-	position: relative;
-	bottom: -88px;
-	right: 28px;
+	position: absolute;
+	bottom: 10px;
+	right: 39px;
 	background-image: url("../img/permalink_big.png");
 	background-size: 14px 18px;
 }
@@ -1657,9 +1688,9 @@ h2
 	overflow: hidden;
 	display: block;
 	float: right;
-	position: relative;
-	bottom: -88px;
-	right: 4px;
+	position: absolute;
+	bottom: 10px;
+	right: 52px;
 	background-size: 18px;
 }
 
@@ -1683,9 +1714,9 @@ h2
 	overflow: hidden;
 	display: block;
 	float: right;
-	position: relative;
-	bottom: -59px;
-	right: 41px;
+	position: absolute;
+    top: 61px;
+    right: 40px;
 }
 
 #favalbums .sortable-dragging
@@ -2727,6 +2758,15 @@ li.emptylist p {
 #genresworks h4 {
 	font-size: 12px;
   margin-top: 2px;
+}
+
+.mobonly,
+#genres span,
+#loader-options,
+#signout,
+#signin
+{
+	display: none !important;
 }
 
 /* firefox tweak */
