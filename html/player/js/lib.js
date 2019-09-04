@@ -45,7 +45,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.09.04.12'
+    version: '1.19.09.04.13'
 };
 
 window.onpopstate = function (event) {
@@ -1024,7 +1024,7 @@ cmas_recordingaction = function (list, auto)
         window.history.pushState({}, 'Concertmaster', '/u/' + list.work.id + '/' + list.recording.spotify_albumid + '/' + list.recording.set);
       }
 
-      document.title = `${list.work.composer.name}: ${list.work.title} - Concertmaster`;
+      document.title = `${list.work.composer.name}: ${list.work.title}`;
 
       $('#playerinfo').html(cmas_recordingitem(list.recording, list.work));
 
