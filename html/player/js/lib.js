@@ -45,7 +45,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.09.03'
+    version: '1.19.09.04'
 };
 
 window.onpopstate = function (event) {

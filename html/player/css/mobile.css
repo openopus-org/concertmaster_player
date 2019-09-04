@@ -154,13 +154,13 @@ body.player #favorites {
     width: -webkit-fill-available;
     bottom: 0;
     z-index: 99999;
+    box-shadow: 0px -5px 6px 0px #000000a6;
 }
 
 body.showingnowplaying #nowplaying
 {
     height: 62px;
     display: block;
-	border-radius: 20px;
 }
 
 body.showingnowplaying #nowplaying #nowplaying-touch
@@ -176,7 +176,6 @@ body.showingplayerbar.showingnowplaying #nowplaying
 	border-top-right-radius: 0px;
 	border-bottom-left-radius: 0px;
 	border-bottom-right-radius: 0px;
-	box-shadow: 0px -5px 6px 0px #000000a6;
 }
 
 #nowplaying h2
@@ -551,7 +550,6 @@ body.player #nowplaying #playertracks {
 #loader-options li a {
 	display: block;
     background-color: #FE365F;
-    border-radius: 20px;
     margin: 10px 0;
     text-align: center;
     font-size: 14px;
@@ -601,7 +599,7 @@ body.showingplayerbar.showingnowplaying.player #playerbar {
 
 body.player #nowplaying {
 	padding: 26px 20px;
-	bottom: 50px;
+    bottom: 50px;
 }
 
 #playerinfo li.cover img {
@@ -1851,7 +1849,6 @@ body.playlist.player #editplaylistslider
     padding: 4px 12px;
     background: #FCE546;
     display: none;
-    border-radius: 14px;
 }
 
 #tuning-modal h2
