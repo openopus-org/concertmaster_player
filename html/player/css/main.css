@@ -1956,7 +1956,8 @@ body.windows #windowcontrol
 	font-size: 12px;
 	text-align: center;
 	display: block;
-	padding-top: 8px;
+	padding-top: 6px;
+    padding-bottom: 2px;
 	float: right;
 	margin-left: 5px;
 }

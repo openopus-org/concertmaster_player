@@ -46,11 +46,6 @@ body
 	font-size: 12px;
 }
 
-strong 
-{
-	font-weight: 600;
-}
-
 ul, li
 {
 	list-style-type: none;
@@ -154,11 +149,11 @@ body.player #favorites {
 #nowplaying
 {
     padding: 20px;
-	background-image: linear-gradient(#4F4F4F, #2B2B2F);
-	position: absolute;
+    background-color: #FCE546;
+    position: absolute;
     width: -webkit-fill-available;
-	bottom: 0;
-	z-index: 99999;
+    bottom: 0;
+    z-index: 99999;
 }
 
 body.showingnowplaying #nowplaying
@@ -176,10 +171,12 @@ body.showingnowplaying #nowplaying #nowplaying-touch
 body.showingplayerbar.showingnowplaying #nowplaying
 {
 	height: 42px;
-	border-top-left-radius: 20px;
-	border-top-right-radius: 20px;
+	border: 0px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
 	border-bottom-left-radius: 0px;
 	border-bottom-right-radius: 0px;
+	box-shadow: 0px -5px 6px 0px #000000a6;
 }
 
 #nowplaying h2
@@ -187,9 +184,14 @@ body.showingplayerbar.showingnowplaying #nowplaying
     display: none;
 }
 
+#playerinfo li
+{
+    color: #000000;
+}
+
 #playerinfo li strong
 {
-	font-family: 'PetitaMedium', sans-serif;
+	font-family: 'PetitaBold', sans-serif;
 }
 
 #playerinfo .composer a, #favorites .composer a, #albums.playlist .composer a
@@ -197,8 +199,8 @@ body.showingplayerbar.showingnowplaying #nowplaying
 	font-family: 'Sanchez', sans-serif;
 	font-size: 12px;
 	text-transform: uppercase;
-	font-weight: 800;
-	color: #FCE546;
+	font-weight: normal;
+	color: #000000;
 }
 
 #favorites .composer a, #albums.playlist .composer a
@@ -213,10 +215,11 @@ body.player #playerinfo .composer a {
 
 #playerinfo .work a
 {
-	font-family: 'PetitaMedium', sans-serif;
-    font-size: 13px;
-    margin-top: 1px;
-    display: block;
+	font-family: 'PetitaBold', sans-serif;
+	font-size: 13px;
+	margin-top: 1px;
+	display: block;
+	color: #000;
 }
 
 #playerinfo li.work span {
@@ -296,7 +299,7 @@ body.composer #genresworks h2 {
 	background-repeat: no-repeat;
 	width: 24px;
 	height: 10px;
-	background-size: 24px 6px;
+	background-size: 21px;
 	text-indent: -9000px;
 	overflow: hidden;
 	display: block;
@@ -316,6 +319,7 @@ body.showingplayerbar.showingnowplaying.player #nowplaying
 	border-bottom-left-radius: 0px;
 	border-bottom-right-radius: 0px;
 	bottom: 50px;
+	box-shadow: none;
 }
 
 #nowplaying #toggle
@@ -371,7 +375,8 @@ body.player #nowplaying #toggle
 #workprofile li.buttons a
 {
 	position: relative;
-	bottom: 10px;
+	bottom: -1px;
+	right: -6px;
 }
 
 #albums .performance .unplaylist a, #favalbums .performance .unplaylist a
@@ -391,6 +396,7 @@ body.player #nowplaying #toggle
 
 body.player #nowplaying #playertracks {
     display: block;
+    color: #000;
 }
 
 .spotify a {
@@ -403,6 +409,7 @@ body.player #nowplaying #playertracks {
 	padding-left: 14px;
 	margin-top: 15px;
 	display: block;
+	color: #000;
 }
 
 #playerinfo li.spotify  {
@@ -436,7 +443,7 @@ body.player #nowplaying #playertracks {
 {
 	width: 0px;
 	height: 4px;
-	background-color: #FCE546;
+	background-color: #FFFFFF;
 	position: relative;
 	bottom: 4px;
 }
@@ -453,6 +460,7 @@ body.player #nowplaying #playertracks {
 	clear: both;
 	display: block;
 	margin-top: 24px;
+	color: #000;
 }
 
 #playertracks #durationglobal, #playertracks #timerglobal
@@ -529,7 +537,7 @@ body.player #nowplaying #playertracks {
 	color: #717171;
 	font-family: 'Sanchez', sans-serif;
 	font-weight: normal;
-	font-size: 12px;
+	font-size: 10px;
 	text-transform: uppercase;
 	margin-top: -22px;
 	text-align: center;
@@ -574,26 +582,25 @@ body.player #nowplaying #playertracks {
     bottom: 20px;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: -webkit-fill-available;
 }
 
 body.showingplayerbar.showingnowplaying #playerbar {
     display: block;
     position: absolute;
     bottom: 50px;
-    background-color:#2B2B2F;
+    background-color: #FCE546;
     width: 100%;
-    height: 40px;
+    height: 42px;
     overflow: hidden;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
 }
 
 body.showingplayerbar.showingnowplaying.player #playerbar {
-    height: 80px;
+    height: 82px;
 }
 
 body.player #nowplaying {
-	padding: 26px;
+	padding: 26px 20px;
 	bottom: 50px;
 }
 
@@ -638,11 +645,13 @@ body.player #nowplaying #toggle {
     position: fixed;
     height: 100%;
     width: 100%;
+    opacity: 1;
 }
 
 #playercontrols {
     position: relative;
     height: 40px;
+    color: #000000;
 }
 
 #playercontrols #previous, #playercontrols #next, #playercontrols #skip
@@ -659,28 +668,30 @@ body.player #nowplaying #toggle {
 
 #playercontrols #previous
 {
-	background-image: url("../img/previoustrack.png");
+	background-image: url("../img/previoustrack_mob.png");
     left: 38px;
     top: 16px;
 }
 
 #playercontrols #next
 {
-	background-image: url("../img/nextrack.png");
+	background-image: url("../img/nextrack_mob.png");
 	right: 46px;
     top: 16px;
 }
 
 #playercontrols #skip
 {
-	background-image: url("../img/skiptrack_off.png");
-    right: -10px;
+	background-image: url("../img/skip_mob.png");
+	right: -6px;
     top: 16px;
+    opacity: 0.1;
 }
 
 #playercontrols #skip.radio
 {
-	background-image: url("../img/skiptrack.png");
+    background-image: url("../img/skip_mob.png");
+    opacity: 1;
 }
 
 #playercontrols #playpause
@@ -702,12 +713,12 @@ body.player #nowplaying #toggle {
 
 #playercontrols #playpause.play
 {
-	background-image: url("../img/play.png");
+	background-image: url("../img/play_mob.png");
 }
 
 #playercontrols #playpause.pause
 {
-	background-image: url("../img/pause.png");
+	background-image: url("../img/pause_mob.png");
 }
 
 #playercontrols #timerglobal, #playercontrols #durationglobal
@@ -721,9 +732,9 @@ body.player #nowplaying #toggle {
 	display: block;
 	position: absolute;
 	bottom: 21px;
-    left: 61px;
-    text-align: right;
-    width: 30px;
+	left: 61px;
+	text-align: right;
+	width: 30px;
 }
 
 #playercontrols #durationglobal
@@ -768,9 +779,9 @@ body.player #nowplaying #toggle {
 {
 	width: 0px;
 	height: 4px;
-	background-color: #FCE546;
+	background-color: #FFFFFF;
 	position: relative;
-    display: block;
+	display: block;
 }
 
 #playercontrols #globaltracks .buffer
@@ -818,7 +829,7 @@ body.player #durationglobal
 body.player #playercontrols
 {
     top: 16px;
-	width: 265px;
+    width: 250px;
     margin: 0 auto;
     height: 48px;
 }
@@ -838,6 +849,7 @@ body.player #playercontrols #playpause
     height: 50px;
     width: 100%;
     overflow: hidden;
+    background-color: #121212;
 }
 
 #mobile-menu ul {
@@ -852,23 +864,22 @@ body.player #playercontrols #playpause
     text-align: center;
     height: 100%;
     text-align: center;
-    font-size: 9px;
+    font-size: 8px;
     font-family: 'Sanchez', sans-serif;
 }
 
 #mobile-menu li a {
     background-repeat: no-repeat;
-    background-size: 23px;
     background-position-x: center;
     height: 50px;
     display: block;
     margin-top: 7px;
-    padding-top: 23px;
+    padding-top: 25px;
     color: #7C726E;
 }
 
 #mobile-menu li a.radio {
-	padding-top: 19px;
+	padding-top: 21px;
 }
 
 body.library #mobile-menu li a.library,
@@ -899,20 +910,20 @@ body.settings #mobile-menu li a.settings {
 
 #mobile-menu li a.library {
     background-image: url(../img/library.png);
-    background-size: 22px;
+    background-size: 21px;
     background-position-y: 3px;
 }
 
 #mobile-menu li a.favorites {
-    background-position-y: 3px;
-    background-size: 21px;
+    background-position-y: 5px;
+    background-size: 19px;
     background-image: url(../img/favorite_go.png);
 }
 
 #mobile-menu li a.settings {
     background-position-y: 2px;
-    background-size: 21px;
-    background-image: url(../img/setup.png);
+    background-size: 20px;
+    background-image: url(../img/setup_moboff.png);
 }
 
 #mobile-menu li a.radio {
@@ -933,7 +944,7 @@ body.settings #mobile-menu li a.settings {
 }
 
 body.radioonair #mobile-menu a.radio span {
-	background-image: url(../img/radioonair.svg);
+	background-image: url(../img/radioonair-menu-active.svg);
 }
 
 body.radio #mobile-menu a.radio span {
@@ -1042,7 +1053,7 @@ ul.composerdetails li.name a,
 #composerprofile li.name,
 #workprofile li.name
 {
-	font-weight: 800;
+	font-weight: normal;
 	font-family: 'Sanchez', sans-serif;
 	font-size: 12px;
 	color: #FCE546;
@@ -1071,8 +1082,8 @@ ul.composerdetails img
 
 #composerprofile li.portrait img
 {
-	width: 58px;
-	height: 58px;
+	width: 50px;
+	height: 50px;
 }
 
 #composerprofile li.back,
@@ -1120,7 +1131,7 @@ ul.composerdetails img
 #workprofile li.title {
 	font-size: 13px;
     width: 82%;
-    font-weight: 600;
+    font-weight: normal;
 }
 
 #composerprofile li.dates {
@@ -1151,13 +1162,14 @@ ul.composerdetails img
 }
 
 #composerprofile li.buttons a.fav {
-	bottom: 42px !important;
-    position: relative;
-    right: -1px;
+	bottom: 29px !important;
+	position: relative;
+	right: -7px;
 }
 
 #workprofile li.buttons a.fav {
-	top: 10px !important;
+	top: 1px !important;
+	right: 1px;
 }
 
 ul.composerdetails li.fullname {
@@ -1267,9 +1279,10 @@ ul.composerdetails li.fullname {
 
 #genres {
     height: 66px;
-	width: calc(100% - 20px);
-	display: flex !important;
-	justify-content: space-between;
+    width: calc(100% - 20px);
+    display: flex !important;
+    justify-content: space-between;
+    margin-top: 32px;
 }
 
 #genres ul {
@@ -1319,7 +1332,7 @@ ul.composerdetails li.fullname {
 
 #genres li#recommended a span {
 	background-image: url(/img/genres/essential.png);
-	background-size: 15px;
+	background-size: 18px;
 }
 
 #genres li#recommended.active a span {
@@ -1391,7 +1404,7 @@ a.wfav {
 }
 
 #works li.separator {
-    font-weight: 600;
+    font-weight: normal;
     padding: 12px 0 2px;
 	border-bottom: 1px solid #FCE546;
 	color: #FCE546;
@@ -1471,9 +1484,9 @@ height: 138px;
 #favalbums li.composer,
 #favalbums li.work {
 	top: 20px;
-    position: relative;
-	left: 100px;
-	width: calc(100% - 100px);
+	position: relative;
+	left: 92px;
+	width: calc(100% - 105px);
 }
 
 #favalbums li.composer,
@@ -1502,7 +1515,7 @@ height: 138px;
 #favalbums li.performance li.cover a {
     width: -webkit-fill-available;
     height: 80px;
-	position: absolute;
+    position: absolute;
     padding: 20px 0;
 }
 
@@ -1541,11 +1554,11 @@ li.disclaimer {
 
 li.disclaimer p {
 	margin-top: 10px;
-    margin-left: -20px;
-    padding: 11px;
-    font-family: 'Sanchez', sans-serif;
-    color: #A7A6A6;
-    font-size: 11px;
+	margin-left: -20px;
+	padding: 11px;
+	font-family: 'Sanchez', sans-serif;
+	color: #A7A6A6;
+	font-size: 9px;
 }
 
 li.disclaimer p a, li.emptylist p a {
@@ -1580,7 +1593,7 @@ li.emptylist p {
 #playlist-menu span.portraits img {
     height: 76px;
     object-fit: cover;
-    margin: 2px;
+    margin: 0 2px;
 }
 
 #playlist-menu span.portraits.composers-1 img {
@@ -1601,12 +1614,12 @@ li.emptylist p {
 }
 
 #playlist-menu {
-	height: 180px;
-	margin-bottom: 16px;
+	height: 192px;
+	margin-bottom: 0px;
 }
 
 #playlist-menu li {
-	height: 180px;
+	height: 170px;
 }
 
 #playlist-menu li a {
@@ -1617,13 +1630,13 @@ li.emptylist p {
 #playlist-menu li.playlist span.title,
 #playlist-menu li.favorites a,
 #playlist-menu li.recently a {
-    font-size: 12px;
-	color: #FCE546;
-	font-family: 'Sanchez', sans-serif;
-	font-weight: 400;
-	margin: 7px 0 2px;
-	display: block;
-	line-height: 1.2;
+    font-size: 11px;
+    color: #FCE546;
+    font-family: 'Sanchez', sans-serif;
+    font-weight: normal;
+    margin: 7px 0 2px;
+    display: block;
+    line-height: 1.1;
 }
 
 #playlist-menu li.favorites a,
@@ -1636,21 +1649,21 @@ li.emptylist p {
 }
 
 #playlist-menu li.favorites a {
-	background-image: url(/img/favorite_big.png);
+	background-image: url(/img/favorite_big_yl.png);
 }
 
 #playlist-menu li.favorites.active a {
-	background-image: url(/img/favorite_big_wt.png);
+	background-image: url(/img/favorite_big_bl.png);
 }
 
 #playlist-menu li.recently a {
-	background-image: url(/img/history_big.png);
+	background-image: url(/img/history_big_yl.png);
 	background-size: 16px;
     background-position: top 42px center;
 }
 
 #playlist-menu li.recently.active a {
-	background-image: url(/img/history_big_wt.png);
+	background-image: url(/img/history_big_bl.png);
 }
 
 #playlist-menu li.playlist span.summary {
@@ -1661,7 +1674,7 @@ li.emptylist p {
 }
 
 #playlist-menu li.active {
-	background-color: #FCE546bb;
+	background-color: #FCE546;
 }
 
 #playlist-menu li.active span.title,
@@ -1677,7 +1690,7 @@ li.emptylist p {
 
 #favalbums li.work {
 	width: calc(100% - 138px);
-	display: block;	
+	display: block;
 }
 
 #favalbums.fav li.favorite a.is {
@@ -1717,22 +1730,20 @@ body.favorites #playlistradioslider,
 body.favorites.playlist #editplaylistslider
 {
 	font-size: 14px;
-    line-height: 14px;
-    display: block;
-    width: 40px;
-    height: 35px;
-    background-color: #FCE546;
-    background-image: url(/img/slider_gr_left.png);
-    background-position: 6px;
-    background-size: 4px;
-    background-repeat: no-repeat;
+	line-height: 14px;
+	display: block;
+	width: 40px;
+	height: 35px;
+	background-color: #FCE546;
+	background-image: url(/img/slider_left_bl.png);
+	background-position: 6px;
+	background-size: 4px;
+	background-repeat: no-repeat;
 	position: absolute;
 	bottom: 64px;
-    right: 0px;
-    z-index: 9999;
-    padding: 0px 0px 0px 20px;
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
+	right: 0px;
+	z-index: 9999;
+	padding: 0px 0px 0px 20px;
 }
 
 body.showingnowplaying.composer #radioslider,
@@ -1756,7 +1767,7 @@ body.favorites #playlistradioslider.active,
 body.playlist #editplaylistslider.active
 {
 	width: 212px;
-	background-image: url(/img/slider_gr_right.png);
+	background-image: url(/img/slider_right_bl.png);
 }
 
 body.composer.player #radioslider,
@@ -1771,21 +1782,21 @@ body.playlist.player #editplaylistslider
 #editplaylistslider a
 {
 	background-repeat: no-repeat;
-    height: 24px;
-    background-size: 20px;
-    background-image: url(/img/radio_top.png);
-    background-position: 0px 2px;
-    text-indent: -9000px;
-    overflow: hidden;
-    display: block;
-    margin: 5px 3px;
-    font-size: 13px;
-    line-height: 12px;
+	height: 24px;
+	background-size: 20px;
+	background-image: url(/img/radio_mob.png);
+	background-position: 0px 2px;
+	text-indent: -9000px;
+	overflow: hidden;
+	display: block;
+	margin: 5px 3px;
+	font-size: 12px;
+	line-height: 12px;
 }
 
 #editplaylistslider a
 {
-	background-image: url(/img/edit_on.png);
+	background-image: url(/img/edit_mob.png);
 	background-size: 18px;
 }
 
@@ -1794,7 +1805,8 @@ body.playlist.player #editplaylistslider
 #editplaylistslider.active a
 {
 	text-indent: 0;
-    padding-left: 33px;
+	padding-left: 33px;
+	color: #000000;
 }
 
 #playlistradioslider.active a,
@@ -1808,7 +1820,7 @@ body.playlist.player #editplaylistslider
     display: block;
     font-family: 'Sanchez', sans-serif;
     font-size: 10px;
-    font-weight: 400;
+    font-weight: normal;
 }
 
 #radioslider.active a em span {
@@ -1867,15 +1879,14 @@ body.playlist.player #editplaylistslider
 div:not(#config).modal
 {
 	padding: 18px;
-    background-color: #2B2B2F;
-    font-size: 14px;
+	background-color: #2B2B2F;
+	font-size: 14px;
 	display: none;
 	max-width: 400px;
-    width: 50%;
+	width: 50%;
 	left: 50%;
-    top: 50% !important;
-    border-radius: 26px;
-    transform: translate(-50%, -50%);
+	top: 50% !important;
+	transform: translate(-50%, -50%);
 }
 
 #playlistmodal,
@@ -1911,10 +1922,12 @@ div:not(#config).modal a,
 	font-size: 10px;
 	text-align: center;
 	text-transform: uppercase;
-	width: 80px;
-	margin-left: 12px;
+	width: 58px;
+	margin-left: 9px;
+	margin-top: 24px;
+	margin-right: 6px;
 	clear: left;
-	border-radius: 12px;
+	border-radius: 0;
 }
 
 .modal h2
@@ -1936,7 +1949,7 @@ div:not(#config).modal a,
 #radiotop h5
 {
 	font-size: 13px;
-	font-weight: 400;
+	font-weight: normal;
 }
 
 #editplaylistmodal a, 
@@ -1949,7 +1962,7 @@ div:not(#config).modal a,
 
 a.actionbutton {
 	background-color: #FCE546 !important;
-	color: #ffffff;
+	color: #000000 !important;
 }
 
 #editplaylistmodal a.actionbutton,
@@ -1973,11 +1986,10 @@ a.actionbutton {
    	background-color: #2B2B2F;
    	width: 150px;
    	font-family: 'Sanchez', sans-serif;
-	font-size: 12px;
-	color: #FFF;
+   	font-size: 12px;
+   	color: #FFF;
    	line-height: 1;
    	border: 0;
-   	border-radius: 10px;
    	height: 24px;
    	-webkit-appearance: none;
    	padding: 0 6px;
@@ -1991,21 +2003,22 @@ a.actionbutton {
 #radiotop select
 {
 	background-color: #717171;
-    color: #FFF;
-    width: -webkit-fill-available;
-    font-size: 14px;
-    padding-left: 12px;
-    height: 39px;
-    margin: 10px 0 20px;
+	color: #FFF;
+	width: -webkit-fill-available;
+	font-size: 11px;
+	padding-left: 7px;
+	height: 30px;
+	margin: 10px 0 20px;
 	border: none;
-	border-radius: 10px;
+	border-radius: 0px;
+	font-family: 'sanchez', serif;
 }
 
 #radiotop select
 {
 	margin-bottom: 6px;
-	font-size: 12px;
-	height: 34px;
+	font-size: 11px;
+	font-family: 'Sanchez', serif;
 }
 
 #playlistmodal #newplaylist, 
@@ -2015,9 +2028,9 @@ a.actionbutton {
 {
 	background-color: #717171;
 	width: -webkit-fill-available;
-	font-size: 14px;
-	padding-left: 12px;
-	height: 39px;
+	font-size: 11px;
+	padding-left: 7px;
+	height: 30px;
 	margin: 15px 0 20px;
 	float: left;
 }
@@ -2026,8 +2039,7 @@ a.actionbutton {
 #unsubscribemodal #playlist_dupname, 
 #permalink-direct
 {
-	padding-right: 108px;
-	border-radius: 12px;
+	padding-right: 88px;
 }
 
 .modal .toggle
@@ -2048,7 +2060,7 @@ a.actionbutton {
 {
 	clear: none;
 	padding-right: 12px;
-	font-size: 12px;
+	font-size: 11px;
 }
 
 div.toggle, div.toggle * {
@@ -2088,12 +2100,12 @@ body.showingnowplaying #config {
 
 body.showingplayerbar.showingnowplaying #radiotop,
 body.showingplayerbar.showingnowplaying #config {
-	height: calc(100% - 240px);
+	height: calc(100% - 220px);
 }
 
 #radiotop h3 {
 	margin-bottom: 18px;
-	font-weight: 400;
+	font-weight: normal;
 	font-size: 12px;
 }
 
@@ -2112,16 +2124,16 @@ body.showingplayerbar.showingnowplaying #config {
 }
 
 #radiotop h6 {
-    font-size: 8px;
+    font-size: 7px;
     width: 22px;
-    height: 10px;
+    height: 9px;
     border-radius: 22px;
     border: 1px solid #717171;
     color: #717171;
     text-transform: uppercase;
     font-family: 'Sanchez', sans-serif;
     text-align: center;
-    padding: 2px;
+    padding: 4px 2px 0px 2px;
     margin: 0 auto;
 }
 
@@ -2140,23 +2152,25 @@ body.radioonair #radiotop a.stopradio {
 
 #radiotop a {
     width: 50%;
-    margin: 12px auto 0;
-    font-size: 12px;
-    padding: 10px;
-	float: none;
-	text-align: left;
+    margin: 12px auto 20px;
+    font-size: 10px;
+    padding: 11px 10px;
+    float: none;
+    text-align: left;
+    color: #000000;
+    background-color: #EEEEEE;
 }
 
 #radiotop a span {
 	background-size: 160px;
-    background-position: 0px 0px;
-    background-image: url(../img/radioonair.svg);
-    background-repeat: no-repeat;
-    width: 40px;
-    height: 20px;
-    float: left;
-    overflow: hidden;
-	margin-top: -1px;
+	background-position: 0px 0px;
+	background-image: url(../img/radioonair.svg);
+	background-repeat: no-repeat;
+	width: 40px;
+	height: 20px;
+	float: left;
+	overflow: hidden;
+	margin-top: -6px;
 	margin-right: 10px;
 }
 
@@ -2169,7 +2183,7 @@ body.radioonair #mobile-menu a.radio span {
 }
 
 @-webkit-keyframes radioonair {
-    100% { background-position: -160px; }
+    100% { background-position: -160px 0px; }
 }
 
 @-webkit-keyframes radioonairmenu {
@@ -2186,18 +2200,18 @@ body.radioonair #radiotop select {
 #toolbar .update.mobonly
 {
 	position: fixed;
-    z-index: 99999;
-    top: 10px;
-    left: 10px;
-    display: none;
-    font-family: 'Sanchez', sans-serif;
-    font-size: 8px;
-    background-image: url(../img/update.png);
-    background-repeat: no-repeat;
-    width: 67px;
-    height: 14px;
-    background-size: 12px;
-    padding: 2px 17px;
+	z-index: 99999;
+	top: 9px;
+	left: 7px;
+	display: none;
+	font-family: 'Sanchez', sans-serif;
+	font-size: 7px;
+	background-image: url(../img/update.png);
+	background-repeat: no-repeat;
+	width: 67px;
+	height: 14px;
+	background-size: 10px;
+	padding: 2px 13px;
 }
 
 #config {
@@ -2219,31 +2233,35 @@ body.radioonair #radiotop select {
 
 #config #about li {
     border-bottom: 1px solid #4F4F4F;
-	padding: 15px 0;
-	font-family: 'Sanchez', sans-serif;
-	font-size: 12px;
-	font-weight: 800;
+    padding: 15px 0;
+    font-family: 'Sanchez', sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    color: #FCE546;
 }
 
 #config #about li a {
-	background-image: url(/img/slider_gr_right.png);
+	background-image: url(/img/slider_right_gr.png);
 	background-position: right;
 	background-repeat: no-repeat;
 	display: block;
 	width: -webkit-fill-available;
 	padding-right: 46px;
-    background-size: 10px 20px;
+	background-size: 10px 20px;
+	color: #FCE546;
 }
 
 #config #about li:last-child {
 	border: 0;
+	margin-bottom: 20px;
 }
 
 #config #about li span {
 	display: block;
 	font-family: 'PetitaMedium', sans-serif;
-	font-size: 12px;
-	font-weight: 400;
+	font-size: 11px;
+	font-weight: normal;
+	color: #FFFFFF;
 }
 
 #config #signin a, 
@@ -2265,7 +2283,7 @@ body.radioonair #radiotop select {
 
 #config #signin,
 body.showingplayerbar #config #signout {
-	display: block;
+	display: none;
 }
 
 #config #signout,
@@ -2275,23 +2293,23 @@ body.showingplayerbar #config #signin {
 
 .hintbox
 {
-    width: 76px;
+    width: 68px;
     height: 12px;
     background-color: #FCE546;
     position: fixed;
     top: 0px;
-    right: 7px;
+    right: 6px;
     z-index: 999;
-    padding: 7px;
+    padding: 6px;
 }
 
 .hintbox a
 {
-    font-size: 10px;
+    font-size: 9px;
     background-repeat: no-repeat;
     width: -webkit-fill-available;
-    height: 20px;
-    background-size: 12px;
+    height: 13px;
+    background-size: 11px;
     background-position: right 0;
     overflow: hidden;
     display: block;
@@ -2304,6 +2322,16 @@ body.showingplayerbar #config #signin {
 }
 
 .playlist_slug {
+	display: none !important;
+}
+
+#playlist-menu li.active a,
+#playlist-menu li.active a span
+{
+   	color: #000000 !important;
+}
+
+body.composer #genresworks h2 {
 	display: none !important;
 }
 
@@ -2367,4 +2395,4 @@ body.player #config {
 
 .empty {
 	display: none !important;
-}
+}   
