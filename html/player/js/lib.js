@@ -45,7 +45,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.09.04'
+    version: '1.19.09.04.12'
 };
 
 window.onpopstate = function (event) {
@@ -1091,6 +1091,7 @@ cmas_recordingaction = function (list, auto)
       if (!auto) {
         cmas_mobilepage ('player');
         cmas_spotifyplay(list.recording.spotify_tracks, 0);
+        cmas_notification(list.work.title, list.recording.cover, list.work.composer.name);
 
         // registering play
         localStorage.lastwid = list.work.id;
@@ -1284,6 +1285,22 @@ cmas_notification = function (text, icon, title)
       icon: icon,
       silent: true
     };
+
+  if ('mediaSession' in navigator) {
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: text,
+      artist: title,
+      artwork: [
+        { src: icon, sizes: '512x512', type: 'image/png' }
+      ]
+    });
+  
+    navigator.mediaSession.setActionHandler('play', function() { cmas_toggleplay(); });
+    navigator.mediaSession.setActionHandler('pause', function() { cmas_toggleplay(); });
+    navigator.mediaSession.setActionHandler('previoustrack', function() { cmas_nexttrack(); });
+    navigator.mediaSession.setActionHandler('nexttrack', function() { cmas_prevtrack(); });
+  }
 
   if ($(window).width() >= 1024) {
     var n = new Notification (title, options);
