@@ -128,10 +128,11 @@ body.mac #toolbar
 
 #toolbar.widget .logo a
 {
-	width: 123px;
+	width: 148px;
     background-image: url(/img/sitelogo.png);
     background-size: 123px 17px;
-    background-position: center;
+    background-position: 10px 0px;
+    margin-top: 12px;
 }
 
 body.windows #toolbar .logo
