@@ -87,7 +87,7 @@ a
     overflow: hidden;
     height: 68px;
     width: 100%;
-		margin: 0 auto;
+	margin: 0 auto;
     background-color: #4F4F4F;
     z-index: 1000;
 }
@@ -128,10 +128,10 @@ body.mac #toolbar
 
 #toolbar.widget .logo a
 {
-	height: 17px;
-	background-image: url("/img/sitelogo.png");
-	background-size: auto 17px;
-	margin-top: 11px;
+	width: 123px;
+    background-image: url(/img/sitelogo.png);
+    background-size: 123px 17px;
+    background-position: center;
 }
 
 body.windows #toolbar .logo

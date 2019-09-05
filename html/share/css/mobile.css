@@ -13,7 +13,7 @@
 #toolbar .logo a {
     width: -webkit-fill-available;
     height: 48px;
-    background-size: auto 24px;
+    background-size: auto 20px;
     background-position: center;
     margin: auto;
 }
@@ -78,11 +78,13 @@
 
 #playercontrols .calltoaction a {
     width: inherit;
-    padding: 12px;
+    padding: 16px 12px;
+    font-size: 12px;
 }
 
 #playercontrols #durationglobal {
     padding: 12px 28px 0 0;
-    font-size: 12px;
-    margin: 0;
+    font-size: 11px;
+    margin: 7px;
+    text-align: right;
 }
