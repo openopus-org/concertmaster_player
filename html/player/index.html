@@ -30,7 +30,7 @@
             <h3 id="version" class="conc-version"></h3>
             <h4 id="loader-loading">Loading<span class="blink">...</span></h4>
             <ul id="loader-options">
-                <li><a href="javascript:cmas_appleauth()">Log in to Spotify</a></li>
+                <li><a href="javascript:cmas_spotifyauth()">Log in to Spotify</a></li>
                 <li><a href="javascript:cmas_guestauth()">Guest access<span>Just browsing, no playback</span></a></li>
             </ul>
             <p>&copy; <span id="year"></span> Open Opus. All rights reserved.</p>
@@ -38,7 +38,7 @@
     </div>
     <div id="toolbar">
         <span class="logo">Concertmaster</span>
-        <span class="update"><a href="javascript:cmas_update()">New version available! Click to update</a></span>
+        <span class="update deskonly"><a href="javascript:cmas_update()">New version available! Click to update</a></span>
         <span class="update mobonly"><a href="javascript:cmas_update()">Update available</a></span>
         <div id="radiotop">
             <h2>radio</h2>
@@ -83,8 +83,8 @@
             <a href="javascript:cmas_radiobutton()" class="startradio mobonly actionbutton"><span></span>Start radio</a>
             <a href="javascript:cmas_radiobutton()" class="stopradio mobonly"><span></span>Stop radio</a>
         </div>
-        <a href="https://getconcertmaster.com/help" id="help" target="_blank">help</a>
-        <a href="javascript:$('#config').leanModal()" id="setup">setup</a>
+        <a href="https://getconcertmaster.com/help" id="help" target="_blank" class="deskonly">help</a>
+        <a href="javascript:$('#config').leanModal()" id="setup" class="deskonly">setup</a>
     </div>
 
     <div id="sidebar">
@@ -102,6 +102,7 @@
                 <a id="shareplaylist" href="javascript:global.playlistshare($('#favtitle select.playlist_slug').val());">share</a>
             </li>
             <li id="favalbumswrapper">
+              <div id="nofavorites">Tap on heart icons to favorite recordings. They will get easily available here.</div>
               <ul id="favalbums">
               </ul>
             </li>

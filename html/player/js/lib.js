@@ -45,7 +45,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.09.04.13'
+    version: '1.19.09.05'
 };
 
 window.onpopstate = function (event) {
@@ -925,7 +925,7 @@ cmas_recordingsbywork = function (work, offset)
         }
       }
 
-      if (list.status.success == "false") $(listul).append('<li class="emptylist"><p>Concertino couldn\'t find any recording of this work in the Spotify catalog. It might be an error, though. Please <a href="mailto:concertmasterteam@gmail.com">reach us</a> if you know a recording. This will help us correct our algorithm.</p></li>')
+      if (list.status.success == "false") $(listul).append('<li class="emptylist"><p>Concertmaster couldn\'t find any recording of this work in the Spotify catalog. It might be an error, though. Please <a href="mailto:concertmasterteam@gmail.com">reach us</a> if you know a recording. This will help us correct our algorithm.</p></li>')
       if (!list.next && list.status.success == "true") $(listul).append('<li class="disclaimer"><p>Those recordings were fetched automatically from the Spotify catalog. The list might be inaccurate or incomplete. Please <a href="mailto:concertmasterteam@gmail.com">reach us</a> for requests, questions or suggestions.</p></li>');
 
       $('#genresworks h2.mobonly').show();
@@ -1555,10 +1555,10 @@ cmas_init = function ()
         cmas_composersbyfav();
       }
 
-      cmas_mobilepage('library');
       if (localStorage.lastwid) {
         cmas_recording(localStorage.lastwid, localStorage.lastaid, localStorage.lastset, true);
       }
+      cmas_mobilepage('library');
       $('#loader').fadeOut();
     }
   });
@@ -1575,15 +1575,19 @@ cmas_favoriterecordings = function ()
     success: function (response) {
       cmas_favorites = response.list;
       docsr = response.recordings;
+      listul = '#favalbums';
+      draggable = "";
+      pidsort = "";
       
-      for (performance in docsr) {
-        listul = '#favalbums';
+      if (response.status.success == "false") {
+        $('#favalbumswrapper').addClass('nofavorites');
+      } else {
+        $('#favalbumswrapper').removeClass('nofavorites');
 
-        draggable = "";
-        pidsort = "";
-
-        $(listul).append('<li pid="' + docsr[performance].work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + '" ' + pidsort + ' class="performance ' + draggable + '"><ul>' + cmas_recordingitem(docsr[performance], docsr[performance].work) + '</ul></li>');
-      }
+        for (performance in docsr) {
+          $(listul).append('<li pid="' + docsr[performance].work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + '" ' + pidsort + ' class="performance ' + draggable + '"><ul>' + cmas_recordingitem(docsr[performance], docsr[performance].work) + '</ul></li>');
+        }
+      }      
     }
   });
 }
@@ -1597,10 +1601,10 @@ cmas_recentrecordings = function () {
     method: "GET",
     success: function (response) {
       docsr = response.recordings;
+      listul = '#favalbums';
+      $('#favalbumswrapper').removeClass('nofavorites');
 
       for (performance in docsr) {
-        listul = '#favalbums';
-
         $(listul).append('<li pid="' + docsr[performance].work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + '" class="performance"><ul>' + cmas_recordingitem(docsr[performance], docsr[performance].work) + '</ul></li>');
       }
     }
@@ -1615,6 +1619,10 @@ cmas_playlistrecordings = function (pid) {
     url: cmas_options.backend + '/recording/list/playlist/'+pid+'.json',
     method: "GET",
     success: function (response) {
+      listul = '#favalbums';
+      draggable = "draggable";
+      pidsort = "";
+      $('#favalbumswrapper').removeClass('nofavorites');
 
       if (response.status.success == "false") {
         cmas_playlist("fav");
@@ -1622,10 +1630,6 @@ cmas_playlistrecordings = function (pid) {
         docsr = response.recordings;
 
         for (performance in docsr) {
-          listul = '#favalbums';
-          draggable = "draggable";
-          pidsort = "";
-
           $(listul).append('<li pid="' + docsr[performance].work.id + '-' + docsr[performance].spotify_albumid + '-' + docsr[performance].set + '" class="performance"><ul>' + cmas_recordingitem(docsr[performance], docsr[performance].work, response.playlist) + '</ul></li>');
         }
       }
@@ -2223,7 +2227,7 @@ cmas_qualify = function () {
 cmas_mobilepage = function (page) {
   if ($(window).width() < 1024) {
     if (window.location.hash != '#' + page) {
-      window.history.pushState({}, 'Concertino', window.location.pathname.split('#')[0] + '#' + page);
+      window.history.pushState({}, 'Concertmaster', window.location.pathname + window.location.search + '#' + page);
     }
   
     if (page == 'player') { 

@@ -1889,7 +1889,8 @@ div:not(#config).modal
 #playlistmodal,
 #editplaylistmodal,
 #premiumneeded,
-#permalink-modal
+#permalink-modal,
+#browsernotsupported
 {
 	width: 80% !important;
 }
@@ -2332,6 +2333,27 @@ body.composer #genresworks h2 {
 	display: none !important;
 }
 
+#favalbumswrapper #nofavorites {
+	display: none;
+} 
+
+#favalbumswrapper.nofavorites #nofavorites {
+	display: block;
+}
+
+#nofavorites {
+	background-image: url(/img/nofavorites.png);
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: 50px;
+    opacity: 0.3;
+    padding-top: 58px;
+    height: -webkit-fill-available;
+    width: 50%;
+    margin: 40px auto 100px;
+    font-size: 12px;
+}
+
 /* pagination */
 
 body.favorites #sidebar #favorites {
@@ -2360,6 +2382,11 @@ body.work #main,
 body.work #main #genresworks
 {
 	display: block;
+}
+
+body.radio #toolbar
+{
+	overflow: visible;
 }
 
 body.radio #radiotop
@@ -2393,3 +2420,13 @@ body.player #config {
 .empty {
 	display: none !important;
 }   
+
+/* scrollbars */
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-button {  display: none; }
+::-webkit-scrollbar-track {  background-color: #28282B;}
+::-webkit-scrollbar-track-piece { background-color: #121212;}
+::-webkit-scrollbar-thumb { height: 50px; background-color: #28282B; border-radius: 2px;}
+::-webkit-scrollbar-corner { display: none; }
+::-webkit-resizer { display: none;}

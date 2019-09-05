@@ -2770,6 +2770,27 @@ li.emptylist p {
 	display: none !important;
 }
 
+#favalbumswrapper #nofavorites {
+	display: none;
+} 
+
+#favalbumswrapper.nofavorites #nofavorites {
+	display: block;
+}
+
+#nofavorites {
+	background-image: url(/img/nofavorites.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+	background-size: 50px;
+	opacity: 0.3;
+	padding-top: 70px;
+	height: -webkit-fill-available;
+	width: 50%;
+	margin: 60px auto;
+	font-size: 12px;
+}
+
 /* firefox tweak */
 
 #composers, #favorites, #works, #albums {

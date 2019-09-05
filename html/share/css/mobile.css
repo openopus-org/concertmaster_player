@@ -1,0 +1,88 @@
+#container.page {
+    border-radius: 0;
+    height: inherit;
+    width: inherit;
+}
+
+#sidebar {
+    height: calc(100% - 136px);
+    padding-bottom: 20px;
+    background-color: #4F4F4F;
+}
+
+#toolbar .logo a {
+    width: -webkit-fill-available;
+    height: 48px;
+    background-size: auto 24px;
+    background-position: center;
+    margin: auto;
+}
+
+#toolbar {
+    height: 50px;
+}
+
+#togglebar {
+    display: none;
+}
+
+#nowplaying {
+    height: -webkit-fill-available;
+    overflow: auto;
+}
+
+#nowplaying.up #playertracks {
+    visibility: visible;
+    margin-top: 26px;
+}
+
+#playertracks li {
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+#playertracks .duration {
+    font-size: 10px;
+}
+
+#playertracks .tracktitle {
+    width: 80%;
+}
+
+#playerinfo .cover img {
+    width: 100px;
+    height: 100px;
+}
+
+#playerinfo .composer {
+    font-size: 16px;
+}
+
+#playerinfo .work {
+    font-size: 16px;
+}
+
+#nowplaying .performers ul li {
+    font-size: 13px;
+}
+
+#playercontrols #playpause {
+    margin: 4px 15px 0 30px;
+    background-size: 33px;
+}
+
+#playerbar {
+    width: -webkit-fill-available;
+    margin: 0 auto;
+}
+
+#playercontrols .calltoaction a {
+    width: inherit;
+    padding: 12px;
+}
+
+#playercontrols #durationglobal {
+    padding: 12px 28px 0 0;
+    font-size: 12px;
+    margin: 0;
+}
