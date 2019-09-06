@@ -4,13 +4,13 @@
     width: inherit;
 }
 
-#sidebar {
+#container.page #sidebar {
     height: calc(100% - 136px);
     padding-bottom: 20px;
     background-color: #4F4F4F;
 }
 
-#toolbar .logo a {
+#container.page #toolbar .logo a {
     width: -webkit-fill-available;
     height: 48px;
     background-size: auto 20px;
@@ -18,20 +18,20 @@
     margin: auto;
 }
 
-#toolbar {
+#container.page #toolbar {
     height: 50px;
 }
 
-#togglebar {
+#container.page #togglebar {
     display: none;
 }
 
-#nowplaying {
+#container.page #nowplaying {
     height: -webkit-fill-available;
     overflow: auto;
 }
 
-#nowplaying.up #playertracks {
+#container.page #nowplaying.up #playertracks {
     visibility: visible;
     margin-top: 26px;
 }
@@ -45,11 +45,11 @@
     font-size: 10px;
 }
 
-#playertracks .tracktitle {
+#container.page #playertracks .tracktitle {
     width: 80%;
 }
 
-#playerinfo .cover img {
+#container.page #playerinfo .cover img {
     width: 100px;
     height: 100px;
 }
@@ -78,13 +78,12 @@
 
 #playercontrols .calltoaction a {
     width: inherit;
-    padding: 16px 12px;
+    padding: 16px 0px;
     font-size: 12px;
 }
 
 #playercontrols #durationglobal {
-    padding: 12px 28px 0 0;
+    padding: 12px 11px 0 0;
     font-size: 11px;
     margin: 7px;
-    text-align: right;
 }

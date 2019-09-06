@@ -1658,7 +1658,7 @@ body.windows ul.connected .radio
 
 #container.widget, #container.widget #toolbar, #container.widget #sidebar, #container.widget #nowplaying, #container.widget #togglebar, #container.widget #playerbar
 {
-	width: 100%;
+	/*width: 100%;*/
 }
 
 #container.widget #playercontrols .calltoaction a
@@ -1668,7 +1668,7 @@ body.windows ul.connected .radio
 
 #container.widget #playertracks li
 {
-	width: 90%;
+	width: 100%;
 }
 
 #container.widget #togglebar
