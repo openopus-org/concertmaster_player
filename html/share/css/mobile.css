@@ -4,10 +4,9 @@
     width: inherit;
 }
 
-#container.page #sidebar {
-    height: calc(100% - 136px);
-    padding-bottom: 20px;
-    background-color: #4F4F4F;
+#sidebar {
+    height: calc(100% - 116px);
+    /*padding-bottom: 20px;*/
 }
 
 #container.page #toolbar .logo a {
@@ -66,10 +65,12 @@
     font-size: 13px;
 }
 
+/*
 #playercontrols #playpause {
     margin: 4px 15px 0 30px;
     background-size: 33px;
 }
+*/
 
 #playerbar {
     width: -webkit-fill-available;
@@ -78,12 +79,12 @@
 
 #playercontrols .calltoaction a {
     width: inherit;
-    padding: 16px 0px;
+    padding: 26px 0px;
     font-size: 12px;
 }
 
 #playercontrols #durationglobal {
-    padding: 12px 11px 0 0;
+    padding: 22px 11px 0 0;
     font-size: 11px;
     margin: 7px;
 }

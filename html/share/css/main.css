@@ -34,7 +34,7 @@ body
 
 #container.widget
 {
-	background-image: linear-gradient(#4F4F4F, #2B2B2F);
+	background-color: #FCE546;
 }
 ul, li
 {
@@ -150,6 +150,7 @@ body.windows #toolbar .logo
 	bottom: 0px;
 	padding: 0px 0px;
 	z-index: 980;
+	/*background-color: #4F4F4F;*/
 }
 
 #main
@@ -622,7 +623,7 @@ h2
 	overflow: hidden;
 	display: block;
 	background-size: 36px 42px;
-	margin: 13px 30px;
+	margin: 13px 18px;
 	float: left;
 }
 
