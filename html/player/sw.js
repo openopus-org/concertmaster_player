@@ -1,4 +1,4 @@
-const cacheName = '1.19.09.07';
+const cacheName = '1.19.09.07.17';
 const precacheResources = [
     '/css/main.css',
     '/css/mobile.css',
