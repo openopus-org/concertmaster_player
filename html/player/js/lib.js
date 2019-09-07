@@ -1040,6 +1040,7 @@ cmas_recordingaction = function (list, auto)
       }
 
       document.title = `${list.work.composer.name}: ${list.work.title}`;
+      gtag ('config', 'UA-89195986-4', {'page_path': '/u/' + list.work.id + '/' + list.recording.spotify_albumid + '/' + list.recording.set });
 
       $('#playerinfo').html(cmas_recordingitem(list.recording, list.work));
 
@@ -1413,7 +1414,7 @@ cmas_submitperf = function (wid, aid, set) {
               $('#playerverify').toggleClass('verified', true);
               $('#playerverify').toggleClass('opened', false);
 
-              $('#nowplaying li.performers').html(cmas_listperformers(response.recording.performers));
+              $('#nowplaying li.performers ul').html(cmas_listperformers(response.recording.performers));
 
               if (window.albumlistwork == wid) {
                 $('#albums li[pid=' + wid + '-' + aid + '-' + set + ']').show();

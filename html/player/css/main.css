@@ -924,12 +924,14 @@ h2
     -webkit-box-sizing: border-box;
 }
 
-#playercontrols #globaltracks.tootoomanytracks
+#playercontrols #globaltracks.tootoomanytracks,
+#playercontrols #globaltracks.toomanytracks
 {
 	border-right: 0;
 }
 
-#playercontrols #globaltracks.tootoomanytracks li
+#playercontrols #globaltracks.tootoomanytracks li,
+#playercontrols #globaltracks.toomanytracks li
 {
 	border-left: 0;
 }
