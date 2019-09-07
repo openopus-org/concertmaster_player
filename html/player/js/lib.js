@@ -45,7 +45,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.09.05'
+    version: '1.19.09.07'
 };
 
 window.onpopstate = function (event) {
@@ -313,6 +313,8 @@ cmas_track = function (offset)
 
 cmas_playstate = function (state)
 {
+  //console.log (state);
+
   var isover = false;
 
   // treating player shutdown
@@ -338,6 +340,19 @@ cmas_playstate = function (state)
     state.track_window.current_track.id = state.track_window.current_track.linked_from.id;
   }
 
+  /*
+  console.log ('===========--------=========');
+  console.log ('state.paused = ' + state.paused);
+  console.log ('cmas_state.paused = ' + cmas_state.paused);
+  console.log ('cmas_playbuffer.tracks.length = ' + cmas_playbuffer.tracks.length);
+  console.log ('state.track_window.current_track.id = ' + state.track_window.current_track.id);
+  console.log ('cmas_playbuffer.tracks[0] = ' + cmas_playbuffer.tracks[0]);
+  console.log ('state.position = ' + state.position);
+  console.log ('Math.floor(state.position / 1000) = ' + Math.floor(state.position / 1000));
+  console.log ('Math.floor(state.duration / 1000) = ' + Math.floor(state.duration / 1000));
+  console.log ('Math.abs (state.duration-state.position) = ' + Math.abs (state.duration-state.position));
+  */
+
   if (state.paused != cmas_state.paused)
   {
     // play pause status has changed
@@ -351,7 +366,7 @@ cmas_playstate = function (state)
 
       // is the single-track recording over?
 
-      if (cmas_playbuffer.tracks.length == 1 && state.paused && state.track_window.current_track.id == cmas_playbuffer.tracks[0] && (state.position == 0 || Math.floor(state.position / 1000) == Math.floor(state.duration / 1000)))
+      if (cmas_playbuffer.tracks.length == 1 && state.paused && state.track_window.current_track.id == cmas_playbuffer.tracks[0] && (state.position == 0 || (Math.abs (state.duration-state.position) <= 2000)))
       {
         console.log ('Over, next');
         state.position = 0;
@@ -2051,7 +2066,6 @@ cmas_newradio = function (filter) {
 // radio skip
 
 cmas_radioskip = function () {
-  console.log('Over, next'); 
   if (cmas_onair) {
     if (cmas_radioqueue.length) {
       if (Object.keys(cmas_state).length > 0 && !cmas_state.paused) {
