@@ -45,7 +45,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.09.07.17'
+    version: '1.19.09.08'
 };
 
 window.onpopstate = function (event) {
@@ -1040,7 +1040,7 @@ cmas_recordingaction = function (list, auto)
       }
 
       document.title = `${list.work.composer.name}: ${list.work.title}`;
-      gtag ('config', 'UA-89195986-4', {'page_path': '/u/' + list.work.id + '/' + list.recording.spotify_albumid + '/' + list.recording.set });
+      gtag ('config', 'UA-89195986-2', {'page_path': '/u/' + list.work.id + '/' + list.recording.spotify_albumid + '/' + list.recording.set });
 
       $('#playerinfo').html(cmas_recordingitem(list.recording, list.work));
 
