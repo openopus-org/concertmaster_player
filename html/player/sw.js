@@ -1,4 +1,4 @@
-const cacheName = '1.19.09.09';
+const cacheName = '1.19.09.08.01';
 const precacheResources = [
     '/css/main.css',
     '/css/mobile.css',
@@ -22,7 +22,6 @@ const precacheResources = [
     '/img/notchecked.png',
     '/img/maximize_on.png',
     '/img/expand_on.png',
-    '/img/library_mobon.png',
     '/img/check.png',
     '/img/cancel-on.png',
     '/img/back.png',
@@ -32,7 +31,6 @@ const precacheResources = [
     '/img/skiptrack_off.png',
     '/img/minimize_on.png',
     '/img/edit.png',
-    '/img/lateromantic.png',
     '/img/incomplete_off.png',
     '/img/previoustrack_mob.png',
     '/img/trayicon_play.png',
