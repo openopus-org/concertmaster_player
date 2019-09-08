@@ -1,4 +1,4 @@
-const cacheName = '1.19.09.08';
+const cacheName = '1.19.09.08.23';
 const precacheResources = [
     '/css/main.css',
     '/css/mobile.css',
@@ -213,8 +213,6 @@ const precacheResources = [
     '/img/periods/renaissance.png',
     '/img/periods/romantic.png',
 
-    '/favicon.ico',
-
     '/img/icons/120x120.png',
     '/img/icons/152x152.png',
     '/img/icons/180x180.png',
@@ -228,7 +226,9 @@ const precacheResources = [
     '/img/splashscreens/ipad_splash.png',
     '/img/splashscreens/ipadpro1_splash.png',
     '/img/splashscreens/ipadpro3_splash.png',
-    '/img/splashscreens/ipadpro2_splash.png'
+    '/img/splashscreens/ipadpro2_splash.png',
+
+    '/favicon.ico'
 ];
 
 self.addEventListener('install', event => {
