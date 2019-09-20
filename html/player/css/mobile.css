@@ -106,19 +106,19 @@ li.cover a img {
 #sidebar {
 	display: block;
 	position: absolute;
-	bottom: 50px;
+	bottom: 65px;
 	height: calc(100% - 86px);
     width: 100%;    
 	overflow: hidden;
 }
 
 body.showingnowplaying #sidebar {
-	bottom: 50px;
+	bottom: 65px;
     height: calc(100% - 86px);
 }
 
 body.showingplayerbar.showingnowplaying #sidebar {
-	bottom: 90px;
+	bottom: 105px;
     height: calc(100% - 126px);
 }
 
@@ -308,7 +308,7 @@ body.composer #genresworks h2 {
 body.showingnowplaying.player #nowplaying
 {
     overflow: auto;
-	height: calc(100% - 54px);
+	height: calc(100% - 69px);
     bottom: 0px;
 }
 
@@ -586,7 +586,7 @@ body.player #nowplaying #playertracks {
 body.showingplayerbar.showingnowplaying #playerbar {
     display: block;
     position: absolute;
-    bottom: 50px;
+    bottom: 65px;
     background-color: #FCE546;
     width: 100%;
     height: 42px;
@@ -844,7 +844,7 @@ body.player #playercontrols #playpause
     display: block;
     bottom: 0;
     position: fixed;
-    height: 50px;
+    height: 65px;
     width: 100%;
     overflow: hidden;
     background-color: #121212;
@@ -956,17 +956,17 @@ body.radio #mobile-menu a.radio span {
     width: -webkit-fill-available;
     overflow: auto;
 	
-	height: calc(100% - 96px);
+	height: calc(100% - 121px);
     bottom: 0 !important;
     margin: 10px 0px 0px 20px;
 }
 
 body.showingnowplaying #main {
-	height: calc(100% - 198px);
+	height: calc(100% - 213px);
 }
 
 body.showingnowplaying.showingplayerbar #main {
-	height: calc(100% - 218px);
+	height: calc(100% - 233px);
 }
 
 #main #atoz, #main .periods {
@@ -1738,7 +1738,7 @@ body.favorites.playlist #editplaylistslider
 	background-size: 4px;
 	background-repeat: no-repeat;
 	position: absolute;
-	bottom: 64px;
+	bottom: 79px;
 	right: 0px;
 	z-index: 9999;
 	padding: 0px 0px 0px 20px;
@@ -1747,7 +1747,7 @@ body.favorites.playlist #editplaylistslider
 body.showingnowplaying.composer #radioslider,
 body.showingnowplaying.favorites #playlistradioslider,
 body.showingnowplaying.playlist #editplaylistslider {
-	bottom: 184px;
+	bottom: 209px;
 }
 
 body.favorites.playlist #editplaylistslider
@@ -1757,7 +1757,7 @@ body.favorites.playlist #editplaylistslider
 
 body.showingnowplaying.favorites.playlist #editplaylistslider
 {
-	bottom: 226px;
+	bottom: 249px;
 }
 
 body.composer #radioslider.active,
@@ -2000,8 +2000,8 @@ a.actionbutton {
 #playlistmodal #existingplaylist,
 #radiotop select
 {
-	background-color: #717171;
-	color: #FFF;
+	background-color: #ababab;
+	color: #000;
 	width: -webkit-fill-available;
 	font-size: 11px;
 	padding-left: 7px;
@@ -2093,12 +2093,12 @@ div.toggle, div.toggle * {
 
 body.showingnowplaying #radiotop,
 body.showingnowplaying #config {
-	height: calc(100% - 222px);
+	height: calc(100% - 237px);
 }
 
 body.showingplayerbar.showingnowplaying #radiotop,
 body.showingplayerbar.showingnowplaying #config {
-	height: calc(100% - 220px);
+	height: calc(100% - 255px);
 }
 
 #radiotop h3 {
