@@ -45,7 +45,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.09.28'
+    version: '1.19.10'
 };
 
 window.onpopstate = function (event) {
@@ -940,8 +940,8 @@ cmas_recordingsbywork = function (work, offset)
         }
       }
 
-      if (list.status.success == "false") $(listul).append('<li class="emptylist"><p>Concertmaster couldn\'t find any recording of this work in the Spotify catalog. It might be an error, though. Please <a href="mailto:concertmasterteam@gmail.com">reach us</a> if you know a recording. This will help us correct our algorithm.</p></li>')
-      if (!list.next && list.status.success == "true") $(listul).append('<li class="disclaimer"><p>Those recordings were fetched automatically from the Spotify catalog. The list might be inaccurate or incomplete. Please <a href="mailto:concertmasterteam@gmail.com">reach us</a> for requests, questions or suggestions.</p></li>');
+      if (list.status.success == "false") $(listul).append('<li class="emptylist"><p>Concertmaster couldn\'t find any recording of this work in the Spotify catalog. It might be an error, though. Please <a href="mailto:concertmaster@openopus.org">reach us</a> if you know a recording. This will help us correct our algorithm.</p></li>')
+      if (!list.next && list.status.success == "true") $(listul).append('<li class="disclaimer"><p>Those recordings were fetched automatically from the Spotify catalog. The list might be inaccurate or incomplete. Please <a href="mailto:concertmaster@openopus.org">reach us</a> for requests, questions or suggestions.</p></li>');
 
       $('#genresworks h2.mobonly').show();
       $('#workprofile').show();
