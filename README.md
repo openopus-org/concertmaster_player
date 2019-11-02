@@ -14,28 +14,28 @@ The player itself is full of features, so there is a [wiki](https://getconcertma
 
 1. Fork this git repository and clone it to your webserver
 2. Fork the [API repository](https://github.com/openopus-org/concertmaster_api) and clone it as well 
-3. Create an inc.php file from the example:
+3. Create an `inc.php` file from the example:
 
 ```bash
 cd /var/www/concertmaster_player/lib/
 cp inc-example.php inc.php
 vim inc.php
 ```
-4. Change variable values in the inc.php accordingly to your webserver and Spotify API params (you can create a Spotify dev account [here](https://developer.spotify.com/))
-5. Edit the html/player/js/lib.js file and change variable values accordingly to your domains and Spotify API key params
-6. It's better to change the Google Analytics tag to your own account. Please check the html/player/index.html file
+4. Change variable values in the `lib/inc.php` accordingly to your webserver and Spotify API params (you can create a Spotify dev account [here](https://developer.spotify.com/))
+5. Edit the `html/player/js/lib.js` file and change variable values accordingly to your domains and Spotify API key params
+6. It's better to change the Google Analytics tag to your own account. Please check the `html/player/index.html` file
 
 ## Domains
 
 There are two public directories in the project and they must have their own virtual hosts on your webserver:
-- *html/player:* it's the main player. For example, we host it at [concertmaster.app](https://concertmaster.app)
-- *html/share:* it's the share page. For example, we host it at [cmas.me](https://cmas.me)
+- `html/player` it's the main player. For example, we host it at [concertmaster.app](https://concertmaster.app)
+- `html/share` it's the share page. For example, we host it at [cmas.me](https://cmas.me)
 
 The main player *must* have SSL enabled (it's a DRM rule). You can use free [Let's Encrypt](https://letsencrypt.org/)-provided certificates, they're perfectly fine.
 
 ### Development environment
 
-We have adopted fake *.local* domains (concertmaster.local, cmas.local) for our dev webserver, but you can change the TLD in the html/player/js/lib.js file. 
+We have adopted fake `.local` domains (concertmaster.local, cmas.local) for our dev webserver, but you can change the TLD in the `html/player/js/lib.js` file. 
 
 Please note that you still need the main player to serve with HTTPS, so you'll have to [create self-signed phony SSL certificates](https://medium.com/@tbusser/creating-a-browser-trusted-self-signed-ssl-certificate-2709ce43fd15) for your dev environment.
 
