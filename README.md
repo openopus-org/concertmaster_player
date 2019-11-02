@@ -12,7 +12,7 @@ The player itself is full of features, so there is a [wiki](https://getconcertma
 
 ## How to build
 
-1. Fork this git repository and clone it to your webserver
+1. Fork and clone this git repository to your webserver (for example, in the `/var/www/` folder)
 2. Fork the [API repository](https://github.com/openopus-org/concertmaster_api) and clone it as well 
 3. Create an `inc.php` file from the example:
 
