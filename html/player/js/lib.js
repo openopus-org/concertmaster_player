@@ -36,16 +36,16 @@ cmas_options = {
     historical: JSON.parse(localStorage.confighistorical),
     compilations: JSON.parse(localStorage.configcompilations),
     timeout: 10000,
-    backend: 'https://api.' + window.location.hostname,
-    opusbackend: 'https://api.openopus.' + (window.location.hostname.split('.')[1] == 'local' ? 'local' : 'org'),
+    backend: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'api.' + window.location.hostname.replace('beta.',''),
+    opusbackend: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'api.openopus.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'org'),
     publicsite: 'https://getconcertmaster.com',
-    shareurl: 'https://cmas.' + (window.location.hostname.split('.')[1] == 'local' ? 'local' : 'me'),
+    shareurl: 'https://' + (window.location.hostname.split('.')[0] == 'beta' ? 'beta.' : '') + 'cmas.' + (window.location.hostname.split('.').pop() == 'local' ? 'local' : 'me'),
     smartradio: JSON.parse(localStorage.smartradio),
     notshow: false,
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.11.28'
+    version: '1.19.11.28' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : '')
 };
 
 window.onpopstate = function (event) {
