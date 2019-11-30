@@ -45,7 +45,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.10'
+    version: '1.19.11.28'
 };
 
 window.onpopstate = function (event) {
@@ -2302,4 +2302,37 @@ cmas_swipedetect = function (el, callback) {
       handleswipe(swipedir)
       //e.preventDefault()
   }, false)
+}
+
+// settings screen: patrons listing
+
+cmas_settings = function (mode) {
+
+  $.ajax({
+    url: cmas_options.opusbackend + '/patron/list.json',
+    method: "GET",
+    success: function (response) {
+
+      if (response.status.rows >= 1) {
+        ulpatrons = $('#patrons ul');
+        ulpatrons.empty();
+
+        for (patron in response.patrons) {
+          ulpatrons.append(`<li>${response.patrons[patron]}</li>`);
+        }
+
+        $('#patrons').removeClass('hidden');
+      }
+      
+      switch (mode) {
+        case "desktop":
+          $('#config').leanModal();
+          break;
+        case "mobile":
+          cmas_mobilepage('settings');
+          break;
+      }
+    }
+  });
+
 }

@@ -2229,13 +2229,19 @@ body.radioonair #radiotop select {
 	margin: 0;
 }
 
-#config #about li {
+#config #about li, #patrons li {
     border-bottom: 1px solid #4F4F4F;
     padding: 15px 0;
     font-family: 'Sanchez', sans-serif;
     font-size: 12px;
     font-weight: normal;
     color: #FCE546;
+}
+
+#patrons li {
+	padding: 12px 0;
+	font-size: 11px;
+	color: #FFFFFF;
 }
 
 #config #about li a {
@@ -2249,12 +2255,16 @@ body.radioonair #radiotop select {
 	color: #FCE546;
 }
 
-#config #about li:last-child {
+#config #about li:last-child, #patrons li:last-child {
 	border: 0;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
 
-#config #about li span {
+#patrons li:last-child {
+	margin-bottom: 0;
+}
+
+#config #about li span, #patrons li span {
 	display: block;
 	font-family: 'PetitaMedium', sans-serif;
 	font-size: 11px;
@@ -2413,13 +2423,29 @@ body.player #config {
 	display: none;
 }
 
+#patrons {
+	display: block;
+}
+
+#patrons ul {
+	margin: 7px 0 0 0;
+}
+
+#patrons h2 {
+	margin-top: 12px;
+}
+
 .deskonly {
 	display: none !important;
 }
 
 .empty {
 	display: none !important;
-}   
+}
+
+.hidden {
+	display: none !important;
+}
 
 /* scrollbars */
 

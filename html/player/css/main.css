@@ -51,7 +51,7 @@ a
 	background-color: #FCE546;
 }
 
-#works::-webkit-scrollbar-track-piece
+#works::-webkit-scrollbar-track-piece, #patrons ul::-webkit-scrollbar-track-piece
 {
 	background-color: #3A3A3A;
 }
@@ -2117,7 +2117,7 @@ body.windows #radiotop a
 	margin-bottom: 22px;
 }
 
-.modal a
+.modal a:not(.about)
 {
 	color: #FCE546;
 	width: 120px;
@@ -2134,7 +2134,7 @@ body.windows #radiotop a
 	clear: left;
 }
 
-.modal a:hover
+.modal a:not(.about):hover
 {
 	background-color: #FCE546;
 	color: #000;
@@ -2793,9 +2793,53 @@ li.emptylist p {
 	font-size: 12px;
 }
 
+.hidden {
+	display: none;
+}
+
+#about {
+	width: 45%;
+	float: left;
+}
+
+#patrons {
+	width: 45%;
+	float: right;
+}
+
+#about h2, #patrons h2 {
+	margin-top: 20px;
+	margin-bottom: 2px;
+}
+
+#patrons h2 {
+	margin-bottom: 7px;
+}
+
+#config #about li span {
+    display: block;
+    font-family: 'PetitaMedium', sans-serif;
+    font-size: 12px;
+}
+
+#config #about li, #patrons li {
+    padding: 7px 0;
+    font-family: 'PetitaBold', sans-serif;
+    font-size: 13px;
+}
+
+#patrons ul {
+	height: 200px;
+	overflow: auto;
+}
+
+#patrons li {
+	padding: 3px;
+}
+
 /* firefox tweak */
 
-#composers, #favorites, #works, #albums {
+#composers, #favorites, #works, #albums, #patrons ul {
 	scrollbar-width: none;
 }
 
@@ -2804,7 +2848,7 @@ li.emptylist p {
 	scrollbar-width: thin;
 }
 
-#works:hover {
+#works:hover, #patrons ul:hover {
   	scrollbar-color: #000;
 	scrollbar-width: thin;
 }

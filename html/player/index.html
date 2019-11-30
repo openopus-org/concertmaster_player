@@ -102,7 +102,7 @@
             <a href="javascript:cmas_radiobutton()" class="stopradio mobonly"><span></span>Stop radio</a>
         </div>
         <a href="https://getconcertmaster.com/help" id="help" target="_blank" class="deskonly">help</a>
-        <a href="javascript:$('#config').leanModal()" id="setup" class="deskonly">setup</a>
+        <a href="javascript:cmas_settings('desktop')" id="setup" class="deskonly">setup</a>
     </div>
 
     <div id="sidebar">
@@ -246,7 +246,7 @@
             <li><a href="javascript:cmas_mobilepage('library')" class="library">Library</a></li>
             <li><a href="javascript:cmas_mobilepage('favorites')" class="favorites">Favorites</a></li>
             <li><a href="javascript:cmas_mobilepage('radio')" class="radio"><span></span>Radio</a></li>
-            <li><a href="javascript:cmas_mobilepage('settings')" class="settings">Settings</a></li>
+            <li><a href="javascript:cmas_settings('mobile')" class="settings">Settings</a></li>
         </ul>
     </div>
     <div id="radioslider" class="mobonly">
@@ -340,27 +340,33 @@
             <li><div id="toggle_historic" class="toggle"></div>Hide old, historical recordings</li>
         </ul>
         <div id="signout">
-                <h3>Sign out</h3>
-                <a href="javascript:cmas_logout()">Logout from Spotify</a>        
-            </div>
-            <div id="signin">
-                <h3>Log in</h3>
-                <a href="javascript:cmas_appleauth()">Log in to Spotify</a>        
-            </div>
+            <h3>Sign out</h3>
+            <a href="javascript:cmas_logout()">Logout from Spotify</a>        
+        </div>
+        <div id="signin">
+            <h3>Log in</h3>
+            <a href="javascript:cmas_spoauth()">Log in to Spotify</a>        
+        </div>
     
         <!--<h3 class="smartradio">Smart radio</h3>
         <ul class="toggle-light">
             <li><div id="toggle_smart" class="toggle"></div>Use your listening behavior to improve the radio experience</li>
         </ul>-->
-        <a href="javascript:$('#config').closeModal()" class="deskonly">Close</a>
-        <div id="about" class="mobonly">
+        
+        <div id="about">
             <h2>About</h2>
             <ul>
                 <li>Version<span class="conc-version"></span></li>
-                <li><a href="https://patreon.com/openopus">Support our projects<span>Help us keeping Concertmaster free! Donate and back our development and hosting costs.</span></a></li>
-                <li><a href="https://github.com/openopus-org/concertmaster_player">Contribute with code<span>Concertmaster is an open source project. You may fork it or help us with code!</span></a></li>
+                <li><a class="about" href="https://patreon.com/openopus">Support our projects<span>Help us keeping Concertmaster free! Donate and back our development and hosting costs.</span></a></li>
+                <li><a class="about" href="https://github.com/openopus-org/concertmaster_player">Contribute with code<span>Concertmaster is an open source project. You may fork it or help us with code!</span></a></li>
+                <li><a class="about" href="https://twitter.com/_concertmaster">Find us on Twitter<span>And tell us how has been your experience with Concertmaster so far!</span></a></li>
             </ul>
         </div>
+        <div id="patrons" class="hidden">
+            <h2>Thanks for our supporters!</h2>
+            <ul></ul>
+        </div>
+        <a href="javascript:$('#config').closeModal()" class="deskonly">Close</a>
     </div>
     <div id="permalink-modal" class="modal">
         <h2>Share</h2>
