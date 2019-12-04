@@ -75,28 +75,60 @@ h2
 
 #toolbar
 {
-    display: block;
 	position: fixed;
-	top: 0px;
-	overflow: hidden;
-	height: 36px;
+    display: block;
+    top: 0px;
+    overflow: hidden;
+    height: 36px;
 	width: 100%;
 	z-index: 990;
 	background-image: linear-gradient(#3C3C3C, #121212);
 }
 
+#toolbar #logo {
+	display: block;
+	width: 120px;
+	margin: 8px auto;
+}
+
+body.beta #toolbar #logo 
+{
+	width: 170px;
+}
+
 #toolbar .logo
 {
 	background-repeat: no-repeat;
-	width: 120px;
-	height: 21px;
-	text-indent: -9000px;
-	overflow: hidden;
-	display: block;
-	background-image: url("../img/logo.png");
-	background-size: 120px;
-	margin: 8px auto;
-	bottom: 7px;
+    width: 120px;
+    height: 21px;
+    text-indent: -9000px;
+    overflow: hidden;
+    display: block;
+    background-image: url(../img/logo.png);
+    background-size: 120px;
+    bottom: 7px;
+    float: left;
+}
+
+#toolbar #beta 
+{
+	display: none;
+}
+
+body.beta #toolbar #beta 
+{
+	display: inline-block;
+    font-family: Sanchez, TimesNewRoman, serif;
+    font-size: 8px;
+    color: #000000;
+    background-color: #FCE546;
+    border-radius: 10px;
+    padding-top: 3px;
+    width: 40px;
+    height: 10px;
+    text-align: center;
+    top: 11px;
+    margin-left: 8px;
 }
 
 li.cover a img {

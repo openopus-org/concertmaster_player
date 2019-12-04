@@ -55,7 +55,10 @@
         </div>
     </div>
     <div id="toolbar">
-        <span class="logo">Concertmaster</span>
+        <div id="logo">
+            <span class="logo">Concertmaster</span>
+            <span id="beta">BETA</span>
+        </div>
         <span class="update deskonly"><a href="javascript:cmas_update()">New version available! Click to update</a></span>
         <span class="update mobonly"><a href="javascript:cmas_update()">Update available</a></span>
         <div id="radiotop">
@@ -524,6 +527,10 @@
         // ask for notification permission
 
         Notification.requestPermission ();
+
+        // beta 
+
+        if (window.location.hostname.split('.')[0] == 'beta') $("body").addClass("beta");
     </script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-89195986-2"></script>

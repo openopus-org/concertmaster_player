@@ -114,6 +114,28 @@ body.showingplayerbar #playerbar
 	bottom: 7px;
 }
 
+#toolbar #beta 
+{
+	display: none;
+}
+
+body.beta #toolbar #beta 
+{
+	display: block;
+	position: absolute;
+    left: 186px;
+    font-family: Sanchez, TimesNewRoman, serif;
+    font-size: 9px;
+    color: #000000;
+    background-color: #FCE546;
+    border-radius: 10px;
+    padding-top: 3px;
+    width: 43px;
+    height: 11px;
+    text-align: center;
+    top: 11px;
+}
+
 #loaderwindow h1
 {
 	background-repeat: no-repeat;
@@ -858,6 +880,8 @@ h2
 	position: absolute;
 	bottom: 24px;
 	left: 208px;
+	text-align: right;
+    width: 58px;
 }
 
 #playercontrols #durationglobal
@@ -870,11 +894,17 @@ h2
 
 #playercontrols #globaltracks
 {
+	margin-right: 20px;
 	font-family: Sanchez, TimesNewRoman, serif;
 	font-size: 10px;
 	position: absolute;
 	bottom: 18px;
 	left: 260px;
+	right: 64px;
+}
+
+#playercontrols.toolong #globaltracks
+{
 	right: 78px;
 }
 
@@ -884,7 +914,7 @@ h2
 	margin-left: 4px;
 }
 
-#playercontrols #globaltracks.toomanytracks .tracktitle, #playercontrols #globaltracks.tootoomanytracks .tracktitle
+#playercontrols.toomanytracks #globaltracks .tracktitle, #playercontrols.nolabels #globaltracks .tracktitle
 {
 	display: block;
 	overflow: hidden;
@@ -924,14 +954,12 @@ h2
     -webkit-box-sizing: border-box;
 }
 
-#playercontrols #globaltracks.tootoomanytracks,
-#playercontrols #globaltracks.toomanytracks
+#playercontrols.toomanytracks #globaltracks
 {
 	border-right: 0;
 }
 
-#playercontrols #globaltracks.tootoomanytracks li,
-#playercontrols #globaltracks.toomanytracks li
+#playercontrols.toomanytracks #globaltracks li
 {
 	border-left: 0;
 }
@@ -939,6 +967,7 @@ h2
 #playercontrols #globaltracks
 {
 	border-right: 2px solid #121212;
+	margin-left: 30px;
 }
 
 #playercontrols #globaltracks .duration
@@ -2403,6 +2432,11 @@ select:focus
     height: 14px;
 	background-size: 14px;
 	padding: 2px 20px;
+}
+
+body.beta #toolbar .update 
+{
+    left: 243px;
 }
 
 #permalink-widget {

@@ -45,7 +45,9 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-birthdate user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.11.28' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : '')
+    version: '1.19.12' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
+    too_many_tracks: 24,
+    no_track_labels: 15
 };
 
 window.onpopstate = function (event) {
@@ -369,6 +371,7 @@ cmas_playstate = function (state)
       if (cmas_playbuffer.tracks.length == 1 && state.paused && state.track_window.current_track.id == cmas_playbuffer.tracks[0] && (state.position == 0 || (Math.abs (state.duration-state.position) <= 2000)))
       {
         console.log ('Over, next');
+        $("#globalslider-total").find('.bar').css('width', '0%');
         state.position = 0;
         isover = true;
         cmas_radioskip ();
@@ -399,6 +402,7 @@ cmas_playstate = function (state)
 
     if (cmas_playbuffer.tracks[0] == state.track_window.current_track.id && state.track_window.next_tracks.length == 0) {
       console.log('Over, next');
+      $("#globalslider-total").find('.bar').css('width', '0%');
       cmas_radioskip();
     }
   }
@@ -423,11 +427,13 @@ cmas_slider = function (arg)
   {
     $("#timer-"+arg.id).html("0:00");
     $("#slider-"+arg.id).find('.bar').css('width', '0%');
-    $("#globalslider-"+arg.id).find('.bar').css('width', '0%');
+    if (!$('#playercontrols').hasClass('toomanytracks')) $("#globalslider-"+arg.id).find('.bar').css('width', '0%');
   }
   else
   {
     $("#timerglobal").html(cmas_readabletime(cmas_playbuffer.accdurations[cmas_playbuffer.tracks.indexOf(arg.id)] + arg.position));
+    if ($('#playercontrols').hasClass('toomanytracks')) $("#globalslider-total").find('.bar').css('width', (100*(cmas_playbuffer.accdurations[cmas_playbuffer.tracks.indexOf(arg.id)] + arg.position)/cmas_playbuffer.accdurations[cmas_playbuffer.accdurations.length - 1]) + '%');
+
     $("#timer-"+arg.id).html(cmas_readabletime(arg.position));
     $("#slider-"+arg.id).find('.bar').css('width', (100*arg.position/arg.duration) + '%');
     $("#globalslider-"+arg.id).find('.bar').css('width', (100*arg.position/arg.duration) + '%');
@@ -457,17 +463,24 @@ cmas_slug = function (str)
 
 // converting seconds to string
 
-cmas_readabletime = function(time)
+cmas_readabletime = function (time) 
 {
-    if (time && time > 0.0)
-    {
-        var sec = parseInt(time % (60));
-        return parseInt(time / (60)) + ':' + (sec < 10 ? '0'+sec : sec);
+  if (time && time > 0.0) {
+    var sec = parseInt(time % (60));
+    var min = parseInt(time / (60));
+
+    if (min > 59) {
+      var minutes = parseInt(min % (60));
+      var part = parseInt(min / (60)) + ':' + (minutes < 10 ? '0' + minutes : minutes);
+    } else {
+      var part = min;
     }
-    else
-    {
-        return '0:00';
-    }
+
+    return part + ':' + (sec < 10 ? '0' + sec : sec);
+  }
+  else {
+    return '0:00';
+  }
 }
 
 // composer list
@@ -1070,21 +1083,14 @@ cmas_recordingaction = function (list, auto)
       $('#playertracks').html('');
       $('#globaltracks').html('');
 
-      if (list.recording.tracks.length >= 60) {
-        trackadjust = ' - 0px';
-        $('#globaltracks').addClass("tootoomanytracks");
+      $('#playercontrols').removeClass("toolong toomanytracks nolabels");
+
+      if (list.recording.length >= 3600) {
+        $('#playercontrols').addClass("toolong");
       }
-      else {
-        trackadjust = ' - 0px';
-        $('#globaltracks').removeClass("tootoomanytracks");
-        if (list.recording.tracks.length >= 12) 
-        {
-          $('#globaltracks').addClass("toomanytracks");
-        }
-        else
-        {
-          $('#globaltracks').removeClass("toomanytracks");
-        }
+
+      if (list.recording.tracks.length > cmas_options.no_track_labels) {
+        $('#playercontrols').addClass("nolabels");
       }
 
       var currtrack = 0;
@@ -1099,7 +1105,15 @@ cmas_recordingaction = function (list, auto)
         var pctsize = ((list.recording.tracks[track].length) / list.recording.length) * 100;
         currtrack = currtrack + 1;
         $('#playertracks').append('<li><a class="tracktitle" href="javascript:cmas_track(' + track + ')">' + list.recording.tracks[track].title + '</a><div id="timer-' + list.recording.tracks[track].spotify_trackid + '" class="timer">0:00</div><div id="slider-' + list.recording.tracks[track].spotify_trackid + '" class="slider"><div class="buffer"></div><div class="bar"></div></div><div class="duration">' + cmas_readabletime(list.recording.tracks[track].length) + '</div></li>');
-        $('#globaltracks').append('<li style="width: calc(' + Math.round(pctsize * 1000) / 1000 + '%' + trackadjust + ')"><a class="tracktitle" href="javascript:cmas_track(' + track + ')">' + currtrack + '</a><div id="globalslider-' + list.recording.tracks[track].spotify_trackid + '" class="slider"><div class="buffer"></div><div class="bar"></div></div><div id="globaltimer-' + track + '" class="timer">0:00</div><div class="duration">' + cmas_readabletime(list.recording.tracks[track].length) + '</div></li>');
+
+        if (list.recording.tracks.length <= cmas_options.too_many_tracks) {
+          $('#globaltracks').append('<li style="width: calc(' + Math.round(pctsize * 1000) / 1000 + '%' + ')"><a class="tracktitle" href="javascript:conc_track(' + track + ')">' + currtrack + '</a><div id="globalslider-' + list.recording.tracks[track].spotify_trackid + '" class="slider"><div class="buffer"></div><div class="bar"></div></div></li>');
+        }
+      }
+
+      if (list.recording.tracks.length > cmas_options.too_many_tracks) {
+        $('#playercontrols').addClass("toomanytracks");
+        $('#globaltracks').append('<li style="width: 100%"><div id="globalslider-total" class="slider"><div class="buffer"></div><div class="bar"></div></div></li>');
       }
 
       $('#durationglobal').html(cmas_readabletime(list.recording.length));
