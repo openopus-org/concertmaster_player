@@ -6,6 +6,6 @@
   echo $api;
 
   $fp = fopen (DEBUG, "w");
-  fwrite ($fp, "https://accounts.spotify.com/api/token", false, Array (SPOTIFYID, SPOTIFYSECRET), "code={$_REQUEST['code']}&grant_type=authorization_code&redirect_uri=https://{$_SERVER['SERVER_NAME']}/sp/". "\n\n". $api);
+  fwrite ($fp, "code={$_REQUEST['code']}&grant_type=authorization_code&redirect_uri=https://{$_SERVER['SERVER_NAME']}/sp/". "\n\n". $api);
   fclose ($fp);
 ?>
