@@ -1,11 +1,11 @@
 <?
   include_once ("../../../lib/inc.php");
 
-  $api = CURL_Internals ("https://accounts.spotify.com/api/token", false, Array (SPOTIFYID, SPOTIFYSECRET), "code={$_REQUEST['code']}&grant_type=authorization_code&redirect_uri=https://{$_SERVER['SERVER_NAME']}/sp/", false);
+  $api = CURL_Internals ("https://accounts.spotify.com/api/token", false, Array (SPOTIFYID, SPOTIFYSECRET), "code={$_REQUEST['code']}&grant_type=authorization_code&redirect_uri=rnmktest://auth", false);
   
   echo $api;
 
   $fp = fopen (DEBUG, "w");
-  fwrite ($fp, "code={$_REQUEST['code']}&grant_type=authorization_code&redirect_uri=https://{$_SERVER['SERVER_NAME']}/sp/". "\n\n". $api);
+  fwrite ($fp, "code={$_REQUEST['code']}&grant_type=authorization_code&redirect_uri=rnmktest://auth". "\n\n". $api);
   fclose ($fp);
 ?>
