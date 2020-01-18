@@ -4,4 +4,8 @@
   $api = CURL_Internals ("https://accounts.spotify.com/api/token", false, Array (SPOTIFYID, SPOTIFYSECRET), "code={$_REQUEST['code']}&grant_type=authorization_code&redirect_uri=https://{$_SERVER['SERVER_NAME']}/auth/", false);
   
   echo $api;
+
+  $fp = fopen (DEBUG, "w");
+  fwrite ($fp, $api);
+  fclose ($fp);
 ?>
