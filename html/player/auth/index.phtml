@@ -1,7 +1,7 @@
 <?
   include_once ("../../../lib/inc.php");
 
-  $api = CURL_Internals ("https://accounts.spotify.com/api/token", false, Array (SPOTIFYID, SPOTIFYSECRET), "code={$_REQUEST['code']}&grant_type=authorization_code&redirect_uri=https://{$_SERVER['SERVER_NAME']}/auth/", false);
+  $api = CURL_Internals ("https://accounts.spotify.com/api/token", false, Array (SPOTIFYID, SPOTIFYSECRET), "code={$_REQUEST['code']}&grant_type=authorization_code&redirect_uri=https://{$_SERVER['SERVER_NAME']}/sp/", false);
   
   echo $api;
 
