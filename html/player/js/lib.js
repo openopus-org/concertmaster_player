@@ -45,7 +45,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.19.12' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
+    version: '1.20' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
     too_many_tracks: 24,
     no_track_labels: 15
 };
