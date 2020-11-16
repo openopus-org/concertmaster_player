@@ -391,18 +391,30 @@ cmas_playstate = function (state)
   if (state.track_window.current_track.id != cmas_state.id && Object.keys(cmas_state).length > 0)
   {
     state.position = 0;
-
+    found_track = false;
     for (trid in cmas_playbuffer.tracks)
     {
       if (cmas_playbuffer.tracks[trid] != state.track_window.current_track.id)
       {
-        cmas_slider ({ changed: true, paused: state.paused, id: cmas_playbuffer.tracks[trid], position: 0, duration: 0 });
+        if (found_track)
+        {
+          cmas_slider ({ changed: true, paused: state.paused, id: cmas_playbuffer.tracks[trid], position: 0, duration: 0 });
+        }
+        else
+        {
+          cmas_slider ({ changed: false, paused: state.paused, id: cmas_playbuffer.tracks[trid], position: 10, duration: 10 });
+        }
+      }
+      else
+      {
+        found_track = true
       }
     }
 
     if (cmas_playbuffer.tracks[0] == state.track_window.current_track.id && state.track_window.next_tracks.length == 0) {
       console.log('Over, next');
       $("#globalslider-total").find('.bar').css('width', '0%');
+      isover = true;
       cmas_radioskip();
     }
   }
