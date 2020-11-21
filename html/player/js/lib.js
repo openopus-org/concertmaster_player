@@ -1119,7 +1119,7 @@ cmas_recordingaction = function (list, auto)
         $('#playertracks').append('<li><a class="tracktitle" href="javascript:cmas_track(' + track + ')">' + list.recording.tracks[track].title + '</a><div id="timer-' + list.recording.tracks[track].spotify_trackid + '" class="timer">0:00</div><div id="slider-' + list.recording.tracks[track].spotify_trackid + '" class="slider"><div class="buffer"></div><div class="bar"></div></div><div class="duration">' + cmas_readabletime(list.recording.tracks[track].length) + '</div></li>');
 
         if (list.recording.tracks.length <= cmas_options.too_many_tracks) {
-          $('#globaltracks').append('<li style="width: calc(' + Math.round(pctsize * 1000) / 1000 + '%' + ')"><a class="tracktitle" href="javascript:conc_track(' + track + ')">' + currtrack + '</a><div id="globalslider-' + list.recording.tracks[track].spotify_trackid + '" class="slider"><div class="buffer"></div><div class="bar"></div></div></li>');
+          $('#globaltracks').append('<li style="width: calc(' + Math.round(pctsize * 1000) / 1000 + '%' + ')"><a class="tracktitle" href="javascript:cmas_track(' + track + ')">' + currtrack + '</a><div id="globalslider-' + list.recording.tracks[track].spotify_trackid + '" class="slider"><div class="buffer"></div><div class="bar"></div></div></li>');
         }
       }
 
