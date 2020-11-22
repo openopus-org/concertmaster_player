@@ -388,7 +388,7 @@ cmas_playstate = function (state)
 
   // has the track changed?
 
-  if (state.track_window.current_track.id != cmas_state.id && Object.keys(cmas_state).length > 0)
+  if (state.track_window.current_track.id != cmas_state.id)
   {
     state.position = 0;
     found_track = false;
