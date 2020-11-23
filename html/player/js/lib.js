@@ -411,7 +411,7 @@ cmas_playstate = function (state)
       }
     }
 
-    if (cmas_playbuffer.tracks[0] == state.track_window.current_track.id && state.track_window.next_tracks.length == 0) {
+    if (cmas_playbuffer.tracks[0] == state.track_window.current_track.id && (cmas_playbuffer.tracks.length != 1 && state.track_window.next_tracks.length == 0)) {
       console.log('Over, next');
       $("#globalslider-total").find('.bar').css('width', '0%');
       isover = true;
