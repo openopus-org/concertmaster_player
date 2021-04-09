@@ -1,0 +1,18 @@
+{
+    "webcredentials": {
+        "apps": [
+            "TXW2W532B9.org.openopus.concertmaster.ios"
+        ]
+    },
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "TXW2W532B9.org.openopus.concertmaster.ios",
+                "paths": [
+                    "*"
+                ]
+            }
+        ]
+    }
+}
