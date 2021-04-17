@@ -45,7 +45,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.20.1123' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
+    version: '1.21.417' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
     too_many_tracks: 24,
     no_track_labels: 15
 };
@@ -388,7 +388,7 @@ cmas_playstate = function (state)
 
   // has the track changed?
 
-  if (state.track_window.current_track.id != cmas_state.id)
+  if (state.track_window.current_track.id != cmas_state.id && Object.keys(cmas_state).length > 0)
   {
     state.position = 0;
     found_track = false;
@@ -396,6 +396,8 @@ cmas_playstate = function (state)
     {
       if (cmas_playbuffer.tracks[trid] != state.track_window.current_track.id)
       {
+        cmas_slider ({ changed: true, paused: state.paused, id: cmas_playbuffer.tracks[trid], position: 0, duration: 0 });
+        /*
         if (found_track)
         {
           cmas_slider ({ changed: true, paused: state.paused, id: cmas_playbuffer.tracks[trid], position: 0, duration: 0 });
@@ -404,6 +406,7 @@ cmas_playstate = function (state)
         {
           cmas_slider ({ changed: false, paused: state.paused, id: cmas_playbuffer.tracks[trid], position: 10, duration: 10 });
         }
+        */
       }
       else
       {
@@ -1185,7 +1188,7 @@ cmas_recordingitem = function (item, work, playlist)
 
   alb = '';
 
-  alb = alb + '<li class="cover"><a href="javascript:cmas_thisrecording(\'' + item.spotify_albumid +'\','+work.id+','+item.set+')">';
+  alb = alb + '<li class="cover"><a href="javascript:cmas_thisrecording(\'' + item.spotify_albumid +'\',\''+work.id+'\',\''+item.set+'\')">';
   alb = alb + '<img src="' + item.cover + '" onerror="this.src=\'/img/nocover.png\'" />';
   alb = alb + '<div class="overlay"></div></a></li>';
 
@@ -1209,28 +1212,28 @@ cmas_recordingitem = function (item, work, playlist)
 
   if ($.inArray(rid, cmas_favorites) != -1)
   {
-    alb = alb + '<li class="favorite"><a href="javascript:cmas_recfavorite(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')" class="is fav_' + rid + '">unfavorite</a></li>';
+    alb = alb + '<li class="favorite"><a href="javascript:cmas_recfavorite(\'' + work.id + '\',\'' + item.spotify_albumid + '\',\'' + item.set + '\')" class="is fav_' + rid + '">unfavorite</a></li>';
   }
   else
   {
-    alb = alb + '<li class="favorite"><a href="javascript:cmas_recfavorite(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')" class="go fav_' + rid + '">favorite</a></li>';
+    alb = alb + '<li class="favorite"><a href="javascript:cmas_recfavorite(\'' + work.id + '\',\'' + item.spotify_albumid + '\',\'' + item.set + '\')" class="go fav_' + rid + '">favorite</a></li>';
   }
 
-  alb = alb + '<li class="permalink"><a href="javascript:cmas_permalink(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')">permalink</a></li>';
+  alb = alb + '<li class="permalink"><a href="javascript:cmas_permalink(\'' + work.id + '\',\'' + item.spotify_albumid + '\',\'' + item.set + '\')">permalink</a></li>';
 
   if (playlist) {
     if (playlist.owner.id == localStorage.spotify_userid) {
       plaction = 'unplaylist';
-      plfunction = 'cmas_unplaylistperformance(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ',' + playlist.id + ')';
+      plfunction = 'cmas_unplaylistperformance(\'' + work.id + '\',\'' + item.spotify_albumid + '\',\'' + item.set + '\',' + playlist.id + ')';
     }
     else {
       plaction = 'doplaylist';
-      plfunction = 'cmas_playlistmodal(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')';
+      plfunction = 'cmas_playlistmodal(\'' + work.id + '\',\'' + item.spotify_albumid + '\',\'' + item.set + '\')';
     }
   }
   else {
     plaction = 'doplaylist';
-    plfunction = 'cmas_playlistmodal(' + work.id + ',\'' + item.spotify_albumid + '\',' + item.set + ')';
+    plfunction = 'cmas_playlistmodal(\'' + work.id + '\',\'' + item.spotify_albumid + '\',\'' + item.set + '\')';
   }
 
   alb = alb + '<li class="playlist '+ plaction +'"><a href="javascript:'+ plfunction +'">playlist</a></li>';
