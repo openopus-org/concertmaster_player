@@ -45,7 +45,7 @@ cmas_options = {
     spot_scopes: 'user-read-private user-read-email user-modify-playback-state streaming',
     spot_id: 'd51f903ebcac46d9a036b4a2da05b299',
     spot_redir: 'https://' + window.location.hostname +'/sp/',
-    version: '1.21.417' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
+    version: '1.21.423' + (window.location.hostname.split('.')[0] == 'beta' ? ' beta' : ''),
     too_many_tracks: 24,
     no_track_labels: 15
 };
@@ -1057,9 +1057,9 @@ cmas_recordingaction = function (list, auto)
   if (list.status.success == "true") {
 
     if (list.recording.length == 0) {
-      cmas_notavailable();
+      if (!cmas_disabled) cmas_notavailable();
     }
-    else if (list.recording.markets.indexOf(localStorage.user_country) != -1) {
+    else if (cmas_disabled || list.recording.markets.indexOf(localStorage.user_country) != -1) {
 
       $('body').addClass('showingnowplaying');
 
@@ -1156,11 +1156,11 @@ cmas_recordingaction = function (list, auto)
 
     }
     else {
-      cmas_notavailable();
+      if (!cmas_disabled) cmas_notavailable();
     }
   }
   else {
-    cmas_notavailable();
+    if (!cmas_disabled) cmas_notavailable();
   }
 }
 
