@@ -292,6 +292,20 @@
         <p class="modaldetails">You can browse Concertmaster's catalogue, create playlists, favorite works, composers and recordings, but playback is disabled.</p>
         <a href="javascript:$('#browsernotsupported').closeModal()">Close</a>
     </div>
+    <div id="mobile-safari" class="modal">
+        <h2>Warning</h2>
+        <p>Playback is disabled on mobile browsers.</p>
+        <p class="modaldetails">We recommend you to use <strong>Concertmaster's iOS app</strong> - it's fully functional and offers a much better experience. Free!</p>
+        <a class="appstore" href="https://apps.apple.com/app/concertmaster-player/id1561622325?l=en">Get it now on the App Store!</a>
+        <a href="javascript:$('#homescreen').closeModal()">Close</a>
+    </div>
+    <div id="homescreen" class="modal">
+        <h2>Warning</h2>
+        <p>Playback is disabled on mobile browsers.</p>
+        <p class="modaldetails">We recommend you to use <strong>Concertmaster's iOS app</strong> - it's fully functional and offers a much better experience. Free!</p>
+        <a class="appstore" href="https://apps.apple.com/app/concertmaster-player/id1561622325?l=en">Get it now on the App Store!</a>
+        <a href="javascript:$('#homescreen').closeModal()">Close</a>
+    </div>
     <div id="playlistmodal" class="modal">
         <h2>Playlist</h2>
         <div id="playlistmodal-new">
@@ -407,9 +421,14 @@
                 $("body").addClass("windows");
             }
 
-            window.onSpotifyWebPlaybackSDKReady = () => {
-                cmas_spotifyauth();
-            };
+            if ((/iP(hone|od|ad)/.test(navigator.platform))) {
+                cmas_disabled = true;
+                cmas_disabledreason = "mobile-safari";
+            } else {
+                window.onSpotifyWebPlaybackSDKReady = () => {
+                    cmas_spotifyauth();
+                };
+            }
 
             $('#composersearch').keyup(function () { cmas_composersbysearch($('#composersearch').val()); });
             $('#worksearch').keyup(function () { cmas_worksbysearch(localStorage.lastcomposerid, localStorage.lastgenre, $('#worksearch').val()); });
