@@ -1940,7 +1940,7 @@ div:not(#config).modal
     font-size: 11px !important;
 }
 
-div:not(#config).modal a, 
+div:not(#config).modal a:not(.appstore), 
 #radiotop a
 {
 	color: #FFF;
@@ -2394,6 +2394,25 @@ body.composer #genresworks h2 {
     width: 50%;
     margin: 40px auto 100px;
     font-size: 12px;
+}
+
+div#homescreen.modal, div#mobile-safari.modal
+{
+	width: 70%;
+}
+
+#homescreen a.appstore, #mobile-safari a.appstore
+{
+	background-repeat: no-repeat;
+    width: 144px;
+    height: 50px;
+    text-indent: -9000px;
+    overflow: hidden;
+    display: block;
+    background-image: url(../img/appstore.png);
+	background-size: 144px 50px;
+	margin: 0 auto;
+	padding-bottom: 34px;
 }
 
 /* pagination */

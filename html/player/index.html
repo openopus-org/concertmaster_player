@@ -295,14 +295,14 @@
     <div id="mobile-safari" class="modal">
         <h2>Warning</h2>
         <p>Playback is disabled on mobile browsers.</p>
-        <p class="modaldetails">We recommend you to use <strong>Concertmaster's iOS app</strong> - it's fully functional and offers a much better experience. Free!</p>
+        <p class="modaldetails">We recommend you to use the <strong>Concertmaster iOS app</strong> - it's fully functional and offers a much better experience. Free!</p>
         <a class="appstore" href="https://apps.apple.com/app/concertmaster-player/id1561622325?l=en">Get it now on the App Store!</a>
-        <a href="javascript:$('#homescreen').closeModal()">Close</a>
+        <a href="javascript:$('#mobile-safari').closeModal()">Close</a>
     </div>
     <div id="homescreen" class="modal">
         <h2>Warning</h2>
         <p>Playback is disabled on mobile browsers.</p>
-        <p class="modaldetails">We recommend you to use <strong>Concertmaster's iOS app</strong> - it's fully functional and offers a much better experience. Free!</p>
+        <p class="modaldetails">We recommend you to use the <strong>Concertmaster iOS app</strong> - it's fully functional and offers a much better experience. Free!</p>
         <a class="appstore" href="https://apps.apple.com/app/concertmaster-player/id1561622325?l=en">Get it now on the App Store!</a>
         <a href="javascript:$('#homescreen').closeModal()">Close</a>
     </div>
@@ -421,14 +421,15 @@
                 $("body").addClass("windows");
             }
 
-            if ((/iP(hone|od|ad)/.test(navigator.platform))) {
-                cmas_disabled = true;
-                cmas_disabledreason = "mobile-safari";
-            } else {
-                window.onSpotifyWebPlaybackSDKReady = () => {
+            window.onSpotifyWebPlaybackSDKReady = () => {
+                if ((/iP(hone|od|ad)/.test(navigator.platform)) || true) {
+                    cmas_disabled = true;
+                    cmas_disabledreason = "mobile-safari";
+                    cmas_init();
+                } else {
                     cmas_spotifyauth();
-                };
-            }
+                }   
+            };
 
             $('#composersearch').keyup(function () { cmas_composersbysearch($('#composersearch').val()); });
             $('#worksearch').keyup(function () { cmas_worksbysearch(localStorage.lastcomposerid, localStorage.lastgenre, $('#worksearch').val()); });
