@@ -422,7 +422,7 @@
             }
 
             window.onSpotifyWebPlaybackSDKReady = () => {
-                if ((/iP(hone|od|ad)/.test(navigator.platform)) || true) {
+                if ((/iP(hone|od|ad)/.test(navigator.platform))) {
                     cmas_disabled = true;
                     cmas_disabledreason = "mobile-safari";
                     cmas_init();
