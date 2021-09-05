@@ -142,14 +142,14 @@
     <div id="main"  onscroll="cmas_albumscroll(this)">
         <div id="composersbrowser">
             <h2 class="deskonly">Library</h2>
-            <div id="library">
+            <form id="library" autocomplete="off">
                 <ul id="atoz">
                     <li><a href="javascript:cmas_composersbyname('all')">All</a></li>
                     <li><a class="favorite" title="Favorites" href="javascript:cmas_composersbyfav()">fav</a></li>
                     <li><a class="popular" title="Popular" href="javascript:cmas_composersbytag('pop')">pop</a></li>
                     <li><a class="recommended" title="Essential" href="javascript:cmas_composersbytag('rec')">rec</a></li>
                 </ul>
-                <select class="periods">
+                <select class="periods" autocomplete="off">
                     <option value="all">All periods</option>
                     <option value="Medieval">Medieval</option>
                     <option value="Renaissance">Renaissance</option>
@@ -162,8 +162,8 @@
                     <option value="Post-War">Post-War</option>
                     <option value="21st Century">21st Century</option>
                 </select>
-                <input type="text" id="composersearch" placeholder="Search composer by name" />
-        </div>
+                <input type="text" id="composersearch" placeholder="Search composer by name" autocomplete="off" />
+            </form>
         <script type="text/javascript">
             var alphabet = "abcdefghijklmnoprstvwxyz".split("");
             for (letter in alphabet)
